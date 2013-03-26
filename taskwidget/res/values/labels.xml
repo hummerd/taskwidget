@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tasks widget</string>
+    <string name="loading_text">Loading&#8230;</string>
+    <string name="about_title">About</string>
+    <string name="btnok">OK</string>
+    <string-array name="cfgactions">
+        <item>Update widget</item>
+        <item>Configure widget</item>
+    </string-array>
+    
+    <string name="addaccount">You must add Google account to use this widget</string>
+    <string name="usingaccount">Using account: %s</string>
+    <string name="selectacount">Select Google account to work with</string>
+    <string name="usinglist">Using list: %s</string>
+    <string name="selectlist">Select tasks list to display</string>
+    
+    <string name="loading">Loading. Please wait&#8230;</string>
+</resources>

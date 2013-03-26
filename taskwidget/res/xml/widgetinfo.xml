@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="296dp"
+    android:minHeight="48dp"
+    android:updatePeriodMillis="0"    
+    android:initialLayout="@layout/taskwidget"
+    android:configure="dima.soft.activity.WidgetCfg"
+    >
+</appwidget-provider>
+
+<!-- 
+android:updatePeriodMillis="86400000"
+android:previewImage="@drawable/preview"
+-->

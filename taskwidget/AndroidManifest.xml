@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="dima.soft"
+    android:versionCode="30"
+    android:versionName="1.0 (30)" 
+    android:installLocation="internalOnly">
+
+    <uses-sdk 
+        android:minSdkVersion="8" 
+        android:targetSdkVersion="14"
+        />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <application
+        android:icon="@drawable/tasks"
+        android:label="@string/app_name" >
+
+        <activity android:name=".activity.About">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name=".activity.WidgetCfg">
+			<intent-filter>
+        		<action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+    		</intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activity.ActionSelect"
+        	android:excludeFromRecents="true" 
+        	android:launchMode="singleInstance"
+        	android:taskAffinity="dima.soft.widgetaction"
+        	android:theme="@android:style/Theme.Translucent.NoTitleBar"            
+            >
+        </activity>
+        
+	    <receiver android:name="TaskWidgetProvider" >
+		    <intent-filter>
+		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+		    </intent-filter>
+		    <meta-data android:name="android.appwidget.provider"
+		               android:resource="@xml/widgetinfo" />
+		</receiver>  
+	    
+	    <service android:name=".WidgetController$UpdateService" >
+	    </service>
+	    
+    </application>
+    
+</manifest>
