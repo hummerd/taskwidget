@@ -3,7 +3,7 @@ package dima.soft.activity;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessProtectedResource;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.services.tasks.model.TaskList;
 
 import dima.soft.GoogleServiceAuthentificator.AuthentificatedCallback;
@@ -27,20 +27,23 @@ import android.net.NetworkInfo.State;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.preference.Preference.OnPreferenceClickListener;
-import android.preference.PreferenceActivity;
+//import android.preference.Preference.OnPreferenceClickListener;
+//import android.preference.PreferenceActivity;
 import android.view.View;
 import android.widget.Button;
-
+import org.holoeverywhere.preference.PreferenceActivity;
+import org.holoeverywhere.preference.PreferenceFragment;
+import org.holoeverywhere.preference.SharedPreferences;
+import org.holoeverywhere.preference.SharedPreferences.OnSharedPreferenceChangeListener;
 
 /**
  * @author Administrator
  *
  */
-public class WidgetCfg extends PreferenceActivity {
+public class WidgetCfg extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 		
 	private class LoadListTaskPrms {
-		GoogleAccessProtectedResource preotectRes;
+		GoogleAccountCredential preotectRes;
 		ProgressDialog dialog;
 		boolean lastTry;
 		List<TaskList> result;
@@ -112,13 +115,13 @@ public class WidgetCfg extends PreferenceActivity {
 	}
 	
 	@Override
-	protected void onStop() {
+	public void onStop() {
 		LogHelper.d("Stop activity");
 		super.onStop();
 	}
 	
 	@Override
-	protected void onPause() {
+	public void onPause() {
 		LogHelper.d("Pause activity");
 		super.onPause();
 	}
@@ -308,5 +311,11 @@ public class WidgetCfg extends PreferenceActivity {
 		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, m_appWidgetIds[0]);
 		setResult(RESULT_OK, resultValue);
 		finish();	
+	}
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences arg0, String arg1) {
+		// TODO Auto-generated method stub
+		
 	}
 }

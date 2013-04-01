@@ -3,7 +3,10 @@ package dima.soft;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessProtectedResource;
+
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+//import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessProtectedResource;
+//import com.google.api.client.googleapis.auth.oauth2.;
 import com.google.api.services.tasks.model.Task;
 import com.google.api.services.tasks.model.TaskList;
 
@@ -111,7 +114,7 @@ public class UpdateWidgetsTask extends AsyncTask<UpdateWidgetsTask.UpdateWidgetP
 		
 		GoogleServiceAuthentificator auth = new GoogleServiceAuthentificator(TasksClientInfo.AUTH_TOKEN_TYPE, accName, context);
 		auth.authentificate(new AuthentificatedCallback() {
-			public boolean authentificated(GoogleAccessProtectedResource protectRes, boolean lastTry) {
+			public boolean authentificated(GoogleAccountCredential protectRes, boolean lastTry) {
 				return updateList(protectRes, context, views, widgetId);
 			}
 		});								
@@ -163,7 +166,7 @@ public class UpdateWidgetsTask extends AsyncTask<UpdateWidgetsTask.UpdateWidgetP
     }
     
     protected boolean updateList(
-	    	GoogleAccessProtectedResource protectRes, 
+    		GoogleAccountCredential protectRes, 
 	    	Context context,
 	    	RemoteViews views,
 	    	int widgetId) {

@@ -2,7 +2,7 @@ package dima.soft;
 
 import java.io.IOException;
 
-import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessProtectedResource;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -21,14 +21,14 @@ public class GoogleServiceAuthentificator {
 	
 	
 	public interface AuthentificatedCallback {
-		boolean authentificated(GoogleAccessProtectedResource protectRes, boolean lastTry);	
+		boolean authentificated(GoogleAccountCredential protectRes, boolean lastTry);	
 	}
 
 	
 	protected String m_accountName;
 	protected String m_authToken;
 	protected String m_authTokenType;
-	protected GoogleAccessProtectedResource m_accessProtectedResource = null;
+	protected GoogleAccountCredential m_accessProtectedResource = null;
 	protected Context m_context;
 	
 	
@@ -67,7 +67,7 @@ public class GoogleServiceAuthentificator {
 		return m_authToken;
 	}
 
-	public GoogleAccessProtectedResource getAccessProtectedResource() {
+	public GoogleAccountCredential getAccessProtectedResource() {
 		return m_accessProtectedResource;
 	}
 	
@@ -94,48 +94,50 @@ public class GoogleServiceAuthentificator {
 			final AuthentificatedCallback callback,
 			final boolean lastTry) {
 		LogHelper.d("authentificateInternal with activity");
-		accountManager.getAuthToken(account, m_authTokenType, null, activity,
-				new AccountManagerCallback<Bundle>() {
-					public void run(AccountManagerFuture<Bundle> future) {
-						m_authToken = null;
-						m_accessProtectedResource = null;
-						
-						try {
-							Bundle bundle = future.getResult();
-							
-							if (bundle.containsKey(AccountManager.KEY_AUTHTOKEN)) {
-								LogHelper.d("got auth token");
-								m_authToken = bundle.getString(AccountManager.KEY_AUTHTOKEN);
-								m_accessProtectedResource = new GoogleAccessProtectedResource(m_authToken);
-				            } else {
-				            	LogHelper.w("no auth token in bundle");
-				            }
-						} catch (OperationCanceledException e) {
-							e.printStackTrace();
-						} catch (AuthenticatorException e) {
-							e.printStackTrace();
-						} catch (IOException e) {
-							e.printStackTrace();
-						} catch (Exception e) {
-							e.printStackTrace();
-						}	
-						
-						boolean actionSucceded = false;
-						if (lastTry || m_accessProtectedResource != null) {
-							actionSucceded = callback.authentificated(m_accessProtectedResource, lastTry);
-						}
-						
-						if(!actionSucceded)
-						{
-							LogHelper.d("possibly wrong auth token");
-							invalidateAuthToken();
-							if (!lastTry) {
-								authentificateInternal(account, accountManager, activity, callback, true);
-							}
-						}
-					}
-				},
-				null);	
+		m_accessProtectedResource = GoogleAccountCredential.usingOAuth2(activity, m_authToken);
+		
+//		accountManager.getAuthToken(account, m_authTokenType, null, activity,
+//				new AccountManagerCallback<Bundle>() {
+//					public void run(AccountManagerFuture<Bundle> future) {
+//						m_authToken = null;
+//						m_accessProtectedResource = null;
+//						
+//						try {
+//							Bundle bundle = future.getResult();
+//							
+//							if (bundle.containsKey(AccountManager.KEY_AUTHTOKEN)) {
+//								LogHelper.d("got auth token");
+//								m_authToken = bundle.getString(AccountManager.KEY_AUTHTOKEN);
+//								m_accessProtectedResource = GoogleAccountCredential.usingOAuth2(m_authToken);
+//				            } else {
+//				            	LogHelper.w("no auth token in bundle");
+//				            }
+//						} catch (OperationCanceledException e) {
+//							e.printStackTrace();
+//						} catch (AuthenticatorException e) {
+//							e.printStackTrace();
+//						} catch (IOException e) {
+//							e.printStackTrace();
+//						} catch (Exception e) {
+//							e.printStackTrace();
+//						}	
+//						
+//						boolean actionSucceded = false;
+//						if (lastTry || m_accessProtectedResource != null) {
+//							actionSucceded = callback.authentificated(m_accessProtectedResource, lastTry);
+//						}
+//						
+//						if(!actionSucceded)
+//						{
+//							LogHelper.d("possibly wrong auth token");
+//							invalidateAuthToken();
+//							if (!lastTry) {
+//								authentificateInternal(account, accountManager, activity, callback, true);
+//							}
+//						}
+//					}
+//				},
+//				null);	
 	}
 	
 	public void authentificateInternal(
@@ -152,7 +154,7 @@ public class GoogleServiceAuthentificator {
 			
 			if (m_authToken != null) {
 				LogHelper.d("got auth token");
-				m_accessProtectedResource = new GoogleAccessProtectedResource(m_authToken);
+				//m_accessProtectedResource = GoogleAccountCredential( );
 			} else {
 				LogHelper.w("failed to get auth token");
 			}
