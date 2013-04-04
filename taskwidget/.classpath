@@ -5,7 +5,5 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/tasks-v1r10lv1.13.2-beta"/>
-	<classpathentry kind="lib" path="C:/Projects/taskwidget-ws/taskwidget/taskwidget/extJars/library-1.5.0.jar"/>
-	<classpathentry kind="lib" path="C:/Projects/taskwidget-ws/taskwidget/taskwidget/extJars/addon-preferences-1.5.0.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
