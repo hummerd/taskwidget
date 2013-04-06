@@ -1,0 +1,4 @@
+
+[submodule "../dependency"]
+	path = ../dependency
+	url = file:////home/dima/dev/taskwidget-ws/taskwidget/dependency/HoloEverywhere
