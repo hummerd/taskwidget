@@ -22,7 +22,9 @@
         android:allowBackup="true"
         android:name="org.holoeverywhere.app.Application" >
 
-        <activity android:name=".activity.About">
+        <activity 
+            android:name=".activity.About"
+            android:theme="@style/Holo.Theme.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
