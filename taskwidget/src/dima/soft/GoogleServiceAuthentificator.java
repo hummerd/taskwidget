@@ -6,13 +6,11 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
+
 
 
 public class GoogleServiceAuthentificator {
