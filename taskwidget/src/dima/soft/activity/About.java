@@ -1,6 +1,6 @@
 package dima.soft.activity;
 
-import org.holoeverywhere.ArrayAdapter;
+import org.holoeverywhere.widget.ArrayAdapter;
 import org.holoeverywhere.app.ListActivity;
 
 import android.content.Context;
