@@ -104,7 +104,7 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	    LogHelper.d("onCreate cfg activity");
 	    LogHelper.d(String.valueOf(m_appWidgetIds[0]));
 	    
-	    m_widgetController = new WidgetController(getActivity());
+	    m_widgetController = new WidgetController(super.getActivity());
 	    m_accountName = m_widgetController.loadWidgetAccount(m_appWidgetIds[0]);
 	    m_tasksListPreference.setEnabled(m_accountName != null);
 	    
@@ -140,7 +140,7 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	}
 	
 	private void initActivity() {
-		FragmentActivity act = getActivity();
+		FragmentActivity act = super.getActivity();
 		Intent intent = act.getIntent();
 		Bundle extras = intent.getExtras();
 		
@@ -166,9 +166,9 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	    
 	    String summary;
 	    if (m_accountName != null) {
-	    	summary = getResources().getString(R.string.usingaccount, m_accountName);
+	    	summary = super.getResources().getString(R.string.usingaccount, m_accountName);
 	    } else {
-	    	summary = getResources().getString(R.string.selectacount);
+	    	summary = super.getResources().getString(R.string.selectacount);
 	    }
 	    
 	    m_accountPreference.setSummary(summary);
@@ -179,9 +179,9 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 		String summary;
 		
 		if (listName == null) {
-			summary = getResources().getString(R.string.selectlist);
+			summary = super.getResources().getString(R.string.selectlist);
 		} else {
-			summary = getResources().getString(R.string.usinglist, listName);
+			summary = super.getResources().getString(R.string.usinglist, listName);
 		}
 		
 		m_tasksListPreference.setSummary(summary);
@@ -211,7 +211,7 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 			accountNames[i] = accounts[i].name;
 		}
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		AlertDialog.Builder builder = new AlertDialog.Builder(super.getActivity());
 		builder.setTitle("Select account");
 		builder.setItems(
 			accountNames, 
@@ -244,16 +244,16 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 		}
 		
 		final ProgressDialog currentDialog = dialog == null 
-				? ProgressDialog.show(getActivity(), "", getResources().getString(R.string.loading), true)
+				? ProgressDialog.show(super.getActivity(), "", super.getResources().getString(R.string.loading), true)
 				: dialog;
 				
 		try {
 			final GoogleServiceAuthentificator auth = new GoogleServiceAuthentificator(
 					TasksClientInfo.AUTH_TOKEN_TYPE, 
 					m_accountName, 
-					getActivity());
+					super.getActivity());
 			
-			auth.authentificate(getActivity(), new AuthentificatedCallback() {
+			auth.authentificate(super.getActivity(), new AuthentificatedCallback() {
 				public boolean authentificated(GoogleAccountCredential protectRes, boolean lt) {			
 					LoadListTaskPrms taskPrms = new LoadListTaskPrms();
 					taskPrms.dialog = currentDialog;
@@ -283,7 +283,7 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 			listsNames[i] = lists.get(i).getTitle();
 		}
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		AlertDialog.Builder builder = new AlertDialog.Builder(super.getActivity());
 		builder.setTitle("Select list");
 		builder.setItems(
 			listsNames, 

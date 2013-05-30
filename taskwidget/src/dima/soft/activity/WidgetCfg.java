@@ -17,7 +17,7 @@ public class WidgetCfg extends PreferenceActivity {
         super.onCreate(savedInstanceState);
         
         // Display the fragment as the main content.
-        getSupportFragmentManager().beginTransaction()
+        super.getSupportFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new WidgetCfgFragment())
                 .commit();
     }
