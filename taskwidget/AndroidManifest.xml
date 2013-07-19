@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dima.soft"
+    package="com.dima.tkswidget"
     android:versionCode="30"
     android:versionName="1.0 (30)" 
     android:installLocation="internalOnly">
@@ -15,6 +15,8 @@
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	<uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
+	<uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
 
     <application
         android:icon="@drawable/tasks"
@@ -31,7 +33,9 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".activity.WidgetCfg">
+        <activity 
+            android:name=".activity.WidgetCfg"
+            android:theme="@style/Holo.Theme.Light">
 			<intent-filter>
         		<action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
     		</intent-filter>
@@ -41,21 +45,36 @@
             android:name=".activity.ActionSelect"
         	android:excludeFromRecents="true" 
         	android:launchMode="singleInstance"
-        	android:taskAffinity="dima.soft.widgetaction"
-        	android:theme="@android:style/Theme.Translucent.NoTitleBar"            
+        	android:taskAffinity="com.dima.widgetaction"
+        	android:theme="@style/Holo.Theme.Light"
             >
+<!-- 			android:theme="@android:style/Theme.Translucent.NoTitleBar" -->
         </activity>
         
-	    <receiver android:name="TaskWidgetProvider" >
+	    <receiver android:name=".TaskWidgetProvider" >
 		    <intent-filter>
 		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+		        <action android:name="com.dima.taskwidget.TASKS_UPDATED" />
 		    </intent-filter>
 		    <meta-data android:name="android.appwidget.provider"
 		               android:resource="@xml/widgetinfo" />
 		</receiver>  
 	    
-	    <service android:name=".WidgetController$UpdateService" >
-	    </service>
+        <service
+                android:name=".TaskSyncService"
+                android:exported="false">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+            <meta-data android:name="android.content.SyncAdapter"
+                    android:resource="@xml/syncadapter" />
+        </service>
+	    
+        <provider android:name=".TaskContentProvider"
+            android:authorities="com.dima.tkswidget.provider"
+            android:exported="false">
+            <grant-uri-permission android:pathPattern=".*" />
+        </provider>
 	    
     </application>
     

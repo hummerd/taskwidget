@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:holo="http://schemas.android.com/apk/res-auto" >
 
-    <PreferenceCategory android:title="Tasks list preferencies" >
+    <PreferenceCategory holo:title="Tasks list preferencies" >
         <Preference
-            android:key="prefAccount"
-            android:title="Select Google account"
+            holo:id="@+id/pref_account"
+            holo:title="Select Google account"
             />
         <Preference
-            android:key="prefTasksList"
-            android:enabled="false"
-            android:title="Select tasks list"
+            holo:id="@+id/pref_tasks_list"
+            holo:enabled="false"
+            holo:title="Select tasks list"
             />
     </PreferenceCategory>
 

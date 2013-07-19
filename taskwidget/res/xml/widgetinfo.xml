@@ -4,7 +4,7 @@
     android:minHeight="48dp"
     android:updatePeriodMillis="0"    
     android:initialLayout="@layout/taskwidget"
-    android:configure="dima.soft.activity.WidgetCfg"
+    android:configure="com.dima.tkswidget.activity.WidgetCfg"
     >
 </appwidget-provider>
 
