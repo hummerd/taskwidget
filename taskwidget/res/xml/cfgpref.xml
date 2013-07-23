@@ -4,6 +4,7 @@
     <PreferenceCategory holo:title="Tasks list preferencies" >
         <Preference
             holo:id="@+id/pref_account"
+            holo:key="prefAcc"
             holo:title="Select Google account"
             />
         <Preference

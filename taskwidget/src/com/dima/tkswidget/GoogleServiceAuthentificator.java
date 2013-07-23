@@ -1,7 +1,9 @@
 package com.dima.tkswidget;
 
+import java.io.IOException;
 import java.util.Collections;
 
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.services.tasks.TasksScopes;
 
@@ -22,7 +24,8 @@ public class GoogleServiceAuthentificator {
 		m_context = context;
 	}
 
-	public void authentificate() {
+	public void authentificate() 
+			throws IOException, GoogleAuthException {
 		authentificateInternal(m_accountName, m_context);
 	}
 
@@ -32,9 +35,11 @@ public class GoogleServiceAuthentificator {
 	
 	protected void authentificateInternal(
 			final String account,
-			final Context context) {
+			final Context context) 
+					throws IOException, GoogleAuthException {
 		LogHelper.d("authentificateInternal");
 		m_accessProtectedResource = GoogleAccountCredential.usingOAuth2(context, Collections.singleton(TasksScopes.TASKS));
 		m_accessProtectedResource.setSelectedAccountName(account);
+		//m_accessProtectedResource.getToken();
 	}
 }

@@ -4,15 +4,24 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
+import com.google.android.gms.auth.UserRecoverableNotifiedException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.util.DateTime;
+import com.google.api.services.tasks.TasksScopes;
 import com.google.api.services.tasks.model.Task;
 import com.google.api.services.tasks.model.TaskList;
 
 import android.accounts.Account;
+import android.app.Activity;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -33,12 +42,18 @@ public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
 	    	String authority,
 	        ContentProviderClient provider, 
 	        SyncResult syncResult) {
-
+	    	
+	    	String token = null;
+	    	
 	        try {
+	        	Bundle b = new Bundle();
+	        	//"Manage your tasks"
+	        	token = GoogleAuthUtil.getTokenWithNotification(m_context, account.name, TasksScopes.TASKS, b, authority, extras);
+	        	
 	        	GoogleServiceAuthentificator servAuth = new GoogleServiceAuthentificator(account.name, m_context);
 	        	servAuth.authentificate();
-	        	GoogleTasksLoader taskLoader = new GoogleTasksLoader(servAuth.getAccessProtectedResource());
-	        
+	        	
+	        	GoogleTasksLoader taskLoader = new GoogleTasksLoader(servAuth.getAccessProtectedResource());	
 	        	List<TaskList> taskLists = taskLoader.getTasksLists();
 	        	
 	        	provider.delete(TaskMetadata.TASK_INFO.CONTENT_DIR, "", new String[0]);
@@ -69,14 +84,20 @@ public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
 	        } catch (final RemoteException e) {
 	            LogHelper.e( "RemoteException", e);
 	            syncResult.stats.numParseExceptions++;
+//	        } catch (final UserRecoverableAuthException userAuthEx) {
+//	        	m_context.startActivity(userAuthEx.getIntent());
+//                return;
 //	        } catch (final AuthenticatorException e) {
 //	            LogHelper.e( "AuthenticatorException", e);
 //	            syncResult.stats.numParseExceptions++;
 //	        } catch (final OperationCanceledException e) {
 //	        	LogHelper.e("OperationCanceledExcetpion", e);
-	        } catch (final IOException e) {
-	        	LogHelper.e("IOException", e);
-	            syncResult.stats.numIoExceptions++;
+//	        } catch (final IOException e) {
+//	        	LogHelper.e("IOException", e);
+//	            syncResult.stats.numIoExceptions++;
+//	        } catch (final IOException e) {
+//	        	LogHelper.e("IOException", e);
+//	            syncResult.stats.numIoExceptions++;
 //	        } catch (final AuthenticationException e) {
 //	        	LogHelper.e("AuthenticationException", e);
 //	            syncResult.stats.numAuthExceptions++;
@@ -86,7 +107,24 @@ public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
 //	        } catch (final JSONException e) {
 //	        	LogHelper.e("JSONException", e);
 //	            syncResult.stats.numParseExceptions++;
-	        }
+	        } catch (UserRecoverableAuthIOException e) {
+	        	if (token != null) {
+	        		GoogleAuthUtil.invalidateToken(m_context, token);
+	        	}
+	        	e.printStackTrace();
+	        	Intent i = e.getIntent();
+	        	i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	        	m_context.startActivity(i);
+	        } catch (UserRecoverableNotifiedException e) {
+				e.printStackTrace();
+				syncResult.stats.numAuthExceptions++;
+			} catch (GoogleAuthException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	    }
 	    
 	    private ContentValues getTaskListValues(TaskList list) {
