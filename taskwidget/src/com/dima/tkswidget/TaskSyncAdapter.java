@@ -2,29 +2,22 @@ package com.dima.tkswidget;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.UserRecoverableAuthException;
-import com.google.android.gms.auth.UserRecoverableNotifiedException;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
-import com.google.api.client.util.DateTime;
-import com.google.api.services.tasks.TasksScopes;
-import com.google.api.services.tasks.model.Task;
-import com.google.api.services.tasks.model.TaskList;
 
 import android.accounts.Account;
-import android.app.Activity;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
 import android.os.RemoteException;
+
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableNotifiedException;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
+import com.google.api.services.tasks.model.Task;
+import com.google.api.services.tasks.model.TaskList;
 
 
 public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
@@ -46,12 +39,8 @@ public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
 	    	String token = null;
 	    	
 	        try {
-	        	Bundle b = new Bundle();
-	        	//"Manage your tasks"
-	        	token = GoogleAuthUtil.getTokenWithNotification(m_context, account.name, TasksScopes.TASKS, b, authority, extras);
-	        	
 	        	GoogleServiceAuthentificator servAuth = new GoogleServiceAuthentificator(account.name, m_context);
-	        	servAuth.authentificate();
+	        	token = servAuth.authentificateSyncAdapter(authority, extras);
 	        	
 	        	GoogleTasksLoader taskLoader = new GoogleTasksLoader(servAuth.getAccessProtectedResource());	
 	        	List<TaskList> taskLists = taskLoader.getTasksLists();
@@ -82,58 +71,35 @@ public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
 	        	ctrl.notifyUpdateCompleted();
 	        	
 	        } catch (final RemoteException e) {
-	            LogHelper.e( "RemoteException", e);
+	        	e.printStackTrace();
 	            syncResult.stats.numParseExceptions++;
-//	        } catch (final UserRecoverableAuthException userAuthEx) {
-//	        	m_context.startActivity(userAuthEx.getIntent());
-//                return;
-//	        } catch (final AuthenticatorException e) {
-//	            LogHelper.e( "AuthenticatorException", e);
-//	            syncResult.stats.numParseExceptions++;
-//	        } catch (final OperationCanceledException e) {
-//	        	LogHelper.e("OperationCanceledExcetpion", e);
-//	        } catch (final IOException e) {
-//	        	LogHelper.e("IOException", e);
-//	            syncResult.stats.numIoExceptions++;
-//	        } catch (final IOException e) {
-//	        	LogHelper.e("IOException", e);
-//	            syncResult.stats.numIoExceptions++;
-//	        } catch (final AuthenticationException e) {
-//	        	LogHelper.e("AuthenticationException", e);
-//	            syncResult.stats.numAuthExceptions++;
-//	        } catch (final ParseException e) {
-//	        	LogHelper.e("ParseException", e);
-//	            syncResult.stats.numParseExceptions++;
-//	        } catch (final JSONException e) {
-//	        	LogHelper.e("JSONException", e);
-//	            syncResult.stats.numParseExceptions++;
 	        } catch (UserRecoverableAuthIOException e) {
+	        	e.printStackTrace();
+	        	syncResult.stats.numAuthExceptions++;
 	        	if (token != null) {
 	        		GoogleAuthUtil.invalidateToken(m_context, token);
 	        	}
-	        	e.printStackTrace();
-	        	Intent i = e.getIntent();
-	        	i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	        	m_context.startActivity(i);
 	        } catch (UserRecoverableNotifiedException e) {
 				e.printStackTrace();
 				syncResult.stats.numAuthExceptions++;
 			} catch (GoogleAuthException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				syncResult.stats.numAuthExceptions++;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				syncResult.stats.numIoExceptions++;
 				e.printStackTrace();
+	        	if (token != null) {
+	        		GoogleAuthUtil.invalidateToken(m_context, token);
+	        	}
 			}
 	    }
 	    
 	    private ContentValues getTaskListValues(TaskList list) {
 	    	ContentValues result = new ContentValues(3);
-	    	
+
 	    	result.put(TaskMetadata.COL_TL_ID, list.getId());
 	    	result.put(TaskMetadata.COL_TL_TITLE, list.getTitle());
-	    	Map<String, Object> uk = list.getUnknownKeys();
-	    	result.put(TaskMetadata.COL_TL_CREATE_DATE, DateTime.parseRfc3339((String)uk.get("updated")).getValue());
+	    	result.put(TaskMetadata.COL_TL_CREATE_DATE, list.getUpdated().getValue());
 	    	
 	    	return result;
 	    }
@@ -143,11 +109,10 @@ public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
 	    	
 	    	result.put(TaskMetadata.COL_ID, task.getId());
 	    	result.put(TaskMetadata.COL_TITLE, task.getTitle());
+	    	result.put(TaskMetadata.COL_CREATE_DATE, task.getUpdated().getValue());
 	    	result.put(TaskMetadata.COL_PARENT_LIST_ID, listId);
 	    	result.put(TaskMetadata.COL_PARENT_TASK_ID, task.getParent());
-	    	Map<String, Object> uk = task.getUnknownKeys();
-	    	result.put(TaskMetadata.COL_TL_CREATE_DATE, DateTime.parseRfc3339((String)uk.get("updated")).getValue());
-	    	
+	    		    	
 	    	return result;
 	    }
 }

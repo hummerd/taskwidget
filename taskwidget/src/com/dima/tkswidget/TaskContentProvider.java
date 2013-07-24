@@ -20,7 +20,7 @@ public class TaskContentProvider extends ContentProvider {
     private static final String DATABASE_NAME = "tkswidget.db";
     private static final String TABLE_NAME_TASK = "task";
     private static final String TABLE_NAME_TASK_LIST = "task_list";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     
     static class DatabaseHelper extends SQLiteOpenHelper {
@@ -40,7 +40,9 @@ public class TaskContentProvider extends ContentProvider {
             db.execSQL("CREATE TABLE " + TABLE_NAME_TASK + " ("
                     + TaskMetadata.COL_ID + " TEXT PRIMARY KEY,"
                     + TaskMetadata.COL_CREATE_DATE + " INTEGER,"
-                    + TaskMetadata.COL_TITLE + " TEXT"
+                    + TaskMetadata.COL_TITLE + " TEXT,"
+                    + TaskMetadata.COL_PARENT_LIST_ID + " TEXT,"
+                    + TaskMetadata.COL_PARENT_TASK_ID + " TEXT"
                     + ");");
             
             db.execSQL("CREATE TABLE " + TABLE_NAME_TASK_LIST + " ("
@@ -65,8 +67,9 @@ public class TaskContentProvider extends ContentProvider {
                     + newVersion + ", which will destroy all old data");
 
             // Kills the table and existing data
-            db.execSQL("DROP TABLE IF EXISTS tasks");
-
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_TASK);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_TASK_LIST);
+            
             // Recreates the database with a new version
             onCreate(db);
         }

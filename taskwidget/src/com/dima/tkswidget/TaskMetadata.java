@@ -102,15 +102,15 @@ public class TaskMetadata {
     }
     
     
-	private static final UriMatcher s_uriMatcher = new UriMatcher(0);
+	private static final UriMatcher s_uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 	private static final SparseArray<EntityMetaInfo> s_uriMeta = new SparseArray<EntityMetaInfo>(4);
 	
     static {
-		s_uriMatcher.addURI(AUTHORITY, TASK_INFO.CONTENT_DIR.toString().replace("/", ""), URI_KIND_TASKS);
-		s_uriMatcher.addURI(AUTHORITY, TASK_INFO.CONTENT_ITEM.toString() + "/#", URI_KIND_TASK_ID);
+		s_uriMatcher.addURI(AUTHORITY, "tasks", URI_KIND_TASKS);
+		s_uriMatcher.addURI(AUTHORITY, "task/#", URI_KIND_TASK_ID);
 		
-		s_uriMatcher.addURI(AUTHORITY, TASK_LIST_INFO.CONTENT_DIR.toString().replace("/", ""), URI_KIND_LISTS);
-		s_uriMatcher.addURI(AUTHORITY, TASK_LIST_INFO.CONTENT_ITEM.toString().replace("/", "") + "/#", URI_KIND_LIST_ID);
+		s_uriMatcher.addURI(AUTHORITY, "tasklists", URI_KIND_LISTS);
+		s_uriMatcher.addURI(AUTHORITY, "tasklist/#", URI_KIND_LIST_ID);
 	
 		s_uriMeta.put(URI_KIND_TASKS, TASK_INFO);
 		s_uriMeta.put(URI_KIND_TASK_ID, TASK_INFO);

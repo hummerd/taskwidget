@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
@@ -16,8 +17,7 @@ import com.google.api.services.tasks.model.TaskLists;
 
 
 public class GoogleTasksLoader {
-	protected static final String TASKS_APP_KEY = "AIzaSyC0HLKFQZbYA0iolnXzNo5WNItMNOomLtg";
-	protected static final String APP_NAME = "com.dima.googletaskswidget";
+	protected static final String APP_NAME = "com.dima.tkswidget";
 	
 	protected GoogleAccountCredential m_googleAccess;
 	protected Tasks m_tasksService;
@@ -25,12 +25,11 @@ public class GoogleTasksLoader {
 	
 	public GoogleTasksLoader(GoogleAccountCredential googleAccess) {
 		m_googleAccess = googleAccess;
-		
+
 		HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
 		m_tasksService = new Tasks.Builder(httpTransport, new GsonFactory(), googleAccess)
-			.setApplicationName(APP_NAME)
+			.setApplicationName("864727567660.apps.googleusercontent.com")
 			.build();
-		
 		Logger.getLogger("com.google.api.client").setLevel(Level.ALL);
 	}
 	
@@ -49,10 +48,12 @@ public class GoogleTasksLoader {
 	}
 
 	public List<TaskList> getTasksLists() 
-			throws IOException {
+			throws IOException, GoogleAuthException {
+	
 		TaskLists taskList = m_tasksService
 			.tasklists()
 			.list()
+			.setFields("items(id,title,updated)")
 			.execute();
 		
 		if (taskList == null)
