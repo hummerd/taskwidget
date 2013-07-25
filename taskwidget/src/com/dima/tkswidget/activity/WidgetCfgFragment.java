@@ -3,6 +3,8 @@ package com.dima.tkswidget.activity;
 import java.util.Arrays;
 import java.util.List;
 
+import org.holoeverywhere.app.AlertDialog;
+import org.holoeverywhere.app.ProgressDialog;
 import org.holoeverywhere.preference.Preference;
 import org.holoeverywhere.preference.Preference.OnPreferenceClickListener;
 import org.holoeverywhere.preference.PreferenceFragment;
@@ -11,34 +13,21 @@ import org.holoeverywhere.preference.SharedPreferences.OnSharedPreferenceChangeL
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
+import android.app.Activity;
 import android.appwidget.AppWidgetManager;
-import android.content.ContentResolver;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SyncStatusObserver;
-import android.database.ContentObserver;
-import android.net.Uri;
+import android.content.IntentFilter;
 import android.os.Bundle;
-//import android.preference.Preference;
 import android.support.v4.app.FragmentActivity;
-//import android.view.View;
-//import android.widget.Button;
 
-
-
-
-
+import com.dima.tkswidget.GoogleServiceAuthentificator;
 import com.dima.tkswidget.LogHelper;
 import com.dima.tkswidget.R;
-//import com.dima.tkswidget.GoogleServiceAuthentificator.AuthentificatedCallback;
-import com.dima.tkswidget.TaskMetadata;
 import com.dima.tkswidget.TaskProvider;
 import com.dima.tkswidget.WidgetController;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.services.tasks.model.TaskList;
 
 public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
@@ -51,20 +40,14 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	private TaskProvider m_taskProvider;
 	private AccountManager m_accountManager;
 	private ProgressDialog m_progressDialog;
-	private ContentObserver m_listUpdated = new ContentObserver(null) {
-		@Override
-		public void onChange(boolean selfChange, Uri uri) {
-			stopUpdating();
-			super.onChange(selfChange, uri);
-		}
-	};
-	private Object m_statusHandle = null;
-	private SyncStatusObserver m_updateStatus = new SyncStatusObserver () {
-		@Override
-		public void onStatusChanged(int which) {
-			int f = which;
-			f++;
-		}
+
+	
+	private final BroadcastReceiver m_syncFinishedReceiver = new BroadcastReceiver() {
+
+	    @Override
+	    public void onReceive(Context context, Intent intent) {
+	    	stopUpdating();
+	    }
 	};
 	
 	
@@ -90,23 +73,30 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	    
 	    checkAccounts();
 	    checkList();
+	    updateLists();
 	}
 	
 	@Override
 	public void onStop() {
-		if (m_progressDialog != null) {
-			m_progressDialog.cancel();
-		}
-		LogHelper.d("Stop activity");
 		super.onStop();
+		LogHelper.d("Stop activity");
 	}
 	
 	@Override
 	public void onPause() {
-		LogHelper.d("Pause activity");
+		super.getActivity().unregisterReceiver(m_syncFinishedReceiver);
 		stopUpdating();
 		super.onPause();
+		LogHelper.d("Pause activity");
 	}
+	
+	@Override
+	public void onResume() {
+		super.getActivity().registerReceiver(m_syncFinishedReceiver, new IntentFilter(WidgetController.TASKS_SYNC_FINISHED));
+	    super.onResume();
+	    LogHelper.d("Resume activity");
+	}
+	
 	
 	private void initCustomPrefs() {
 	    m_accountPreference = (Preference)findPreference(R.id.pref_account);
@@ -114,13 +104,6 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 
 	    m_tasksListPreference = (Preference)findPreference(R.id.pref_tasks_list);
 	    m_tasksListPreference.setOnPreferenceClickListener(onTasksListSelect);
-	    
-//	    Button btn = (Button)findViewById(R.id.btnok);
-//	    btn.setOnClickListener(new View.OnClickListener() {
-//			public void onClick(View v) {
-//				finishWithOk();
-//			}
-//		});
 	}
 	
 	private void initActivity() {
@@ -222,32 +205,23 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	}
 		
 	private void updateLists() {
-		int serviceAvailable = GooglePlayServicesUtil.isGooglePlayServicesAvailable(super.getActivity());
-		if (serviceAvailable != ConnectionResult.SUCCESS) {
-			Dialog d = GooglePlayServicesUtil.getErrorDialog(serviceAvailable, super.getActivity(), 1);
-			d.show();
+		if (m_accountName == null) {
 			return;
 		}
 		
-		m_progressDialog = ProgressDialog.show(super.getActivity(), "", super.getResources().getString(R.string.loading), true);
+		final Activity activity = super.getActivity();
 		
-		ContentResolver resolver = super.getActivity().getContentResolver();
-		resolver.registerContentObserver(TaskMetadata.TASK_LIST_INFO.CONTENT_DIR, true, m_listUpdated);
-		m_statusHandle = ContentResolver.addStatusChangeListener(
-				ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE
-				+ ContentResolver.SYNC_OBSERVER_TYPE_PENDING
-				+ ContentResolver.SYNC_OBSERVER_TYPE_SETTINGS, 
-				m_updateStatus);
-		m_widgetController.startSync();
+		GoogleServiceAuthentificator auth = new GoogleServiceAuthentificator(m_accountName, activity);
+		auth.authentificateActivityAsync(activity, 2, 3, new Runnable() {
+			@Override
+			public void run() {
+				m_progressDialog = ProgressDialog.show(activity, "", activity.getResources().getString(R.string.loading), true);
+				m_widgetController.startSync();
+			}
+		});
 	}
 	
 	private void stopUpdating() {
-		ContentResolver resolver = getActivity().getContentResolver();
-		resolver.unregisterContentObserver(m_listUpdated);
-		
-		if (m_statusHandle != null) {
-			ContentResolver.removeStatusChangeListener(m_statusHandle);
-		}
 		
 		if (m_progressDialog != null) {
 			m_progressDialog.cancel();
@@ -275,23 +249,24 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 		    			m_appWidgetIds[0], 
 		    			lists.get(ix).getId(),
 		    			lists.get(ix).getTitle());
-		    	checkList();
+		    	//checkList();
+		    	finishWithOk();
 		    }
 		});
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
 	
-//	private void finishWithOk() {
-//		LogHelper.i("finishWithOk");
-//		
-//		m_widgetController.launchUpdateService(m_appWidgetIds, false);
-//		
-//		Intent resultValue = new Intent();
-//		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, m_appWidgetIds[0]);
-//		setResult(RESULT_OK, resultValue);
-//		finish();	
-//	}
+	private void finishWithOk() {
+		LogHelper.i("finishWithOk");
+		
+		m_widgetController.updateWidgets(m_appWidgetIds);
+		
+		Intent resultValue = new Intent();
+		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, m_appWidgetIds[0]);
+		super.getActivity().setResult(Activity.RESULT_OK, resultValue);
+		super.getActivity().finish();	
+	}
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {

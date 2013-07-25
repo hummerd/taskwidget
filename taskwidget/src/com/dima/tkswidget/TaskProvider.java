@@ -9,6 +9,7 @@ import com.google.api.services.tasks.model.TaskList;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 
 public class TaskProvider {
 	protected final Context m_context;
@@ -24,7 +25,7 @@ public class TaskProvider {
 		Cursor cursor = m_content.query(
 				TaskMetadata.TASK_LIST_INFO.CONTENT_DIR,
 				new String[] { TaskMetadata.COL_TL_ID, TaskMetadata.COL_TL_TITLE },  
-				"",  
+				null,  
 				null, 
 				null);
 		
@@ -40,10 +41,10 @@ public class TaskProvider {
 	
 	public TaskList getList(String id) {
 		Cursor cursor = m_content.query(
-				TaskMetadata.TASK_LIST_INFO.CONTENT_ITEM,
+				Uri.withAppendedPath(TaskMetadata.TASK_LIST_INFO.CONTENT_ITEM, id),
 				new String[] { TaskMetadata.COL_TL_ID, TaskMetadata.COL_TL_TITLE },  
-				TaskMetadata.TASK_LIST_INFO.COL_ID + " = ?",  
-				new String[] { id }, 
+				null,  
+				null, 
 				null);
 		
 		if(!cursor.moveToNext()) {
@@ -59,8 +60,8 @@ public class TaskProvider {
 	
 	public List<Task> getListTasks(String id) {
 		Cursor cursor = m_content.query(
-				TaskMetadata.TASK_INFO.CONTENT_ITEM,
-				new String[] { TaskMetadata.COL_ID, TaskMetadata.COL_TITLE },  
+				TaskMetadata.TASK_INFO.CONTENT_DIR,
+				new String[] { TaskMetadata.COL_ID, TaskMetadata.COL_TITLE, TaskMetadata.COL_STATUS },  
 				TaskMetadata.COL_PARENT_LIST_ID + " = ?",  
 				new String[] { id }, 
 				null);
@@ -70,6 +71,7 @@ public class TaskProvider {
 			Task task = new Task();
 			task.setId(cursor.getString(0));
 			task.setTitle(cursor.getString(1));
+			task.setStatus(cursor.getString(2));
 			result.add(task);
 		}
 		

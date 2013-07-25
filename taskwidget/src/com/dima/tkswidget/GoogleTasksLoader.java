@@ -28,7 +28,7 @@ public class GoogleTasksLoader {
 
 		HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
 		m_tasksService = new Tasks.Builder(httpTransport, new GsonFactory(), googleAccess)
-			.setApplicationName("864727567660.apps.googleusercontent.com")
+			.setApplicationName(APP_NAME)
 			.build();
 		Logger.getLogger("com.google.api.client").setLevel(Level.ALL);
 	}

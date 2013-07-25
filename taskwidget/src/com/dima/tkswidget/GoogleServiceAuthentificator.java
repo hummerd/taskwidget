@@ -3,12 +3,18 @@ package com.dima.tkswidget;
 import java.io.IOException;
 import java.util.Collections;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
+import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.auth.UserRecoverableNotifiedException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.services.tasks.TasksScopes;
 
@@ -19,6 +25,24 @@ import com.google.api.services.tasks.TasksScopes;
  * @author Dima Kozlov
  */
 public class GoogleServiceAuthentificator {
+
+	private static void processAuthError(Exception exc, Activity activity, int requestCodePlayServ, int requestRecoverAuth) {
+		if (exc.getClass() == GooglePlayServicesAvailabilityException.class) {
+    		GooglePlayServicesAvailabilityException e = (GooglePlayServicesAvailabilityException)exc;
+    	    Dialog dialog = GooglePlayServicesUtil.getErrorDialog(
+    	    	e.getConnectionStatusCode(),
+    	    	activity,
+    	    	requestCodePlayServ);
+    	    dialog.show();
+    	    
+    	} else if (exc.getClass() == UserRecoverableAuthException.class) {
+    		UserRecoverableAuthException e = (UserRecoverableAuthException)exc;
+    		activity.startActivityForResult(
+    		   	e.getIntent(), 
+    		   	requestRecoverAuth);
+    	}
+	}
+	
 	
 	protected String m_accountName;
 	protected GoogleAccountCredential m_accessProtectedResource = null;
@@ -36,9 +60,48 @@ public class GoogleServiceAuthentificator {
 		m_accessProtectedResource.setSelectedAccountName(m_accountName);
 	}
 
-	public void authentificateActivity() 
-			throws IOException, GoogleAuthException {
-		GoogleAuthUtil.getToken(m_context, m_accountName, m_scope);
+	public void authentificateActivityAsync(final Activity activity, final int requestCodePlayServ, final int requestRecoverAuth, final Runnable onStartUpdate) 
+	{
+		AsyncTask<Void, Void, Exception> task = new AsyncTask<Void, Void, Exception>() {
+		    @Override
+		    protected Exception doInBackground(Void... params) {
+		    	try {
+					GoogleAuthUtil.getToken(m_context, m_accountName, m_scope);
+				} catch (Exception e) {
+					LogHelper.e("Exception on GoogleAuthUtil.getToken: " + e.getMessage(), e);
+					e.printStackTrace();
+					return e;
+				}
+				
+				return null;
+		    }
+		    
+		    @Override
+		    protected void onPostExecute(Exception result) {
+		    	super.onPostExecute(result);
+		    	
+		    	if (result == null && onStartUpdate != null) {
+		    		onStartUpdate.run();
+		    		
+		    	} else {
+		    		processAuthError(result, activity, requestCodePlayServ, requestRecoverAuth);
+		    	}
+		    }
+		};
+		task.execute((Void)null);
+	}
+	
+	public String authentificateActivity(final Activity activity, final int requestCodePlayServ, final int requestRecoverAuth) 
+	{
+		try {
+			return GoogleAuthUtil.getToken(m_context, m_accountName, m_scope);
+		} catch (Exception exc) {
+			LogHelper.e("Exception on GoogleAuthUtil.getToken: " + exc.getMessage(), exc);
+			exc.printStackTrace();
+			processAuthError(exc, activity, requestCodePlayServ, requestRecoverAuth);
+		}
+
+		return null;
 	}
 
 	public String authentificateSyncAdapter(String authority, Bundle syncBundle) 

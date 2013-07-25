@@ -47,6 +47,7 @@ public class TaskMetadata {
 	
 	public static final String COL_ID = "id";
 	public static final String COL_TITLE = "title";
+	public static final String COL_STATUS = "status";
 	public static final String COL_CREATE_DATE = "date";
 	public static final String COL_PARENT_TASK_ID = "parent_id";
 	public static final String COL_PARENT_LIST_ID = "list_id";
@@ -58,7 +59,7 @@ public class TaskMetadata {
 		COL_CREATE_DATE + " DESC",
 		Uri.parse(ContentResolver.SCHEME_CONTENT + "://" + AUTHORITY + "/tasks"),
 		Uri.parse(ContentResolver.SCHEME_CONTENT + "://" + AUTHORITY + "/task"),
-		Uri.parse(ContentResolver.SCHEME_CONTENT + "://" + AUTHORITY + "/task/#"),
+		Uri.parse(ContentResolver.SCHEME_CONTENT + "://" + AUTHORITY + "/task/*"),
 		1,
 		"vnd.android.cursor.item/vnd." + AUTHORITY + ".task",
 		"vnd.android.cursor.dir/vnd." + AUTHORITY + ".task"
@@ -77,7 +78,7 @@ public class TaskMetadata {
 		COL_TL_CREATE_DATE + " DESC",
 		Uri.parse(ContentResolver.SCHEME_CONTENT + "://" + AUTHORITY + "/tasklists"),
 		Uri.parse(ContentResolver.SCHEME_CONTENT + "://" + AUTHORITY + "/tasklist"),
-		Uri.parse(ContentResolver.SCHEME_CONTENT + "://" + AUTHORITY + "/tasklist/#"),
+		Uri.parse(ContentResolver.SCHEME_CONTENT + "://" + AUTHORITY + "/tasklist/*"),
 		1,
 		"vnd.android.cursor.item/vnd." + AUTHORITY + ".tasklist",
 		"vnd.android.cursor.dir/vnd." + AUTHORITY + ".tasklist"
@@ -107,10 +108,10 @@ public class TaskMetadata {
 	
     static {
 		s_uriMatcher.addURI(AUTHORITY, "tasks", URI_KIND_TASKS);
-		s_uriMatcher.addURI(AUTHORITY, "task/#", URI_KIND_TASK_ID);
+		s_uriMatcher.addURI(AUTHORITY, "task/*", URI_KIND_TASK_ID);
 		
 		s_uriMatcher.addURI(AUTHORITY, "tasklists", URI_KIND_LISTS);
-		s_uriMatcher.addURI(AUTHORITY, "tasklist/#", URI_KIND_LIST_ID);
+		s_uriMatcher.addURI(AUTHORITY, "tasklist/*", URI_KIND_LIST_ID);
 	
 		s_uriMeta.put(URI_KIND_TASKS, TASK_INFO);
 		s_uriMeta.put(URI_KIND_TASK_ID, TASK_INFO);

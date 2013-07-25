@@ -39,6 +39,7 @@ public class WidgetController {
     private static final String LIST_CLICK_ACTION = "com.dima.taskwidget.OPEN_TASKS";
     private static final String TASKS_CLICK_ACTION = "com.dima.taskwidget.OPEN_CFG";
     private static final String TASKS_UPDATED_ACTION = "com.dima.taskwidget.TASKS_UPDATED";
+    public static final String TASKS_SYNC_FINISHED = "com.dima.taskwidget.TASKS_SYNC_FINISHED";
     
     
 	private static class AccountWidgets {			
@@ -155,6 +156,9 @@ public class WidgetController {
 		for (int id : widgetIds) {
 			LogHelper.i("loading list");
 			String listId = loadWidgetList(id);
+			if (listId == null) {
+				continue;
+			}
 			TaskList list = m_taskSource.getList(listId);
 			List<Task> tasks = m_taskSource.getListTasks(listId);
 			
@@ -180,6 +184,11 @@ public class WidgetController {
 	
 	public void notifyUpdateCompleted() {
 		Intent intent = new Intent(TASKS_UPDATED_ACTION);
+		m_context.sendBroadcast(intent);
+	}
+	
+	public void notifySyncCompleted() {
+		Intent intent = new Intent(TASKS_SYNC_FINISHED);
 		m_context.sendBroadcast(intent);
 	}
 	
