@@ -46,9 +46,9 @@
         	android:excludeFromRecents="true" 
         	android:launchMode="singleInstance"
         	android:taskAffinity="com.dima.widgetaction"
-        	android:theme="@style/Holo.Theme.Light"
+        	android:theme="@style/Transparent"
             >
-<!-- 			android:theme="@android:style/Theme.Translucent.NoTitleBar" -->
+<!-- 			android:theme="@style/Holo.Theme.Light" -->
         </activity>
         
 	    <receiver android:name=".TaskWidgetProvider" >

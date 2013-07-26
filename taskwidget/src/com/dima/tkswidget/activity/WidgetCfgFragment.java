@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.holoeverywhere.app.AlertDialog;
-import org.holoeverywhere.app.ProgressDialog;
 import org.holoeverywhere.preference.Preference;
 import org.holoeverywhere.preference.Preference.OnPreferenceClickListener;
 import org.holoeverywhere.preference.PreferenceFragment;
@@ -13,17 +12,12 @@ import org.holoeverywhere.preference.SharedPreferences.OnSharedPreferenceChangeL
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.appwidget.AppWidgetManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import com.dima.tkswidget.GoogleServiceAuthentificator;
 import com.dima.tkswidget.LogHelper;
 import com.dima.tkswidget.R;
 import com.dima.tkswidget.TaskProvider;
@@ -39,18 +33,7 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	private WidgetController m_widgetController;
 	private TaskProvider m_taskProvider;
 	private AccountManager m_accountManager;
-	private ProgressDialog m_progressDialog;
 
-	
-	private final BroadcastReceiver m_syncFinishedReceiver = new BroadcastReceiver() {
-
-	    @Override
-	    public void onReceive(Context context, Intent intent) {
-	    	stopUpdating();
-	    }
-	};
-	
-	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -73,28 +56,6 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	    
 	    checkAccounts();
 	    checkList();
-	    updateLists();
-	}
-	
-	@Override
-	public void onStop() {
-		super.onStop();
-		LogHelper.d("Stop activity");
-	}
-	
-	@Override
-	public void onPause() {
-		super.getActivity().unregisterReceiver(m_syncFinishedReceiver);
-		stopUpdating();
-		super.onPause();
-		LogHelper.d("Pause activity");
-	}
-	
-	@Override
-	public void onResume() {
-		super.getActivity().registerReceiver(m_syncFinishedReceiver, new IntentFilter(WidgetController.TASKS_SYNC_FINISHED));
-	    super.onResume();
-	    LogHelper.d("Resume activity");
 	}
 	
 	
@@ -188,7 +149,6 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 			new DialogInterface.OnClickListener() {
 		    public void onClick(DialogInterface dialog, int item) {
 		    	storeAccount(accountNames[item]);
-		    	updateLists();
 		    }
 		});
 		AlertDialog alert = builder.create();
@@ -202,30 +162,6 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 		m_accountName = accountName;
 		m_tasksListPreference.setEnabled(m_accountName != null);
 		checkAccounts();
-	}
-		
-	private void updateLists() {
-		if (m_accountName == null) {
-			return;
-		}
-		
-		final Activity activity = super.getActivity();
-		
-		GoogleServiceAuthentificator auth = new GoogleServiceAuthentificator(m_accountName, activity);
-		auth.authentificateActivityAsync(activity, 2, 3, new Runnable() {
-			@Override
-			public void run() {
-				m_progressDialog = ProgressDialog.show(activity, "", activity.getResources().getString(R.string.loading), true);
-				m_widgetController.startSync();
-			}
-		});
-	}
-	
-	private void stopUpdating() {
-		
-		if (m_progressDialog != null) {
-			m_progressDialog.cancel();
-		}
 	}
 	
 	private void selectList() {
@@ -249,24 +185,13 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 		    			m_appWidgetIds[0], 
 		    			lists.get(ix).getId(),
 		    			lists.get(ix).getTitle());
-		    	//checkList();
-		    	finishWithOk();
+		    	checkList();
 		    }
 		});
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
 	
-	private void finishWithOk() {
-		LogHelper.i("finishWithOk");
-		
-		m_widgetController.updateWidgets(m_appWidgetIds);
-		
-		Intent resultValue = new Intent();
-		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, m_appWidgetIds[0]);
-		super.getActivity().setResult(Activity.RESULT_OK, resultValue);
-		super.getActivity().finish();	
-	}
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
