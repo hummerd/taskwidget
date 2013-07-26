@@ -1,1 +1,3 @@
-/.metadata
+/dependency/google-play-services_lib/gen
+/dependency/google-play-services_lib/bin
+/dependency/google-play-services_lib/.settings
