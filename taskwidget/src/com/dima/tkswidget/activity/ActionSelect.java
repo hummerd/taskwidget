@@ -1,10 +1,11 @@
 package com.dima.tkswidget.activity;
 
-import com.dima.tkswidget.WidgetController;
+import org.holoeverywhere.app.AlertDialog;
 
+import com.dima.tkswidget.WidgetController;
 import com.dima.tkswidget.R;
+
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.DialogInterface;
 import android.content.Intent;

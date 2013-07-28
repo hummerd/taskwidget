@@ -37,6 +37,7 @@ public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
 	        SyncResult syncResult) {
 	    	
 	    	String token = null;
+	    	WidgetController ctrl = new WidgetController(m_context);
 	    	
 	        try {
 	        	GoogleServiceAuthentificator servAuth = new GoogleServiceAuthentificator(account.name, m_context);
@@ -67,8 +68,9 @@ public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
 	        		provider.bulkInsert(TaskMetadata.TASK_INFO.CONTENT_DIR, tasksValues);
 	        	}
 	        	
-	        	WidgetController ctrl = new WidgetController(m_context);
 	        	ctrl.notifyUpdateCompleted();
+	        	ctrl.notifySyncCompleted();
+	        	return;
 	        	
 	        } catch (final RemoteException e) {
 	        	e.printStackTrace();
@@ -92,6 +94,8 @@ public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
 	        		GoogleAuthUtil.invalidateToken(m_context, token);
 	        	}
 			}
+	        
+	        ctrl.notifySyncCompleted();
 	    }
 	    
 	    private ContentValues getTaskListValues(TaskList list) {
@@ -110,6 +114,7 @@ public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
 	    	result.put(TaskMetadata.COL_ID, task.getId());
 	    	result.put(TaskMetadata.COL_TITLE, task.getTitle());
 	    	result.put(TaskMetadata.COL_CREATE_DATE, task.getUpdated().getValue());
+	    	result.put(TaskMetadata.COL_STATUS, task.getStatus());
 	    	result.put(TaskMetadata.COL_PARENT_LIST_ID, listId);
 	    	result.put(TaskMetadata.COL_PARENT_TASK_ID, task.getParent());
 	    		    	
