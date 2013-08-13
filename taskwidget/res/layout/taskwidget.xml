@@ -1,19 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/widget_margin" >
-
+    android:padding="@dimen/widget_margin" >
+    
     <TextView
-        android:id="@+id/textViewList"
-        style="@style/mytheme"
-       	android:layout_marginRight="1dp"
-    	android:layout_width="@dimen/left_block_width"
-    	android:layout_height="match_parent"    
-        android:gravity="center"
-        android:padding="8dp"
-        android:textStyle="bold"
-        />
+        android:id="@+id/spacer_top"
+        android:layout_width="match_parent"
+        android:layout_height="8dp" />
+    
+    <TextView
+        android:id="@+id/spacer_left"
+        android:layout_width="8dp"
+        android:layout_height="match_parent" 
+        android:layout_below="@+id/spacer_top"
+        android:layout_alignParentLeft="true" />
+    
+    <TextView
+        android:id="@+id/spacer_right"
+        android:layout_width="8dp"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/spacer_top"
+        android:layout_alignParentRight="true" />
+  
+    <TextView
+        android:id="@+id/spacer_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_alignParentBottom="true" />
+    
+    
+	<RelativeLayout
+	    android:id="@+id/left_block"
+	    android:layout_marginRight="1dp"
+        android:layout_width="@dimen/left_block_width"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/spacer_top" 
+        android:layout_above="@+id/spacer_bottom"
+        android:layout_toRightOf="@+id/spacer_left"
+        >
+
+        <ImageView
+            android:id="@+id/imageRefresh"
+            android:layout_width="8dip"
+            android:layout_height="8dip"
+            android:contentDescription="@string/updating"
+            android:src="@drawable/ic_navigation_refresh"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/textViewList"
+            style="@style/mytheme"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="8dp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
 
     <LinearLayout 
         style="@style/mytheme"
@@ -21,6 +66,10 @@
         android:layout_height="match_parent"     
         android:orientation="vertical"
         android:padding="12dp"
+        android:layout_below="@+id/spacer_top" 
+        android:layout_above="@+id/spacer_bottom"
+        android:layout_toRightOf="@+id/left_block"
+        android:layout_toLeftOf="@+id/spacer_right"
         >
 	    <TextView
 	        android:id="@+id/textViewTasks"
@@ -28,7 +77,7 @@
 	        android:layout_height="wrap_content"	        
 	        android:gravity="left|top"
 	        android:lineSpacingMultiplier="1.1"
-	        android:textSize="13dp"
+	        android:textSize="12sp"
 	        android:textColor="#ffffff"
 	        android:text="@string/loading_text"
 	        />
@@ -39,8 +88,8 @@
         	android:layout_height="wrap_content"	        
 	        android:gravity="left|top"
 	        android:lineSpacingMultiplier="1.1"
-	        android:textSize="13dp"
+	        android:textSize="12sp"
 	        />	    
     </LinearLayout>
     
-</LinearLayout>
+</RelativeLayout>

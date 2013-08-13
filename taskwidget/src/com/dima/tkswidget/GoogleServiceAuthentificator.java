@@ -60,7 +60,12 @@ public class GoogleServiceAuthentificator {
 		m_accessProtectedResource.setSelectedAccountName(m_accountName);
 	}
 
-	public void authentificateActivityAsync(final Activity activity, final int requestCodePlayServ, final int requestRecoverAuth, final Runnable onStartUpdate) 
+	public void authentificateActivityAsync(
+			final Activity activity, 
+			final int requestCodePlayServ, 
+			final int requestRecoverAuth, 
+			final Runnable onAuthSucceded,
+			final Runnable onAuthFailed) 
 	{
 		AsyncTask<Void, Void, Exception> task = new AsyncTask<Void, Void, Exception>() {
 		    @Override
@@ -80,10 +85,10 @@ public class GoogleServiceAuthentificator {
 		    protected void onPostExecute(Exception result) {
 		    	super.onPostExecute(result);
 		    	
-		    	if (result == null && onStartUpdate != null) {
-		    		onStartUpdate.run();
-		    		
+		    	if (result == null && onAuthFailed != null) {
+		    		onAuthSucceded.run();	
 		    	} else {
+		    		onAuthFailed.run();
 		    		processAuthError(result, activity, requestCodePlayServ, requestRecoverAuth);
 		    	}
 		    }

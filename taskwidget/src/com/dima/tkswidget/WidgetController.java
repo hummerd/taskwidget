@@ -1,37 +1,29 @@
 package com.dima.tkswidget;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.dima.tkswidget.activity.ActionSelect;
 import com.google.api.services.tasks.model.Task;
 import com.google.api.services.tasks.model.TaskList;
-import com.dima.tkswidget.R;
 
 
 public class WidgetController {
 	public static String ACCOUNT_TYPE = "com.google";
 	
-	private static final String PREF_SCHEME = "tw.prefs";
-	private static final String PREF_ACCOUNT_NAME = "tw.prefs.account";
-	private static final String PREF_LIST_ID = "tw.prefs.listid";
-	private static final String PREF_LIST_NAME = "tw.prefs.listname";
-
     //private static final String WIDGET_IDS_EXTRA = "widgetIds";
     //private static final String SILENT_MODE_EXTRA = "silent";
     private final static String NEW_LINE = System.getProperty("line.separator");
@@ -48,54 +40,19 @@ public class WidgetController {
 	}
 	
 	
-	
 	protected final Context m_context;
-	//protected final UpdateWidgetsTask m_updateTask;
 	protected final TaskProvider m_taskSource;
+	protected final AppWidgetManager m_manager;
+	protected final ComponentName m_name;
+	protected final SettingsController m_settings;
+	
 	
 	public WidgetController(Context context) {
 		m_context = context;
+		m_manager = AppWidgetManager.getInstance(m_context);
+		m_name = new ComponentName(m_context, TaskWidgetProvider.class.getName());
+		m_settings = new SettingsController(m_context);
 		m_taskSource = new TaskProvider(m_context);
-	}
-	
-
-	public void clearPrefs(int[] widgetId) {
-		for (int id : widgetId) {
-	        SharedPreferences customSharedPreference = getPrefs(id);
-	        SharedPreferences.Editor editor = customSharedPreference.edit();
-	        editor.clear();
-	        editor.commit();			
-		}
-	}
-	
-	public void saveWidgetAccount(int widgetId, String accountName) {
-        SharedPreferences customSharedPreference = getPrefs(widgetId);
-        SharedPreferences.Editor editor = customSharedPreference.edit();
-        editor.putString(PREF_ACCOUNT_NAME, accountName);
-        editor.commit();
-	}
-
-	public void saveWidgetList(int widgetId, String listId, String listName) {
-		SharedPreferences customSharedPreference = getPrefs(widgetId);
-        SharedPreferences.Editor editor = customSharedPreference.edit();
-        editor.putString(PREF_LIST_ID, listId);
-        editor.putString(PREF_LIST_NAME, listName);
-        editor.commit();
-	}
-	
-	public String loadWidgetAccount(int widgetId) {
-		SharedPreferences customSharedPreference = getPrefs(widgetId);
-		return customSharedPreference.getString(PREF_ACCOUNT_NAME, null);
-	}
-
-	public String loadWidgetList(int widgetId) {
-		SharedPreferences customSharedPreference = getPrefs(widgetId);
-		return customSharedPreference.getString(PREF_LIST_ID, null);		
-	}
-
-	public String loadWidgetListName(int widgetId) {
-		SharedPreferences customSharedPreference = getPrefs(widgetId);
-		return customSharedPreference.getString(PREF_LIST_NAME, null);		
 	}
 	
 	public void startSync() {
@@ -112,39 +69,6 @@ public class WidgetController {
 		}
 	}
 	
-	public void setWidgetsIds(int[] widgetId) {
-		String[] ids = getWidgetIds();
-		HashSet<String> uniqueIds = new HashSet<String>(Arrays.asList(ids));
-		
-		for (int id : widgetId) {
-			uniqueIds.add(Integer.toString(id));		
-		}
-		
-		StringBuffer buffer = new StringBuffer(uniqueIds.size() * 4);
-		for (String id : uniqueIds) {
-			buffer.append(id);
-			buffer.append(",");
-		}
-		buffer.deleteCharAt(buffer.length() - 1);
-		
-		SharedPreferences prefs = m_context.getSharedPreferences(PREF_SCHEME + ".widgetIds", Activity.MODE_PRIVATE);
-		SharedPreferences.Editor editor = prefs.edit();
-		editor.putString("widgetIds", buffer.toString());
-		editor.commit();
-	}
-	
-	public int[] getWidgetsIds() {
-		String[] ids = getWidgetIds();
-		int[] result = new int[ids.length];
-		
-		int i = 0;
-		for (String id : ids) {
-			result[i++] = Integer.parseInt(id);
-		}
-		
-		return result;
-	}
-	
 	public void updateWidgets() {
 		int[] ids = getWidgetsIds();
 		updateWidgets(ids);
@@ -155,7 +79,7 @@ public class WidgetController {
 		
 		for (int id : widgetIds) {
 			LogHelper.i("loading list");
-			String listId = loadWidgetList(id);
+			String listId = m_settings.loadWidgetList(id);
 			if (listId == null) {
 				continue;
 			}
@@ -165,8 +89,21 @@ public class WidgetController {
 			LogHelper.i("updating widget");
 			updateWidget(views, list, tasks);
 			
-			AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(m_context);
-			appWidgetManager.updateAppWidget(id, views);	
+			m_manager.updateAppWidget(id, views);	
+		}
+	}
+	
+	public void setMargin(Boolean margin, int[] widgetIds) {
+		RemoteViews views = new RemoteViews(m_context.getPackageName(), R.layout.taskwidget);
+		
+		for (int id : widgetIds) {
+			int v = margin ? View.VISIBLE : View.GONE;
+			views.setViewVisibility(R.id.spacer_bottom, v);
+			views.setViewVisibility(R.id.spacer_top, v);
+			views.setViewVisibility(R.id.spacer_left, v);
+			views.setViewVisibility(R.id.spacer_right, v);
+			
+			m_manager.updateAppWidget(id, views);	
 		}
 	}
 	
@@ -222,17 +159,8 @@ public class WidgetController {
         m_context.startActivity(openCfg);
     }
     
-	protected String[] getWidgetIds() {
-		SharedPreferences prefs = m_context.getSharedPreferences(PREF_SCHEME + ".widgetIds", Activity.MODE_PRIVATE);
-		String idString = prefs.getString("widgetIds", "");
-		String[] ids = idString == "" ? new String[0] : idString.split(",");
-		return ids;
-	}
-	
-	protected SharedPreferences getPrefs(int widgetId) {
-        return m_context.getSharedPreferences(
-        		PREF_SCHEME + widgetId, 
-            	Activity.MODE_PRIVATE);		
+	protected int[] getWidgetsIds() {
+		return m_manager.getAppWidgetIds(m_name);
 	}
 	
 	protected void setupEvents(RemoteViews views, int widgetId) {
@@ -307,7 +235,7 @@ public class WidgetController {
 			LogHelper.d("Updating widget with id:");
 			LogHelper.d(String.valueOf(wId));
 			
-			String accName = getAccountName(m_context, wId);
+			String accName = m_settings.loadWidgetAccount(wId);
 			if (accName == null) {
 				continue;
 			}
@@ -335,14 +263,6 @@ public class WidgetController {
 		}
 		return null;
 	}
-	
-    protected String getAccountName(Context context, int widgetId) {
-        SharedPreferences prefs = context.getSharedPreferences(
-            	"tw.prefs" + widgetId, 
-            	Activity.MODE_PRIVATE);
-        
-        return prefs.getString("tw.prefs.account", null);
-    }
     
 	protected Account getAccount(String accountName) {
 		Account[] accounts = AccountManager.get(m_context).getAccountsByType(ACCOUNT_TYPE);

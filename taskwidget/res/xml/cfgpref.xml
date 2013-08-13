@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:holo="http://schemas.android.com/apk/res-auto" >
+<PreferenceScreen xmlns:holo="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory holo:title="Tasks list preferencies" >
         <Preference
@@ -12,6 +12,11 @@
             holo:enabled="false"
             holo:title="Select tasks list"
             />
+        <SwitchPreference
+            holo:id="@+id/pref_margin"
+            holo:title="Enable widget margin"
+            android:persistent="false"
+            />        
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -1,5 +1,6 @@
 package com.dima.tkswidget.activity;
 
+import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.ProgressDialog;
 import org.holoeverywhere.preference.PreferenceActivity;
 
@@ -9,6 +10,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.dima.tkswidget.GoogleServiceAuthentificator;
 import com.dima.tkswidget.LogHelper;
 import com.dima.tkswidget.R;
+import com.dima.tkswidget.SettingsController;
 import com.dima.tkswidget.WidgetController;
 
 import android.app.Activity;
@@ -18,6 +20,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 
 /**
@@ -27,8 +33,10 @@ import android.os.Bundle;
 public class WidgetCfg extends PreferenceActivity {
 	
 	private WidgetController m_widgetController;
+	private SettingsController m_settings;
 	private ProgressDialog m_progressDialog = null;
 	private int[] m_appWidgetIds;
+	private MenuItem m_refreshMenu = null;
 	
 	private final BroadcastReceiver m_syncFinishedReceiver = new BroadcastReceiver() {
 
@@ -43,7 +51,8 @@ public class WidgetCfg extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        super.getSupportFragmentManager().beginTransaction()
+        super.getSupportFragmentManager()
+        	.beginTransaction()
         	.replace(android.R.id.content, new WidgetCfgFragment())
             .commit();
         
@@ -51,6 +60,7 @@ public class WidgetCfg extends PreferenceActivity {
 		Bundle extras = intent.getExtras();
 		
 		m_widgetController = new WidgetController(this);
+		m_settings = new SettingsController(this);
 		m_appWidgetIds = new int[] { extras.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID, 
             AppWidgetManager.INVALID_APPWIDGET_ID) };
@@ -87,6 +97,7 @@ public class WidgetCfg extends PreferenceActivity {
             	finishWithOk();
                 return true;
             case R.id.cfgmenu_refresh:
+            	refresh(item);
             	updateLists();
                 return true;
             default:
@@ -94,6 +105,18 @@ public class WidgetCfg extends PreferenceActivity {
         }
     }
     
+    public void refresh(MenuItem item) {
+    	m_refreshMenu = item;
+    	
+        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        ImageView iv = (ImageView) inflater.inflate(R.layout.refresh_view, null);
+
+        Animation rotation = AnimationUtils.loadAnimation(this, R.drawable.anim_rotate);
+        rotation.setRepeatCount(Animation.INFINITE);
+        iv.startAnimation(rotation);
+
+        item.setActionView(iv);
+    }
     
 	private void finishWithOk() {
 		LogHelper.i("finishWithOk");
@@ -108,25 +131,42 @@ public class WidgetCfg extends PreferenceActivity {
 	}
 	
 	private void updateLists() {
-		String accountName = m_widgetController.loadWidgetAccount(m_appWidgetIds[0]);
+		String accountName = m_settings.loadWidgetAccount(m_appWidgetIds[0]);
 		
 		if (accountName == null) {
+			stopUpdating();
 			return;
 		}
 		
 		GoogleServiceAuthentificator auth = new GoogleServiceAuthentificator(accountName, this);
-		auth.authentificateActivityAsync(this, 2, 3, new Runnable() {
-			@Override
-			public void run() {
-				m_progressDialog = ProgressDialog.show(WidgetCfg.this, "", getResources().getString(R.string.loading), true);
-				m_widgetController.startSync();
-			}
-		});
+		auth.authentificateActivityAsync(this, 2, 3, 
+			new Runnable() {
+				@Override
+				public void run() {
+					//m_progressDialog = ProgressDialog.show(WidgetCfg.this, "", getResources().getString(R.string.loading), true);
+					m_widgetController.startSync();
+				}
+			},
+			new Runnable() {
+				@Override
+				public void run() {
+					stopUpdating();
+					
+				}
+			});
 	}
 	
 	private void stopUpdating() {	
 		if (m_progressDialog != null) {
 			m_progressDialog.cancel();
+		}
+		
+		if (m_refreshMenu != null) {
+			View v = m_refreshMenu.getActionView();
+			if (v != null) {
+				v.clearAnimation();
+				m_refreshMenu.setActionView(null);	
+			}
 		}
 	}
 }

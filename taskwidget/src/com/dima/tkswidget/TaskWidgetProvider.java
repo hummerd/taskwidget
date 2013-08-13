@@ -12,8 +12,8 @@ public class TaskWidgetProvider extends AppWidgetProvider {
     public void onDeleted(Context context, int[] appWidgetIds) {
         super.onDeleted(context, appWidgetIds);
         
-        WidgetController updater = new WidgetController(context);
-        updater.clearPrefs(appWidgetIds);
+        SettingsController controller = new SettingsController(context);
+        controller.clearPrefs(appWidgetIds);
     }
 
     @Override
@@ -44,7 +44,6 @@ public class TaskWidgetProvider extends AppWidgetProvider {
     	LogHelper.i("update widgets started ");
         
     	WidgetController controller = new WidgetController(context);
-    	controller.setWidgetsIds(appWidgetIds);
     	controller.setupEvents(appWidgetIds);
     	controller.updateWidgets(appWidgetIds);
     	

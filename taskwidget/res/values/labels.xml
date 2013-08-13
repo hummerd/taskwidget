@@ -16,4 +16,6 @@
     <string name="selectlist">Select tasks list to display</string>
     
     <string name="loading">Loading. Please wait&#8230;</string>
+    <string name="updating">Updating&#8230;</string>
+    
 </resources>
