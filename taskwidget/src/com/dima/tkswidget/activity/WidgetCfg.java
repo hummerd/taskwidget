@@ -42,7 +42,15 @@ public class WidgetCfg extends PreferenceActivity {
 
 	    @Override
 	    public void onReceive(Context context, Intent intent) {
-	    	stopUpdating();
+	    	switch (intent.getFlags()) {
+			case WidgetController.SYNC_STATE_STARTED:
+				refresh();
+				break;
+			case WidgetController.SYNC_STATE_FINISHED: 
+			case WidgetController.SYNC_STATE_LISTS_UPDATED:
+				stopUpdating();
+				break;
+			}
 	    }
 	};
 	
@@ -68,25 +76,40 @@ public class WidgetCfg extends PreferenceActivity {
     
 	@Override
 	public void onPause() {
-		unregisterReceiver(m_syncFinishedReceiver);
-		stopUpdating();
 		super.onPause();
 		LogHelper.d("Pause activity");
+		
+		unregisterReceiver(m_syncFinishedReceiver);
+		stopUpdating();
 	}
 	
 	@Override
 	public void onResume() {
-		registerReceiver(m_syncFinishedReceiver, new IntentFilter(WidgetController.TASKS_SYNC_FINISHED));
-	    super.onResume();
-	    LogHelper.d("Resume activity");
+		super.onResume();
+		LogHelper.d("Resume activity");
+		
+		registerReceiver(m_syncFinishedReceiver, new IntentFilter(WidgetController.TASKS_SYNC_STATE));
 	}
 	
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
         MenuInflater inflater = super.getSupportMenuInflater();
         inflater.inflate(R.menu.cfgmenu, menu);
-        return super.onCreateOptionsMenu(menu);
+        boolean r = super.onCreateOptionsMenu(menu);
+        return r;
+    }
+    
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+    	boolean r = super.onPrepareOptionsMenu(menu);
+    	
+    	 m_refreshMenu = menu.findItem(R.id.cfgmenu_refresh);
+		boolean syncInProgress = m_widgetController.isSyncInProgress(m_appWidgetIds[0]);
+		if (syncInProgress) {
+			refresh();
+		}
+		
+		return r;
     }
     
     @Override
@@ -97,7 +120,7 @@ public class WidgetCfg extends PreferenceActivity {
             	finishWithOk();
                 return true;
             case R.id.cfgmenu_refresh:
-            	refresh(item);
+            	refresh();
             	updateLists();
                 return true;
             default:
@@ -105,9 +128,7 @@ public class WidgetCfg extends PreferenceActivity {
         }
     }
     
-    public void refresh(MenuItem item) {
-    	m_refreshMenu = item;
-    	
+    public void refresh() {
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ImageView iv = (ImageView) inflater.inflate(R.layout.refresh_view, null);
 
@@ -115,7 +136,7 @@ public class WidgetCfg extends PreferenceActivity {
         rotation.setRepeatCount(Animation.INFINITE);
         iv.startAnimation(rotation);
 
-        item.setActionView(iv);
+        m_refreshMenu.setActionView(iv);
     }
     
 	private void finishWithOk() {
@@ -142,8 +163,7 @@ public class WidgetCfg extends PreferenceActivity {
 		auth.authentificateActivityAsync(this, 2, 3, 
 			new Runnable() {
 				@Override
-				public void run() {
-					//m_progressDialog = ProgressDialog.show(WidgetCfg.this, "", getResources().getString(R.string.loading), true);
+				public void run() {	
 					m_widgetController.startSync();
 				}
 			},
@@ -151,7 +171,6 @@ public class WidgetCfg extends PreferenceActivity {
 				@Override
 				public void run() {
 					stopUpdating();
-					
 				}
 			});
 	}

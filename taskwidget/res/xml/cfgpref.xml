@@ -5,16 +5,16 @@
         <Preference
             holo:id="@+id/pref_account"
             holo:key="prefAcc"
-            holo:title="Select Google account"
+            holo:title="@string/pref_sel_acc"
             />
         <Preference
             holo:id="@+id/pref_tasks_list"
             holo:enabled="false"
-            holo:title="Select tasks list"
+            holo:title="@string/pref_sel_list"
             />
         <SwitchPreference
             holo:id="@+id/pref_margin"
-            holo:title="Enable widget margin"
+            holo:title="@string/pref_margin"
             android:persistent="false"
             />        
     </PreferenceCategory>

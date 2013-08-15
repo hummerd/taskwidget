@@ -638,11 +638,6 @@ com.actionbarsherlock.R$styleable: int SherlockTheme_windowNoTitle
 com.actionbarsherlock.R$styleable: int SherlockTheme_windowSplitActionBar
 com.actionbarsherlock.R$styleable: int[] SherlockView
 com.actionbarsherlock.R$styleable: int SherlockView_android_focusable
-com.actionbarsherlock.app.SherlockActivity: void setContentView(android.view.View)
-com.actionbarsherlock.app.SherlockExpandableListActivity: void setContentView(android.view.View)
-com.actionbarsherlock.app.SherlockFragmentActivity: void setContentView(android.view.View)
-com.actionbarsherlock.app.SherlockListActivity: void setContentView(android.view.View)
-com.actionbarsherlock.app.SherlockPreferenceActivity: void setContentView(android.view.View)
 com.actionbarsherlock.internal.nineoldandroids.view.NineViewGroup: NineViewGroup(android.content.Context)
 com.actionbarsherlock.internal.nineoldandroids.view.NineViewGroup: NineViewGroup(android.content.Context,android.util.AttributeSet)
 com.actionbarsherlock.internal.nineoldandroids.view.NineViewGroup: NineViewGroup(android.content.Context,android.util.AttributeSet,int)
@@ -930,6 +925,7 @@ com.dima.tkswidget.R$attr: int activityChooserViewStyle
 com.dima.tkswidget.R$attr: int alertDialogCenterButtons
 com.dima.tkswidget.R$attr: int alertDialogStyle
 com.dima.tkswidget.R$attr: int alertDialogTheme
+com.dima.tkswidget.R$attr: int alertDialogTitleDividerColor
 com.dima.tkswidget.R$attr: int autoCompleteTextViewStyle
 com.dima.tkswidget.R$attr: int background
 com.dima.tkswidget.R$attr: int backgroundSplit
@@ -949,6 +945,11 @@ com.dima.tkswidget.R$attr: int buttonBarStyle
 com.dima.tkswidget.R$attr: int buttonStyleSmall
 com.dima.tkswidget.R$attr: int calendarViewShown
 com.dima.tkswidget.R$attr: int calendarViewStyle
+com.dima.tkswidget.R$attr: int cameraBearing
+com.dima.tkswidget.R$attr: int cameraTargetLat
+com.dima.tkswidget.R$attr: int cameraTargetLng
+com.dima.tkswidget.R$attr: int cameraTilt
+com.dima.tkswidget.R$attr: int cameraZoom
 com.dima.tkswidget.R$attr: int centerBright
 com.dima.tkswidget.R$attr: int centerDark
 com.dima.tkswidget.R$attr: int centerMedium
@@ -975,7 +976,6 @@ com.dima.tkswidget.R$attr: int disableDependentsState
 com.dima.tkswidget.R$attr: int displayOptions
 com.dima.tkswidget.R$attr: int divider
 com.dima.tkswidget.R$attr: int dividerHorizontal
-com.dima.tkswidget.R$attr: int dividerPadding
 com.dima.tkswidget.R$attr: int dividerVertical
 com.dima.tkswidget.R$attr: int dropDownHintAppearance
 com.dima.tkswidget.R$attr: int dropDownHorizontalOffset
@@ -1032,6 +1032,7 @@ com.dima.tkswidget.R$attr: int listPreferredItemHeightSmall
 com.dima.tkswidget.R$attr: int listPreferredItemPaddingLeft
 com.dima.tkswidget.R$attr: int listPreferredItemPaddingRight
 com.dima.tkswidget.R$attr: int logo
+com.dima.tkswidget.R$attr: int mapType
 com.dima.tkswidget.R$attr: int max
 com.dima.tkswidget.R$attr: int maxDate
 com.dima.tkswidget.R$attr: int mimeType
@@ -1093,7 +1094,6 @@ com.dima.tkswidget.R$attr: int selectionDividerHeight
 com.dima.tkswidget.R$attr: int selectionDividersDistance
 com.dima.tkswidget.R$attr: int shouldDisableView
 com.dima.tkswidget.R$attr: int showDefault
-com.dima.tkswidget.R$attr: int showDividers
 com.dima.tkswidget.R$attr: int showSilent
 com.dima.tkswidget.R$attr: int showWeekNumber
 com.dima.tkswidget.R$attr: int shownWeekCount
@@ -1121,7 +1121,6 @@ com.dima.tkswidget.R$attr: int switchTextOff
 com.dima.tkswidget.R$attr: int switchTextOn
 com.dima.tkswidget.R$attr: int targetClass
 com.dima.tkswidget.R$attr: int targetPackage
-com.dima.tkswidget.R$attr: int textAllCaps
 com.dima.tkswidget.R$attr: int textAppearanceLargePopupMenu
 com.dima.tkswidget.R$attr: int textAppearanceListItem
 com.dima.tkswidget.R$attr: int textAppearanceListItemSmall
@@ -1146,7 +1145,14 @@ com.dima.tkswidget.R$attr: int toggleWhenClick
 com.dima.tkswidget.R$attr: int topBright
 com.dima.tkswidget.R$attr: int topDark
 com.dima.tkswidget.R$attr: int track
+com.dima.tkswidget.R$attr: int uiCompass
+com.dima.tkswidget.R$attr: int uiRotateGestures
+com.dima.tkswidget.R$attr: int uiScrollGestures
+com.dima.tkswidget.R$attr: int uiTiltGestures
+com.dima.tkswidget.R$attr: int uiZoomControls
+com.dima.tkswidget.R$attr: int uiZoomGestures
 com.dima.tkswidget.R$attr: int unfocusedMonthDateColor
+com.dima.tkswidget.R$attr: int useViewLifecycle
 com.dima.tkswidget.R$attr: int value
 com.dima.tkswidget.R$attr: int verticalDivider
 com.dima.tkswidget.R$attr: int virtualButtonPressedDrawable
@@ -1171,6 +1177,7 @@ com.dima.tkswidget.R$attr: int windowNoTitle
 com.dima.tkswidget.R$attr: int windowSplitActionBar
 com.dima.tkswidget.R$attr: int wrapSelectorWheel
 com.dima.tkswidget.R$attr: int yesNoPreferenceStyle
+com.dima.tkswidget.R$attr: int zOrderOnTop
 com.dima.tkswidget.R$bool: int abs__action_bar_embed_tabs
 com.dima.tkswidget.R$bool: int abs__action_bar_expanded_action_views_exclusive
 com.dima.tkswidget.R$bool: int abs__config_actionMenuItemAllCaps
@@ -1204,6 +1211,18 @@ com.dima.tkswidget.R$color: int bright_foreground_inverse_holo_light
 com.dima.tkswidget.R$color: int bright_foreground_light
 com.dima.tkswidget.R$color: int bright_foreground_light_disabled
 com.dima.tkswidget.R$color: int bright_foreground_light_inverse
+com.dima.tkswidget.R$color: int common_action_bar_splitter
+com.dima.tkswidget.R$color: int common_signin_btn_dark_text_default
+com.dima.tkswidget.R$color: int common_signin_btn_dark_text_disabled
+com.dima.tkswidget.R$color: int common_signin_btn_dark_text_focused
+com.dima.tkswidget.R$color: int common_signin_btn_dark_text_pressed
+com.dima.tkswidget.R$color: int common_signin_btn_default_background
+com.dima.tkswidget.R$color: int common_signin_btn_light_text_default
+com.dima.tkswidget.R$color: int common_signin_btn_light_text_disabled
+com.dima.tkswidget.R$color: int common_signin_btn_light_text_focused
+com.dima.tkswidget.R$color: int common_signin_btn_light_text_pressed
+com.dima.tkswidget.R$color: int common_signin_btn_text_dark
+com.dima.tkswidget.R$color: int common_signin_btn_text_light
 com.dima.tkswidget.R$color: int dim_foreground_dark
 com.dima.tkswidget.R$color: int dim_foreground_dark_inverse
 com.dima.tkswidget.R$color: int dim_foreground_disabled_holo_dark
@@ -1404,6 +1423,7 @@ com.dima.tkswidget.R$drawable: int activated_background_holo
 com.dima.tkswidget.R$drawable: int activity_picker_bg
 com.dima.tkswidget.R$drawable: int activity_picker_bg_activated
 com.dima.tkswidget.R$drawable: int activity_picker_bg_focused
+com.dima.tkswidget.R$drawable: int anim_rotate
 com.dima.tkswidget.R$drawable: int background_cache_hint_selector_holo_dark
 com.dima.tkswidget.R$drawable: int background_cache_hint_selector_holo_light
 com.dima.tkswidget.R$drawable: int background_holo_dark
@@ -1529,6 +1549,30 @@ com.dima.tkswidget.R$drawable: int btn_toggle_on_normal_holo_dark
 com.dima.tkswidget.R$drawable: int btn_toggle_on_normal_holo_light
 com.dima.tkswidget.R$drawable: int btn_toggle_on_pressed_holo_dark
 com.dima.tkswidget.R$drawable: int btn_toggle_on_pressed_holo_light
+com.dima.tkswidget.R$drawable: int common_signin_btn_icon_dark
+com.dima.tkswidget.R$drawable: int common_signin_btn_icon_disabled_dark
+com.dima.tkswidget.R$drawable: int common_signin_btn_icon_disabled_focus_dark
+com.dima.tkswidget.R$drawable: int common_signin_btn_icon_disabled_focus_light
+com.dima.tkswidget.R$drawable: int common_signin_btn_icon_disabled_light
+com.dima.tkswidget.R$drawable: int common_signin_btn_icon_focus_dark
+com.dima.tkswidget.R$drawable: int common_signin_btn_icon_focus_light
+com.dima.tkswidget.R$drawable: int common_signin_btn_icon_light
+com.dima.tkswidget.R$drawable: int common_signin_btn_icon_normal_dark
+com.dima.tkswidget.R$drawable: int common_signin_btn_icon_normal_light
+com.dima.tkswidget.R$drawable: int common_signin_btn_icon_pressed_dark
+com.dima.tkswidget.R$drawable: int common_signin_btn_icon_pressed_light
+com.dima.tkswidget.R$drawable: int common_signin_btn_text_dark
+com.dima.tkswidget.R$drawable: int common_signin_btn_text_disabled_dark
+com.dima.tkswidget.R$drawable: int common_signin_btn_text_disabled_focus_dark
+com.dima.tkswidget.R$drawable: int common_signin_btn_text_disabled_focus_light
+com.dima.tkswidget.R$drawable: int common_signin_btn_text_disabled_light
+com.dima.tkswidget.R$drawable: int common_signin_btn_text_focus_dark
+com.dima.tkswidget.R$drawable: int common_signin_btn_text_focus_light
+com.dima.tkswidget.R$drawable: int common_signin_btn_text_light
+com.dima.tkswidget.R$drawable: int common_signin_btn_text_normal_dark
+com.dima.tkswidget.R$drawable: int common_signin_btn_text_normal_light
+com.dima.tkswidget.R$drawable: int common_signin_btn_text_pressed_dark
+com.dima.tkswidget.R$drawable: int common_signin_btn_text_pressed_light
 com.dima.tkswidget.R$drawable: int day_picker_week_view_dayline_holo
 com.dima.tkswidget.R$drawable: int dialog_bottom_holo_dark
 com.dima.tkswidget.R$drawable: int dialog_bottom_holo_light
@@ -1565,6 +1609,9 @@ com.dima.tkswidget.R$drawable: int fastscroll_track_holo_dark
 com.dima.tkswidget.R$drawable: int fastscroll_track_holo_light
 com.dima.tkswidget.R$drawable: int fastscroll_track_pressed_holo_dark
 com.dima.tkswidget.R$drawable: int fastscroll_track_pressed_holo_light
+com.dima.tkswidget.R$drawable: int ic_navigation_accept
+com.dima.tkswidget.R$drawable: int ic_navigation_refresh
+com.dima.tkswidget.R$drawable: int ic_navigation_refresh_dark
 com.dima.tkswidget.R$drawable: int item_background_holo_dark
 com.dima.tkswidget.R$drawable: int item_background_holo_light
 com.dima.tkswidget.R$drawable: int list_activated_holo
@@ -1768,7 +1815,6 @@ com.dima.tkswidget.R$id: int amPm
 com.dima.tkswidget.R$id: int atThumb
 com.dima.tkswidget.R$id: int auto
 com.dima.tkswidget.R$id: int back_button
-com.dima.tkswidget.R$id: int beginning
 com.dima.tkswidget.R$id: int bottom
 com.dima.tkswidget.R$id: int button1
 com.dima.tkswidget.R$id: int button2
@@ -1782,6 +1828,8 @@ com.dima.tkswidget.R$id: int calendar_view
 com.dima.tkswidget.R$id: int center
 com.dima.tkswidget.R$id: int center_horizontal
 com.dima.tkswidget.R$id: int center_vertical
+com.dima.tkswidget.R$id: int cfgmenu_done
+com.dima.tkswidget.R$id: int cfgmenu_refresh
 com.dima.tkswidget.R$id: int checkbox
 com.dima.tkswidget.R$id: int clip
 com.dima.tkswidget.R$id: int clip_horizontal
@@ -1808,24 +1856,30 @@ com.dima.tkswidget.R$id: int fill
 com.dima.tkswidget.R$id: int fill_horizontal
 com.dima.tkswidget.R$id: int fill_vertical
 com.dima.tkswidget.R$id: int floating
+com.dima.tkswidget.R$id: int fontLoaderFont
+com.dima.tkswidget.R$id: int fontLoaderFontFamily
+com.dima.tkswidget.R$id: int fontLoaderFontStyle
 com.dima.tkswidget.R$id: int headers
 com.dima.tkswidget.R$id: int homeAsUp
 com.dima.tkswidget.R$id: int hour
+com.dima.tkswidget.R$id: int hybrid
 com.dima.tkswidget.R$id: int icon
+com.dima.tkswidget.R$id: int imageRefresh
 com.dima.tkswidget.R$id: int increment
 com.dima.tkswidget.R$id: int internalEmpty
 com.dima.tkswidget.R$id: int invalid
 com.dima.tkswidget.R$id: int itemTextView
 com.dima.tkswidget.R$id: int left
 com.dima.tkswidget.R$id: int leftSpacer
+com.dima.tkswidget.R$id: int left_block
 com.dima.tkswidget.R$id: int left_icon
 com.dima.tkswidget.R$id: int light
 com.dima.tkswidget.R$id: int list
 com.dima.tkswidget.R$id: int listContainer
 com.dima.tkswidget.R$id: int listMode
 com.dima.tkswidget.R$id: int list_footer
+com.dima.tkswidget.R$id: int mainLayout
 com.dima.tkswidget.R$id: int message
-com.dima.tkswidget.R$id: int middle
 com.dima.tkswidget.R$id: int minute
 com.dima.tkswidget.R$id: int mixed
 com.dima.tkswidget.R$id: int month
@@ -1839,6 +1893,9 @@ com.dima.tkswidget.R$id: int notification
 com.dima.tkswidget.R$id: int numberpicker_input
 com.dima.tkswidget.R$id: int parentPanel
 com.dima.tkswidget.R$id: int pickers
+com.dima.tkswidget.R$id: int pref_account
+com.dima.tkswidget.R$id: int pref_margin
+com.dima.tkswidget.R$id: int pref_tasks_list
 com.dima.tkswidget.R$id: int preference
 com.dima.tkswidget.R$id: int prefs
 com.dima.tkswidget.R$id: int prefs_frame
@@ -1852,8 +1909,8 @@ com.dima.tkswidget.R$id: int right
 com.dima.tkswidget.R$id: int rightSpacer
 com.dima.tkswidget.R$id: int ring
 com.dima.tkswidget.R$id: int ringtone
+com.dima.tkswidget.R$id: int satellite
 com.dima.tkswidget.R$id: int scrollView
-com.dima.tkswidget.R$id: int secondaryProgress
 com.dima.tkswidget.R$id: int seekbar
 com.dima.tkswidget.R$id: int select_dialog_listview
 com.dima.tkswidget.R$id: int shortcut
@@ -1861,12 +1918,17 @@ com.dima.tkswidget.R$id: int showCustom
 com.dima.tkswidget.R$id: int showHome
 com.dima.tkswidget.R$id: int showTitle
 com.dima.tkswidget.R$id: int skip_button
+com.dima.tkswidget.R$id: int spacer_bottom
+com.dima.tkswidget.R$id: int spacer_left
+com.dima.tkswidget.R$id: int spacer_right
+com.dima.tkswidget.R$id: int spacer_top
 com.dima.tkswidget.R$id: int start
 com.dima.tkswidget.R$id: int summary
 com.dima.tkswidget.R$id: int switchWidget
 com.dima.tkswidget.R$id: int system
 com.dima.tkswidget.R$id: int tabMode
 com.dima.tkswidget.R$id: int tabSwipePager
+com.dima.tkswidget.R$id: int terrain
 com.dima.tkswidget.R$id: int textViewCompletedTasks
 com.dima.tkswidget.R$id: int textViewList
 com.dima.tkswidget.R$id: int textViewTasks
@@ -1964,6 +2026,7 @@ com.dima.tkswidget.R$layout: int preference_widget_seekbar
 com.dima.tkswidget.R$layout: int preference_widget_switch
 com.dima.tkswidget.R$layout: int preflayout
 com.dima.tkswidget.R$layout: int progress_dialog_holo
+com.dima.tkswidget.R$layout: int refresh_view
 com.dima.tkswidget.R$layout: int resolve_list_item
 com.dima.tkswidget.R$layout: int resolver_grid
 com.dima.tkswidget.R$layout: int select_dialog_holo
@@ -1989,6 +2052,7 @@ com.dima.tkswidget.R$layout: int tab_swipe
 com.dima.tkswidget.R$layout: int taskwidget
 com.dima.tkswidget.R$layout: int time_picker_dialog
 com.dima.tkswidget.R$layout: int time_picker_holo
+com.dima.tkswidget.R$menu: int cfgmenu
 com.dima.tkswidget.R$raw: int roboto_bold
 com.dima.tkswidget.R$raw: int roboto_bolditalic
 com.dima.tkswidget.R$raw: int roboto_italic
@@ -2011,12 +2075,33 @@ com.dima.tkswidget.R$string: int activity_resolver_use_always
 com.dima.tkswidget.R$string: int activity_resolver_use_once
 com.dima.tkswidget.R$string: int addaccount
 com.dima.tkswidget.R$string: int app_name
+com.dima.tkswidget.R$string: int auth_client_needs_enabling_title
+com.dima.tkswidget.R$string: int auth_client_needs_installation_title
+com.dima.tkswidget.R$string: int auth_client_needs_update_title
+com.dima.tkswidget.R$string: int auth_client_play_services_err_notification_msg
+com.dima.tkswidget.R$string: int auth_client_requested_by_msg
+com.dima.tkswidget.R$string: int auth_client_using_bad_version_title
 com.dima.tkswidget.R$string: int back_button_label
 com.dima.tkswidget.R$string: int btnok
 com.dima.tkswidget.R$string: int candidates_style
 com.dima.tkswidget.R$string: int capital_off
 com.dima.tkswidget.R$string: int capital_on
 com.dima.tkswidget.R$string: int chooseActivity
+com.dima.tkswidget.R$string: int common_google_play_services_enable_button
+com.dima.tkswidget.R$string: int common_google_play_services_enable_text
+com.dima.tkswidget.R$string: int common_google_play_services_enable_title
+com.dima.tkswidget.R$string: int common_google_play_services_install_button
+com.dima.tkswidget.R$string: int common_google_play_services_install_text_phone
+com.dima.tkswidget.R$string: int common_google_play_services_install_text_tablet
+com.dima.tkswidget.R$string: int common_google_play_services_install_title
+com.dima.tkswidget.R$string: int common_google_play_services_unknown_issue
+com.dima.tkswidget.R$string: int common_google_play_services_unsupported_text
+com.dima.tkswidget.R$string: int common_google_play_services_unsupported_title
+com.dima.tkswidget.R$string: int common_google_play_services_update_button
+com.dima.tkswidget.R$string: int common_google_play_services_update_text
+com.dima.tkswidget.R$string: int common_google_play_services_update_title
+com.dima.tkswidget.R$string: int common_signin_button_text
+com.dima.tkswidget.R$string: int common_signin_button_text_long
 com.dima.tkswidget.R$string: int date_picker_decrement_day_button
 com.dima.tkswidget.R$string: int date_picker_decrement_month_button
 com.dima.tkswidget.R$string: int date_picker_decrement_year_button
@@ -2048,6 +2133,7 @@ com.dima.tkswidget.R$string: int time_picker_increment_hour_button
 com.dima.tkswidget.R$string: int time_picker_increment_minute_button
 com.dima.tkswidget.R$string: int time_picker_increment_set_pm_button
 com.dima.tkswidget.R$string: int time_picker_separator
+com.dima.tkswidget.R$string: int updating
 com.dima.tkswidget.R$string: int usingaccount
 com.dima.tkswidget.R$string: int usinglist
 com.dima.tkswidget.R$string: int whichApplication
@@ -2266,6 +2352,7 @@ com.dima.tkswidget.R$style: int Theme_Sherlock_Light
 com.dima.tkswidget.R$style: int Theme_Sherlock_Light_DarkActionBar
 com.dima.tkswidget.R$style: int Theme_Sherlock_Light_NoActionBar
 com.dima.tkswidget.R$style: int Theme_Sherlock_NoActionBar
+com.dima.tkswidget.R$style: int Transparent
 com.dima.tkswidget.R$style: int Widget
 com.dima.tkswidget.R$style: int Widget_Sherlock_ActionBar
 com.dima.tkswidget.R$style: int Widget_Sherlock_ActionBar_Solid
@@ -2314,6 +2401,10 @@ com.dima.tkswidget.R$style: int Widget_Sherlock_SearchAutoCompleteTextView
 com.dima.tkswidget.R$style: int Widget_Sherlock_Spinner_DropDown_ActionBar
 com.dima.tkswidget.R$style: int Widget_Sherlock_TextView_SpinnerItem
 com.dima.tkswidget.R$style: int mytheme
+com.dima.tkswidget.R$styleable: int[] AbsListView
+com.dima.tkswidget.R$styleable: int AbsListView_android_choiceMode
+com.dima.tkswidget.R$styleable: int AbsListView_android_fastScrollAlwaysVisible
+com.dima.tkswidget.R$styleable: int AbsListView_android_fastScrollEnabled
 com.dima.tkswidget.R$styleable: int[] AbsSpinner
 com.dima.tkswidget.R$styleable: int AbsSpinner_android_entries
 com.dima.tkswidget.R$styleable: int[] AlertDialog
@@ -2433,11 +2524,24 @@ com.dima.tkswidget.R$styleable: int LinearLayout_android_measureWithLargestChild
 com.dima.tkswidget.R$styleable: int LinearLayout_android_orientation
 com.dima.tkswidget.R$styleable: int LinearLayout_android_showDividers
 com.dima.tkswidget.R$styleable: int LinearLayout_android_weightSum
-com.dima.tkswidget.R$styleable: int LinearLayout_dividerPadding
-com.dima.tkswidget.R$styleable: int LinearLayout_showDividers
 com.dima.tkswidget.R$styleable: int[] ListPreference
 com.dima.tkswidget.R$styleable: int ListPreference_entries
 com.dima.tkswidget.R$styleable: int ListPreference_entryValues
+com.dima.tkswidget.R$styleable: int[] MapAttrs
+com.dima.tkswidget.R$styleable: int MapAttrs_cameraBearing
+com.dima.tkswidget.R$styleable: int MapAttrs_cameraTargetLat
+com.dima.tkswidget.R$styleable: int MapAttrs_cameraTargetLng
+com.dima.tkswidget.R$styleable: int MapAttrs_cameraTilt
+com.dima.tkswidget.R$styleable: int MapAttrs_cameraZoom
+com.dima.tkswidget.R$styleable: int MapAttrs_mapType
+com.dima.tkswidget.R$styleable: int MapAttrs_uiCompass
+com.dima.tkswidget.R$styleable: int MapAttrs_uiRotateGestures
+com.dima.tkswidget.R$styleable: int MapAttrs_uiScrollGestures
+com.dima.tkswidget.R$styleable: int MapAttrs_uiTiltGestures
+com.dima.tkswidget.R$styleable: int MapAttrs_uiZoomControls
+com.dima.tkswidget.R$styleable: int MapAttrs_uiZoomGestures
+com.dima.tkswidget.R$styleable: int MapAttrs_useViewLifecycle
+com.dima.tkswidget.R$styleable: int MapAttrs_zOrderOnTop
 com.dima.tkswidget.R$styleable: int[] MenuView
 com.dima.tkswidget.R$styleable: int MenuView_android_headerBackground
 com.dima.tkswidget.R$styleable: int MenuView_android_horizontalDivider
@@ -2719,6 +2823,7 @@ com.dima.tkswidget.R$styleable: int[] SwitchPreference
 com.dima.tkswidget.R$styleable: int SwitchPreference_switchTextOff
 com.dima.tkswidget.R$styleable: int SwitchPreference_switchTextOn
 com.dima.tkswidget.R$styleable: int[] TextAppearance
+com.dima.tkswidget.R$styleable: int TextAppearance_android_fontFamily
 com.dima.tkswidget.R$styleable: int TextAppearance_android_textAllCaps
 com.dima.tkswidget.R$styleable: int TextAppearance_android_textColor
 com.dima.tkswidget.R$styleable: int TextAppearance_android_textColorHighlight
@@ -2728,9 +2833,7 @@ com.dima.tkswidget.R$styleable: int TextAppearance_android_textSize
 com.dima.tkswidget.R$styleable: int TextAppearance_android_textStyle
 com.dima.tkswidget.R$styleable: int TextAppearance_android_typeface
 com.dima.tkswidget.R$styleable: int[] TextView
-com.dima.tkswidget.R$styleable: int TextView_android_text
-com.dima.tkswidget.R$styleable: int TextView_android_textAllCaps
-com.dima.tkswidget.R$styleable: int TextView_textAllCaps
+com.dima.tkswidget.R$styleable: int TextView_android_textAppearance
 com.dima.tkswidget.R$styleable: int[] TimePicker
 com.dima.tkswidget.R$styleable: int TimePicker_layout
 com.dima.tkswidget.R$styleable: int[] TimePreference
@@ -2783,6 +2886,176 @@ com.fasterxml.jackson.core.util.BufferRecycler$ByteBufferType: com.fasterxml.jac
 com.fasterxml.jackson.core.util.BufferRecycler$ByteBufferType: com.fasterxml.jackson.core.util.BufferRecycler$ByteBufferType valueOf(java.lang.String)
 com.fasterxml.jackson.core.util.BufferRecycler$CharBufferType: com.fasterxml.jackson.core.util.BufferRecycler$CharBufferType[] values()
 com.fasterxml.jackson.core.util.BufferRecycler$CharBufferType: com.fasterxml.jackson.core.util.BufferRecycler$CharBufferType valueOf(java.lang.String)
+com.google.android.gms.R$attr: int cameraBearing
+com.google.android.gms.R$attr: int cameraTargetLat
+com.google.android.gms.R$attr: int cameraTargetLng
+com.google.android.gms.R$attr: int cameraTilt
+com.google.android.gms.R$attr: int cameraZoom
+com.google.android.gms.R$attr: int mapType
+com.google.android.gms.R$attr: int uiCompass
+com.google.android.gms.R$attr: int uiRotateGestures
+com.google.android.gms.R$attr: int uiScrollGestures
+com.google.android.gms.R$attr: int uiTiltGestures
+com.google.android.gms.R$attr: int uiZoomControls
+com.google.android.gms.R$attr: int uiZoomGestures
+com.google.android.gms.R$attr: int useViewLifecycle
+com.google.android.gms.R$attr: int zOrderOnTop
+com.google.android.gms.R$color: int common_action_bar_splitter
+com.google.android.gms.R$color: int common_signin_btn_dark_text_default
+com.google.android.gms.R$color: int common_signin_btn_dark_text_disabled
+com.google.android.gms.R$color: int common_signin_btn_dark_text_focused
+com.google.android.gms.R$color: int common_signin_btn_dark_text_pressed
+com.google.android.gms.R$color: int common_signin_btn_default_background
+com.google.android.gms.R$color: int common_signin_btn_light_text_default
+com.google.android.gms.R$color: int common_signin_btn_light_text_disabled
+com.google.android.gms.R$color: int common_signin_btn_light_text_focused
+com.google.android.gms.R$color: int common_signin_btn_light_text_pressed
+com.google.android.gms.R$color: int common_signin_btn_text_dark
+com.google.android.gms.R$color: int common_signin_btn_text_light
+com.google.android.gms.R$drawable: int common_signin_btn_icon_dark
+com.google.android.gms.R$drawable: int common_signin_btn_icon_disabled_dark
+com.google.android.gms.R$drawable: int common_signin_btn_icon_disabled_focus_dark
+com.google.android.gms.R$drawable: int common_signin_btn_icon_disabled_focus_light
+com.google.android.gms.R$drawable: int common_signin_btn_icon_disabled_light
+com.google.android.gms.R$drawable: int common_signin_btn_icon_focus_dark
+com.google.android.gms.R$drawable: int common_signin_btn_icon_focus_light
+com.google.android.gms.R$drawable: int common_signin_btn_icon_light
+com.google.android.gms.R$drawable: int common_signin_btn_icon_normal_dark
+com.google.android.gms.R$drawable: int common_signin_btn_icon_normal_light
+com.google.android.gms.R$drawable: int common_signin_btn_icon_pressed_dark
+com.google.android.gms.R$drawable: int common_signin_btn_icon_pressed_light
+com.google.android.gms.R$drawable: int common_signin_btn_text_dark
+com.google.android.gms.R$drawable: int common_signin_btn_text_disabled_dark
+com.google.android.gms.R$drawable: int common_signin_btn_text_disabled_focus_dark
+com.google.android.gms.R$drawable: int common_signin_btn_text_disabled_focus_light
+com.google.android.gms.R$drawable: int common_signin_btn_text_disabled_light
+com.google.android.gms.R$drawable: int common_signin_btn_text_focus_dark
+com.google.android.gms.R$drawable: int common_signin_btn_text_focus_light
+com.google.android.gms.R$drawable: int common_signin_btn_text_light
+com.google.android.gms.R$drawable: int common_signin_btn_text_normal_dark
+com.google.android.gms.R$drawable: int common_signin_btn_text_normal_light
+com.google.android.gms.R$drawable: int common_signin_btn_text_pressed_dark
+com.google.android.gms.R$drawable: int common_signin_btn_text_pressed_light
+com.google.android.gms.R$id: int hybrid
+com.google.android.gms.R$id: int none
+com.google.android.gms.R$id: int normal
+com.google.android.gms.R$id: int satellite
+com.google.android.gms.R$id: int terrain
+com.google.android.gms.R$string: int auth_client_needs_enabling_title
+com.google.android.gms.R$string: int auth_client_needs_installation_title
+com.google.android.gms.R$string: int auth_client_needs_update_title
+com.google.android.gms.R$string: int auth_client_play_services_err_notification_msg
+com.google.android.gms.R$string: int auth_client_requested_by_msg
+com.google.android.gms.R$string: int auth_client_using_bad_version_title
+com.google.android.gms.R$string: int common_google_play_services_enable_button
+com.google.android.gms.R$string: int common_google_play_services_enable_text
+com.google.android.gms.R$string: int common_google_play_services_enable_title
+com.google.android.gms.R$string: int common_google_play_services_install_button
+com.google.android.gms.R$string: int common_google_play_services_install_text_phone
+com.google.android.gms.R$string: int common_google_play_services_install_text_tablet
+com.google.android.gms.R$string: int common_google_play_services_install_title
+com.google.android.gms.R$string: int common_google_play_services_unknown_issue
+com.google.android.gms.R$string: int common_google_play_services_unsupported_text
+com.google.android.gms.R$string: int common_google_play_services_unsupported_title
+com.google.android.gms.R$string: int common_google_play_services_update_button
+com.google.android.gms.R$string: int common_google_play_services_update_text
+com.google.android.gms.R$string: int common_google_play_services_update_title
+com.google.android.gms.R$string: int common_signin_button_text
+com.google.android.gms.R$string: int common_signin_button_text_long
+com.google.android.gms.R$styleable: int[] MapAttrs
+com.google.android.gms.R$styleable: int MapAttrs_cameraBearing
+com.google.android.gms.R$styleable: int MapAttrs_cameraTargetLat
+com.google.android.gms.R$styleable: int MapAttrs_cameraTargetLng
+com.google.android.gms.R$styleable: int MapAttrs_cameraTilt
+com.google.android.gms.R$styleable: int MapAttrs_cameraZoom
+com.google.android.gms.R$styleable: int MapAttrs_mapType
+com.google.android.gms.R$styleable: int MapAttrs_uiCompass
+com.google.android.gms.R$styleable: int MapAttrs_uiRotateGestures
+com.google.android.gms.R$styleable: int MapAttrs_uiScrollGestures
+com.google.android.gms.R$styleable: int MapAttrs_uiTiltGestures
+com.google.android.gms.R$styleable: int MapAttrs_uiZoomControls
+com.google.android.gms.R$styleable: int MapAttrs_uiZoomGestures
+com.google.android.gms.R$styleable: int MapAttrs_useViewLifecycle
+com.google.android.gms.R$styleable: int MapAttrs_zOrderOnTop
+com.google.android.gms.common.SignInButton: void setSize(int)
+com.google.android.gms.common.SignInButton: void setColorScheme(int)
+com.google.android.gms.common.SignInButton: void setOnClickListener(android.view.View$OnClickListener)
+com.google.android.gms.common.SignInButton: void setEnabled(boolean)
+com.google.android.gms.common.images.ImageManager$b
+com.google.android.gms.games.Game
+com.google.android.gms.games.GameEntity
+com.google.android.gms.games.GameEntity: android.os.Parcelable$Creator CREATOR
+com.google.android.gms.games.Player
+com.google.android.gms.games.PlayerEntity
+com.google.android.gms.games.PlayerEntity: android.os.Parcelable$Creator CREATOR
+com.google.android.gms.games.multiplayer.Invitation
+com.google.android.gms.games.multiplayer.InvitationEntity
+com.google.android.gms.games.multiplayer.InvitationEntity: android.os.Parcelable$Creator CREATOR
+com.google.android.gms.games.multiplayer.Participant
+com.google.android.gms.games.multiplayer.ParticipantEntity
+com.google.android.gms.games.multiplayer.ParticipantEntity: android.os.Parcelable$Creator CREATOR
+com.google.android.gms.games.multiplayer.realtime.RealTimeMessage
+com.google.android.gms.games.multiplayer.realtime.RealTimeMessage: android.os.Parcelable$Creator CREATOR
+com.google.android.gms.games.multiplayer.realtime.Room
+com.google.android.gms.games.multiplayer.realtime.RoomEntity
+com.google.android.gms.games.multiplayer.realtime.RoomEntity: android.os.Parcelable$Creator CREATOR
+com.google.android.gms.internal.ae
+com.google.android.gms.internal.ag
+com.google.android.gms.internal.ai
+com.google.android.gms.internal.ak
+com.google.android.gms.internal.ak$a
+com.google.android.gms.internal.an$a
+com.google.android.gms.internal.aq
+com.google.android.gms.internal.aq$a
+com.google.android.gms.internal.aq$b
+com.google.android.gms.internal.at
+com.google.android.gms.internal.bf
+com.google.android.gms.internal.bg
+com.google.android.gms.internal.bw
+com.google.android.gms.internal.bx
+com.google.android.gms.internal.bz
+com.google.android.gms.internal.cf
+com.google.android.gms.internal.dz: void setOnPlusOneClickListener(com.google.android.gms.plus.PlusOneButton$OnPlusOneClickListener)
+com.google.android.gms.internal.dz: void setOnClickListener(android.view.View$OnClickListener)
+com.google.android.gms.internal.dz: void setAnnotation(int)
+com.google.android.gms.internal.dz: void setSize(int)
+com.google.android.gms.internal.dz: void setType(int)
+com.google.android.gms.internal.ea: void setGravity(int)
+com.google.android.gms.internal.ea: void setTextColor(int)
+com.google.android.gms.internal.eb
+com.google.android.gms.internal.ed
+com.google.android.gms.internal.ef
+com.google.android.gms.internal.eq
+com.google.android.gms.internal.eq$a
+com.google.android.gms.internal.eq$b
+com.google.android.gms.internal.eq$b$a
+com.google.android.gms.internal.eq$b$b
+com.google.android.gms.internal.eq$c
+com.google.android.gms.internal.eq$d
+com.google.android.gms.internal.eq$e
+com.google.android.gms.internal.eq$g
+com.google.android.gms.internal.eq$h
+com.google.android.gms.internal.eq$i
+com.google.android.gms.internal.k
+com.google.android.gms.location.ActivityRecognitionResult
+com.google.android.gms.location.DetectedActivity
+com.google.android.gms.location.LocationRequest
+com.google.android.gms.maps.GoogleMapOptions
+com.google.android.gms.maps.MapView: com.google.android.gms.maps.GoogleMap getMap()
+com.google.android.gms.maps.model.CameraPosition
+com.google.android.gms.maps.model.CircleOptions
+com.google.android.gms.maps.model.GroundOverlayOptions
+com.google.android.gms.maps.model.LatLng
+com.google.android.gms.maps.model.LatLngBounds
+com.google.android.gms.maps.model.MarkerOptions
+com.google.android.gms.maps.model.PolygonOptions
+com.google.android.gms.maps.model.PolylineOptions
+com.google.android.gms.maps.model.Tile
+com.google.android.gms.maps.model.TileOverlayOptions
+com.google.android.gms.maps.model.VisibleRegion
+com.google.android.gms.plus.PlusOneButton: void setOnPlusOneClickListener(com.google.android.gms.plus.PlusOneButton$OnPlusOneClickListener)
+com.google.android.gms.plus.PlusOneButton: void setAnnotation(int)
+com.google.android.gms.plus.PlusOneButton: void setSize(int)
 com.google.api.client.auth.oauth.OAuthAuthorizeTemporaryTokenUrl: java.lang.String temporaryToken
 com.google.api.client.auth.oauth.OAuthCallbackUrl: java.lang.String token
 com.google.api.client.auth.oauth.OAuthCallbackUrl: java.lang.String verifier
@@ -2992,22 +3265,6 @@ com.google.gson.stream.JsonScope: com.google.gson.stream.JsonScope[] values()
 com.google.gson.stream.JsonScope: com.google.gson.stream.JsonScope valueOf(java.lang.String)
 com.google.gson.stream.JsonToken: com.google.gson.stream.JsonToken[] values()
 com.google.gson.stream.JsonToken: com.google.gson.stream.JsonToken valueOf(java.lang.String)
-com.google.protobuf.DescriptorProtos$FieldDescriptorProto$Label: com.google.protobuf.DescriptorProtos$FieldDescriptorProto$Label[] values()
-com.google.protobuf.DescriptorProtos$FieldDescriptorProto$Label: com.google.protobuf.DescriptorProtos$FieldDescriptorProto$Label valueOf(java.lang.String)
-com.google.protobuf.DescriptorProtos$FieldDescriptorProto$Type: com.google.protobuf.DescriptorProtos$FieldDescriptorProto$Type[] values()
-com.google.protobuf.DescriptorProtos$FieldDescriptorProto$Type: com.google.protobuf.DescriptorProtos$FieldDescriptorProto$Type valueOf(java.lang.String)
-com.google.protobuf.DescriptorProtos$FieldOptions$CType: com.google.protobuf.DescriptorProtos$FieldOptions$CType[] values()
-com.google.protobuf.DescriptorProtos$FieldOptions$CType: com.google.protobuf.DescriptorProtos$FieldOptions$CType valueOf(java.lang.String)
-com.google.protobuf.DescriptorProtos$FileOptions$OptimizeMode: com.google.protobuf.DescriptorProtos$FileOptions$OptimizeMode[] values()
-com.google.protobuf.DescriptorProtos$FileOptions$OptimizeMode: com.google.protobuf.DescriptorProtos$FileOptions$OptimizeMode valueOf(java.lang.String)
-com.google.protobuf.Descriptors$FieldDescriptor$JavaType: com.google.protobuf.Descriptors$FieldDescriptor$JavaType[] values()
-com.google.protobuf.Descriptors$FieldDescriptor$JavaType: com.google.protobuf.Descriptors$FieldDescriptor$JavaType valueOf(java.lang.String)
-com.google.protobuf.Descriptors$FieldDescriptor$Type: com.google.protobuf.Descriptors$FieldDescriptor$Type[] values()
-com.google.protobuf.Descriptors$FieldDescriptor$Type: com.google.protobuf.Descriptors$FieldDescriptor$Type valueOf(java.lang.String)
-com.google.protobuf.WireFormat$FieldType: com.google.protobuf.WireFormat$FieldType[] values()
-com.google.protobuf.WireFormat$FieldType: com.google.protobuf.WireFormat$FieldType valueOf(java.lang.String)
-com.google.protobuf.WireFormat$JavaType: com.google.protobuf.WireFormat$JavaType[] values()
-com.google.protobuf.WireFormat$JavaType: com.google.protobuf.WireFormat$JavaType valueOf(java.lang.String)
 javax.annotation.meta.When: javax.annotation.meta.When[] values()
 javax.annotation.meta.When: javax.annotation.meta.When valueOf(java.lang.String)
 org.codehaus.jackson.JsonEncoding: org.codehaus.jackson.JsonEncoding[] values()
@@ -3073,6 +3330,7 @@ org.holoeverywhere.R$attr: int activityChooserViewStyle
 org.holoeverywhere.R$attr: int alertDialogCenterButtons
 org.holoeverywhere.R$attr: int alertDialogStyle
 org.holoeverywhere.R$attr: int alertDialogTheme
+org.holoeverywhere.R$attr: int alertDialogTitleDividerColor
 org.holoeverywhere.R$attr: int autoCompleteTextViewStyle
 org.holoeverywhere.R$attr: int background
 org.holoeverywhere.R$attr: int backgroundSplit
@@ -3100,7 +3358,6 @@ org.holoeverywhere.R$attr: int disableChildrenWhenDisabled
 org.holoeverywhere.R$attr: int displayOptions
 org.holoeverywhere.R$attr: int divider
 org.holoeverywhere.R$attr: int dividerHorizontal
-org.holoeverywhere.R$attr: int dividerPadding
 org.holoeverywhere.R$attr: int dividerVertical
 org.holoeverywhere.R$attr: int dropDownHintAppearance
 org.holoeverywhere.R$attr: int dropDownHorizontalOffset
@@ -3184,7 +3441,6 @@ org.holoeverywhere.R$attr: int selectedWeekBackgroundColor
 org.holoeverywhere.R$attr: int selectionDivider
 org.holoeverywhere.R$attr: int selectionDividerHeight
 org.holoeverywhere.R$attr: int selectionDividersDistance
-org.holoeverywhere.R$attr: int showDividers
 org.holoeverywhere.R$attr: int showWeekNumber
 org.holoeverywhere.R$attr: int shownWeekCount
 org.holoeverywhere.R$attr: int singleChoiceItemLayout
@@ -3202,7 +3458,6 @@ org.holoeverywhere.R$attr: int switchPadding
 org.holoeverywhere.R$attr: int switchStyle
 org.holoeverywhere.R$attr: int switchStyleOld
 org.holoeverywhere.R$attr: int switchTextAppearance
-org.holoeverywhere.R$attr: int textAllCaps
 org.holoeverywhere.R$attr: int textAppearanceLargePopupMenu
 org.holoeverywhere.R$attr: int textAppearanceListItem
 org.holoeverywhere.R$attr: int textAppearanceListItemSmall
@@ -3819,10 +4074,8 @@ org.holoeverywhere.R$id: int abs__textButton
 org.holoeverywhere.R$id: int abs__title
 org.holoeverywhere.R$id: int abs__up
 org.holoeverywhere.R$id: int alertTitle
-org.holoeverywhere.R$id: int all
 org.holoeverywhere.R$id: int amPm
 org.holoeverywhere.R$id: int atThumb
-org.holoeverywhere.R$id: int beginning
 org.holoeverywhere.R$id: int bottom
 org.holoeverywhere.R$id: int button1
 org.holoeverywhere.R$id: int button2
@@ -3861,6 +4114,9 @@ org.holoeverywhere.R$id: int fill
 org.holoeverywhere.R$id: int fill_horizontal
 org.holoeverywhere.R$id: int fill_vertical
 org.holoeverywhere.R$id: int floating
+org.holoeverywhere.R$id: int fontLoaderFont
+org.holoeverywhere.R$id: int fontLoaderFontFamily
+org.holoeverywhere.R$id: int fontLoaderFontStyle
 org.holoeverywhere.R$id: int homeAsUp
 org.holoeverywhere.R$id: int hour
 org.holoeverywhere.R$id: int icon
@@ -3874,12 +4130,10 @@ org.holoeverywhere.R$id: int list
 org.holoeverywhere.R$id: int listContainer
 org.holoeverywhere.R$id: int listMode
 org.holoeverywhere.R$id: int message
-org.holoeverywhere.R$id: int middle
 org.holoeverywhere.R$id: int minute
 org.holoeverywhere.R$id: int mixed
 org.holoeverywhere.R$id: int month
 org.holoeverywhere.R$id: int month_name
-org.holoeverywhere.R$id: int none
 org.holoeverywhere.R$id: int normal
 org.holoeverywhere.R$id: int numberpicker_input
 org.holoeverywhere.R$id: int parentPanel
@@ -3894,7 +4148,6 @@ org.holoeverywhere.R$id: int resolver_grid
 org.holoeverywhere.R$id: int right
 org.holoeverywhere.R$id: int rightSpacer
 org.holoeverywhere.R$id: int scrollView
-org.holoeverywhere.R$id: int secondaryProgress
 org.holoeverywhere.R$id: int select_dialog_listview
 org.holoeverywhere.R$id: int shortcut
 org.holoeverywhere.R$id: int showCustom
@@ -4285,6 +4538,10 @@ org.holoeverywhere.R$style: int Widget_Sherlock_ProgressBar_Horizontal
 org.holoeverywhere.R$style: int Widget_Sherlock_SearchAutoCompleteTextView
 org.holoeverywhere.R$style: int Widget_Sherlock_Spinner_DropDown_ActionBar
 org.holoeverywhere.R$style: int Widget_Sherlock_TextView_SpinnerItem
+org.holoeverywhere.R$styleable: int[] AbsListView
+org.holoeverywhere.R$styleable: int AbsListView_android_choiceMode
+org.holoeverywhere.R$styleable: int AbsListView_android_fastScrollAlwaysVisible
+org.holoeverywhere.R$styleable: int AbsListView_android_fastScrollEnabled
 org.holoeverywhere.R$styleable: int[] AbsSpinner
 org.holoeverywhere.R$styleable: int AbsSpinner_android_entries
 org.holoeverywhere.R$styleable: int[] AlertDialog
@@ -4385,8 +4642,6 @@ org.holoeverywhere.R$styleable: int LinearLayout_android_measureWithLargestChild
 org.holoeverywhere.R$styleable: int LinearLayout_android_orientation
 org.holoeverywhere.R$styleable: int LinearLayout_android_showDividers
 org.holoeverywhere.R$styleable: int LinearLayout_android_weightSum
-org.holoeverywhere.R$styleable: int LinearLayout_dividerPadding
-org.holoeverywhere.R$styleable: int LinearLayout_showDividers
 org.holoeverywhere.R$styleable: int[] MenuView
 org.holoeverywhere.R$styleable: int MenuView_android_headerBackground
 org.holoeverywhere.R$styleable: int MenuView_android_horizontalDivider
@@ -4619,6 +4874,7 @@ org.holoeverywhere.R$styleable: int Switch_thumbTextPadding
 org.holoeverywhere.R$styleable: int Switch_toggleWhenClick
 org.holoeverywhere.R$styleable: int Switch_track
 org.holoeverywhere.R$styleable: int[] TextAppearance
+org.holoeverywhere.R$styleable: int TextAppearance_android_fontFamily
 org.holoeverywhere.R$styleable: int TextAppearance_android_textAllCaps
 org.holoeverywhere.R$styleable: int TextAppearance_android_textColor
 org.holoeverywhere.R$styleable: int TextAppearance_android_textColorHighlight
@@ -4628,9 +4884,7 @@ org.holoeverywhere.R$styleable: int TextAppearance_android_textSize
 org.holoeverywhere.R$styleable: int TextAppearance_android_textStyle
 org.holoeverywhere.R$styleable: int TextAppearance_android_typeface
 org.holoeverywhere.R$styleable: int[] TextView
-org.holoeverywhere.R$styleable: int TextView_android_text
-org.holoeverywhere.R$styleable: int TextView_android_textAllCaps
-org.holoeverywhere.R$styleable: int TextView_textAllCaps
+org.holoeverywhere.R$styleable: int TextView_android_textAppearance
 org.holoeverywhere.R$styleable: int[] TimePicker
 org.holoeverywhere.R$styleable: int TimePicker_layout
 org.holoeverywhere.R$styleable: int[] WindowSizes
@@ -4706,6 +4960,7 @@ org.holoeverywhere.preference.R$attr: int activityChooserViewStyle
 org.holoeverywhere.preference.R$attr: int alertDialogCenterButtons
 org.holoeverywhere.preference.R$attr: int alertDialogStyle
 org.holoeverywhere.preference.R$attr: int alertDialogTheme
+org.holoeverywhere.preference.R$attr: int alertDialogTitleDividerColor
 org.holoeverywhere.preference.R$attr: int autoCompleteTextViewStyle
 org.holoeverywhere.preference.R$attr: int background
 org.holoeverywhere.preference.R$attr: int backgroundSplit
@@ -4751,7 +5006,6 @@ org.holoeverywhere.preference.R$attr: int disableDependentsState
 org.holoeverywhere.preference.R$attr: int displayOptions
 org.holoeverywhere.preference.R$attr: int divider
 org.holoeverywhere.preference.R$attr: int dividerHorizontal
-org.holoeverywhere.preference.R$attr: int dividerPadding
 org.holoeverywhere.preference.R$attr: int dividerVertical
 org.holoeverywhere.preference.R$attr: int dropDownHintAppearance
 org.holoeverywhere.preference.R$attr: int dropDownHorizontalOffset
@@ -4869,7 +5123,6 @@ org.holoeverywhere.preference.R$attr: int selectionDividerHeight
 org.holoeverywhere.preference.R$attr: int selectionDividersDistance
 org.holoeverywhere.preference.R$attr: int shouldDisableView
 org.holoeverywhere.preference.R$attr: int showDefault
-org.holoeverywhere.preference.R$attr: int showDividers
 org.holoeverywhere.preference.R$attr: int showSilent
 org.holoeverywhere.preference.R$attr: int showWeekNumber
 org.holoeverywhere.preference.R$attr: int shownWeekCount
@@ -4897,7 +5150,6 @@ org.holoeverywhere.preference.R$attr: int switchTextOff
 org.holoeverywhere.preference.R$attr: int switchTextOn
 org.holoeverywhere.preference.R$attr: int targetClass
 org.holoeverywhere.preference.R$attr: int targetPackage
-org.holoeverywhere.preference.R$attr: int textAllCaps
 org.holoeverywhere.preference.R$attr: int textAppearanceLargePopupMenu
 org.holoeverywhere.preference.R$attr: int textAppearanceListItem
 org.holoeverywhere.preference.R$attr: int textAppearanceListItemSmall
@@ -5541,7 +5793,6 @@ org.holoeverywhere.preference.R$id: int amPm
 org.holoeverywhere.preference.R$id: int atThumb
 org.holoeverywhere.preference.R$id: int auto
 org.holoeverywhere.preference.R$id: int back_button
-org.holoeverywhere.preference.R$id: int beginning
 org.holoeverywhere.preference.R$id: int bottom
 org.holoeverywhere.preference.R$id: int button1
 org.holoeverywhere.preference.R$id: int button2
@@ -5581,6 +5832,9 @@ org.holoeverywhere.preference.R$id: int fill
 org.holoeverywhere.preference.R$id: int fill_horizontal
 org.holoeverywhere.preference.R$id: int fill_vertical
 org.holoeverywhere.preference.R$id: int floating
+org.holoeverywhere.preference.R$id: int fontLoaderFont
+org.holoeverywhere.preference.R$id: int fontLoaderFontFamily
+org.holoeverywhere.preference.R$id: int fontLoaderFontStyle
 org.holoeverywhere.preference.R$id: int headers
 org.holoeverywhere.preference.R$id: int homeAsUp
 org.holoeverywhere.preference.R$id: int hour
@@ -5597,7 +5851,6 @@ org.holoeverywhere.preference.R$id: int listContainer
 org.holoeverywhere.preference.R$id: int listMode
 org.holoeverywhere.preference.R$id: int list_footer
 org.holoeverywhere.preference.R$id: int message
-org.holoeverywhere.preference.R$id: int middle
 org.holoeverywhere.preference.R$id: int minute
 org.holoeverywhere.preference.R$id: int mixed
 org.holoeverywhere.preference.R$id: int month
@@ -5605,7 +5858,6 @@ org.holoeverywhere.preference.R$id: int month_name
 org.holoeverywhere.preference.R$id: int music
 org.holoeverywhere.preference.R$id: int next_button
 org.holoeverywhere.preference.R$id: int no
-org.holoeverywhere.preference.R$id: int none
 org.holoeverywhere.preference.R$id: int normal
 org.holoeverywhere.preference.R$id: int notification
 org.holoeverywhere.preference.R$id: int numberpicker_input
@@ -5625,7 +5877,6 @@ org.holoeverywhere.preference.R$id: int rightSpacer
 org.holoeverywhere.preference.R$id: int ring
 org.holoeverywhere.preference.R$id: int ringtone
 org.holoeverywhere.preference.R$id: int scrollView
-org.holoeverywhere.preference.R$id: int secondaryProgress
 org.holoeverywhere.preference.R$id: int seekbar
 org.holoeverywhere.preference.R$id: int select_dialog_listview
 org.holoeverywhere.preference.R$id: int shortcut
@@ -6070,6 +6321,10 @@ org.holoeverywhere.preference.R$style: int Widget_Sherlock_ProgressBar_Horizonta
 org.holoeverywhere.preference.R$style: int Widget_Sherlock_SearchAutoCompleteTextView
 org.holoeverywhere.preference.R$style: int Widget_Sherlock_Spinner_DropDown_ActionBar
 org.holoeverywhere.preference.R$style: int Widget_Sherlock_TextView_SpinnerItem
+org.holoeverywhere.preference.R$styleable: int[] AbsListView
+org.holoeverywhere.preference.R$styleable: int AbsListView_android_choiceMode
+org.holoeverywhere.preference.R$styleable: int AbsListView_android_fastScrollAlwaysVisible
+org.holoeverywhere.preference.R$styleable: int AbsListView_android_fastScrollEnabled
 org.holoeverywhere.preference.R$styleable: int[] AbsSpinner
 org.holoeverywhere.preference.R$styleable: int AbsSpinner_android_entries
 org.holoeverywhere.preference.R$styleable: int[] AlertDialog
@@ -6189,8 +6444,6 @@ org.holoeverywhere.preference.R$styleable: int LinearLayout_android_measureWithL
 org.holoeverywhere.preference.R$styleable: int LinearLayout_android_orientation
 org.holoeverywhere.preference.R$styleable: int LinearLayout_android_showDividers
 org.holoeverywhere.preference.R$styleable: int LinearLayout_android_weightSum
-org.holoeverywhere.preference.R$styleable: int LinearLayout_dividerPadding
-org.holoeverywhere.preference.R$styleable: int LinearLayout_showDividers
 org.holoeverywhere.preference.R$styleable: int[] ListPreference
 org.holoeverywhere.preference.R$styleable: int ListPreference_entries
 org.holoeverywhere.preference.R$styleable: int ListPreference_entryValues
@@ -6475,6 +6728,7 @@ org.holoeverywhere.preference.R$styleable: int Switch_thumbTextPadding
 org.holoeverywhere.preference.R$styleable: int Switch_toggleWhenClick
 org.holoeverywhere.preference.R$styleable: int Switch_track
 org.holoeverywhere.preference.R$styleable: int[] TextAppearance
+org.holoeverywhere.preference.R$styleable: int TextAppearance_android_fontFamily
 org.holoeverywhere.preference.R$styleable: int TextAppearance_android_textAllCaps
 org.holoeverywhere.preference.R$styleable: int TextAppearance_android_textColor
 org.holoeverywhere.preference.R$styleable: int TextAppearance_android_textColorHighlight
@@ -6484,9 +6738,7 @@ org.holoeverywhere.preference.R$styleable: int TextAppearance_android_textSize
 org.holoeverywhere.preference.R$styleable: int TextAppearance_android_textStyle
 org.holoeverywhere.preference.R$styleable: int TextAppearance_android_typeface
 org.holoeverywhere.preference.R$styleable: int[] TextView
-org.holoeverywhere.preference.R$styleable: int TextView_android_text
-org.holoeverywhere.preference.R$styleable: int TextView_android_textAllCaps
-org.holoeverywhere.preference.R$styleable: int TextView_textAllCaps
+org.holoeverywhere.preference.R$styleable: int TextView_android_textAppearance
 org.holoeverywhere.preference.R$styleable: int[] TimePicker
 org.holoeverywhere.preference.R$styleable: int TimePicker_layout
 org.holoeverywhere.preference.R$styleable: int[] TimePreference
@@ -6587,6 +6839,8 @@ org.holoeverywhere.widget.AutoCompleteTextView: void setOnItemClickListener(andr
 org.holoeverywhere.widget.AutoCompleteTextView: void setOnItemSelectedListener(android.widget.AdapterView$OnItemSelectedListener)
 org.holoeverywhere.widget.AutoCompleteTextView: void setThreshold(int)
 org.holoeverywhere.widget.AutoCompleteTextView: void setValidator(org.holoeverywhere.widget.AutoCompleteTextView$Validator)
+org.holoeverywhere.widget.Button: java.lang.String getFontFamily()
+org.holoeverywhere.widget.Button: int getFontStyle()
 org.holoeverywhere.widget.Button: void setAllCaps(boolean)
 org.holoeverywhere.widget.CalendarView: long getDate()
 org.holoeverywhere.widget.CalendarView: int getFirstDayOfWeek()
@@ -6603,7 +6857,11 @@ org.holoeverywhere.widget.CalendarView: void setMonthDisplayed(java.util.Calenda
 org.holoeverywhere.widget.CalendarView: void setOnDateChangeListener(org.holoeverywhere.widget.CalendarView$OnDateChangeListener)
 org.holoeverywhere.widget.CalendarView: void setShowWeekNumber(boolean)
 org.holoeverywhere.widget.CalendarView: void setUpHeader(int)
+org.holoeverywhere.widget.CheckBox: java.lang.String getFontFamily()
+org.holoeverywhere.widget.CheckBox: int getFontStyle()
 org.holoeverywhere.widget.CheckBox: void setAllCaps(boolean)
+org.holoeverywhere.widget.CheckedTextView: java.lang.String getFontFamily()
+org.holoeverywhere.widget.CheckedTextView: int getFontStyle()
 org.holoeverywhere.widget.CheckedTextView: void setAllCaps(boolean)
 org.holoeverywhere.widget.DatePicker: org.holoeverywhere.widget.CalendarView getCalendarView()
 org.holoeverywhere.widget.DatePicker: boolean getCalendarViewShown()
@@ -6624,9 +6882,9 @@ org.holoeverywhere.widget.DatePicker: void setSpinnersShown(boolean)
 org.holoeverywhere.widget.DatePicker$SavedState
 org.holoeverywhere.widget.DatePicker$SavedState: android.os.Parcelable$Creator CREATOR
 org.holoeverywhere.widget.DrawerLayout: void setFitsSystemWindows(boolean)
-org.holoeverywhere.widget.EditText: android.view.View$OnCreateContextMenuListener getOnCreateContextMenuListener()
+org.holoeverywhere.widget.EditText: java.lang.String getFontFamily()
+org.holoeverywhere.widget.EditText: int getFontStyle()
 org.holoeverywhere.widget.EditText: void setAllCaps(boolean)
-org.holoeverywhere.widget.EditText: void setOnCreateContextMenuListener(android.view.View$OnCreateContextMenuListener)
 org.holoeverywhere.widget.ExpandableListConnector$GroupMetadata
 org.holoeverywhere.widget.ExpandableListConnector$GroupMetadata: android.os.Parcelable$Creator CREATOR
 org.holoeverywhere.widget.ExpandableListView: android.widget.ExpandableListAdapter getExpandableListAdapter()
@@ -6647,23 +6905,31 @@ org.holoeverywhere.widget.ExpandableListView: void setSelectedGroup(int)
 org.holoeverywhere.widget.ExpandableListView$SavedState
 org.holoeverywhere.widget.ExpandableListView$SavedState: android.os.Parcelable$Creator CREATOR
 org.holoeverywhere.widget.GridView: org.holoeverywhere.app.Activity getActivity()
+org.holoeverywhere.widget.GridView: android.widget.ListAdapter getAdapterSource()
 org.holoeverywhere.widget.GridView: int getCheckedItemCount()
 org.holoeverywhere.widget.GridView: long[] getCheckedItemIds()
 org.holoeverywhere.widget.GridView: int getCheckedItemPosition()
 org.holoeverywhere.widget.GridView: android.util.SparseBooleanArray getCheckedItemPositions()
-org.holoeverywhere.widget.GridView: long[] getCheckItemIds()
 org.holoeverywhere.widget.GridView: int getChoiceMode()
 org.holoeverywhere.widget.GridView: android.view.ContextMenu$ContextMenuInfo getContextMenuInfo()
 org.holoeverywhere.widget.GridView: int getFooterViewsCount()
 org.holoeverywhere.widget.GridView: int getHeaderViewsCount()
+org.holoeverywhere.widget.GridView: int getVerticalScrollbarPosition()
+org.holoeverywhere.widget.GridView: int getVerticalScrollbarWidth()
 org.holoeverywhere.widget.GridView: void setActivity(org.holoeverywhere.app.Activity)
 org.holoeverywhere.widget.GridView: void setAdapter(android.widget.ListAdapter)
 org.holoeverywhere.widget.GridView: void setChoiceMode(int)
-org.holoeverywhere.widget.GridView: void setEnableModalBackgroundWrapper(boolean)
+org.holoeverywhere.widget.GridView: void setFastScrollAlwaysVisible(boolean)
+org.holoeverywhere.widget.GridView: void setFastScrollEnabled(boolean)
 org.holoeverywhere.widget.GridView: void setForceHeaderListAdapter(boolean)
 org.holoeverywhere.widget.GridView: void setMultiChoiceModeListener(org.holoeverywhere.widget.ListView$MultiChoiceModeListener)
 org.holoeverywhere.widget.GridView: void setOnItemLongClickListener(android.widget.AdapterView$OnItemLongClickListener)
 org.holoeverywhere.widget.GridView: void setOnScrollListener(android.widget.AbsListView$OnScrollListener)
+org.holoeverywhere.widget.GridView: void setPaddingFromScroller(boolean)
+org.holoeverywhere.widget.GridView: void setSelector(int)
+org.holoeverywhere.widget.GridView: void setVerticalScrollbarPosition(int)
+org.holoeverywhere.widget.GridView$SavedState
+org.holoeverywhere.widget.GridView$SavedState: android.os.Parcelable$Creator CREATOR
 org.holoeverywhere.widget.LinearLayout: LinearLayout(android.content.Context)
 org.holoeverywhere.widget.LinearLayout: LinearLayout(android.content.Context,android.util.AttributeSet)
 org.holoeverywhere.widget.LinearLayout: LinearLayout(android.content.Context,android.util.AttributeSet,int)
@@ -6754,6 +7020,8 @@ org.holoeverywhere.widget.ProgressBar: void setSecondaryProgress(int)
 org.holoeverywhere.widget.ProgressBar: void setVisibility(int)
 org.holoeverywhere.widget.ProgressBar$SavedState
 org.holoeverywhere.widget.ProgressBar$SavedState: android.os.Parcelable$Creator CREATOR
+org.holoeverywhere.widget.RadioButton: java.lang.String getFontFamily()
+org.holoeverywhere.widget.RadioButton: int getFontStyle()
 org.holoeverywhere.widget.RadioButton: void setAllCaps(boolean)
 org.holoeverywhere.widget.SeekBar: void setOnSeekBarChangeListener(org.holoeverywhere.widget.SeekBar$OnSeekBarChangeListener)
 org.holoeverywhere.widget.Spinner: int getBaseline()
@@ -6797,6 +7065,8 @@ org.holoeverywhere.widget.Switch: void setThumbTextPadding(int)
 org.holoeverywhere.widget.Switch: void setToggleWhenClick(boolean)
 org.holoeverywhere.widget.Switch: void setTrackDrawable(android.graphics.drawable.Drawable)
 org.holoeverywhere.widget.Switch: void setTrackResource(int)
+org.holoeverywhere.widget.TextView: java.lang.String getFontFamily()
+org.holoeverywhere.widget.TextView: int getFontStyle()
 org.holoeverywhere.widget.TextView: void setAllCaps(boolean)
 org.holoeverywhere.widget.TimePicker: int getBaseline()
 org.holoeverywhere.widget.TimePicker: java.lang.Integer getCurrentHour()
@@ -6809,4 +7079,7 @@ org.holoeverywhere.widget.TimePicker: void setIs24HourView(java.lang.Boolean)
 org.holoeverywhere.widget.TimePicker: void setOnTimeChangedListener(org.holoeverywhere.widget.TimePicker$OnTimeChangedListener)
 org.holoeverywhere.widget.TimePicker$SavedState
 org.holoeverywhere.widget.TimePicker$SavedState: android.os.Parcelable$Creator CREATOR
+org.holoeverywhere.widget.ToggleButton: java.lang.String getFontFamily()
+org.holoeverywhere.widget.ToggleButton: int getFontStyle()
 org.holoeverywhere.widget.ToggleButton: void setAllCaps(boolean)
+org.holoeverywhere.widget.ViewPager: void setSwipeEnabled(boolean)

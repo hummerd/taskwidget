@@ -30,9 +30,12 @@ public class WidgetController {
     
     private static final String LIST_CLICK_ACTION = "com.dima.taskwidget.OPEN_TASKS";
     private static final String TASKS_CLICK_ACTION = "com.dima.taskwidget.OPEN_CFG";
-    private static final String TASKS_UPDATED_ACTION = "com.dima.taskwidget.TASKS_UPDATED";
-    public static final String TASKS_SYNC_FINISHED = "com.dima.taskwidget.TASKS_SYNC_FINISHED";
     
+    public static final String TASKS_SYNC_STATE = "com.dima.taskwidget.TASKS_SYNC_STATE";
+    public static final int SYNC_STATE_STARTED = 1;
+    public static final int SYNC_STATE_LISTS_UPDATED = 2;
+    public static final int SYNC_STATE_TASKS_UPDATED = 3;
+    public static final int SYNC_STATE_FINISHED = 4;
     
 	private static class AccountWidgets {			
 		public String accountName;
@@ -69,6 +72,17 @@ public class WidgetController {
 		}
 	}
 	
+	public boolean isSyncInProgress(int widgetId) {
+		String accName = m_settings.loadWidgetAccount(widgetId);
+		if (accName == null) {
+			return false;
+		}
+
+		Account acc = getAccount(accName);
+		boolean r = ContentResolver.isSyncActive(acc, TaskMetadata.AUTHORITY);
+		return r;
+	}
+	
 	public void updateWidgets() {
 		int[] ids = getWidgetsIds();
 		updateWidgets(ids);
@@ -78,7 +92,9 @@ public class WidgetController {
 		RemoteViews views = new RemoteViews(m_context.getPackageName(), R.layout.taskwidget);
 		
 		for (int id : widgetIds) {
-			LogHelper.i("loading list");
+			LogHelper.d("Updating widget with id:");
+			LogHelper.d(String.valueOf(id));
+			
 			String listId = m_settings.loadWidgetList(id);
 			if (listId == null) {
 				continue;
@@ -86,25 +102,33 @@ public class WidgetController {
 			TaskList list = m_taskSource.getList(listId);
 			List<Task> tasks = m_taskSource.getListTasks(listId);
 			
-			LogHelper.i("updating widget");
 			updateWidget(views, list, tasks);
 			
 			m_manager.updateAppWidget(id, views);	
 		}
 	}
 	
-	public void setMargin(Boolean margin, int[] widgetIds) {
+	public void applySettings(int[] widgetIds) {
 		RemoteViews views = new RemoteViews(m_context.getPackageName(), R.layout.taskwidget);
 		
 		for (int id : widgetIds) {
-			int v = margin ? View.VISIBLE : View.GONE;
-			views.setViewVisibility(R.id.spacer_bottom, v);
-			views.setViewVisibility(R.id.spacer_top, v);
-			views.setViewVisibility(R.id.spacer_left, v);
-			views.setViewVisibility(R.id.spacer_right, v);
+			Boolean margin = m_settings.loadWidgetMargin(id);
+			setMargin(margin, id);
 			
-			m_manager.updateAppWidget(id, views);	
+			m_manager.updateAppWidget(id, views);
 		}
+	}
+	
+	public void setMargin(Boolean margin, int widgetId) {
+		RemoteViews views = new RemoteViews(m_context.getPackageName(), R.layout.taskwidget);
+		
+		int v = margin ? View.VISIBLE : View.GONE;
+		views.setViewVisibility(R.id.spacer_bottom, v);
+		views.setViewVisibility(R.id.spacer_top, v);
+		views.setViewVisibility(R.id.spacer_left, v);
+		views.setViewVisibility(R.id.spacer_right, v);
+		
+		m_manager.updateAppWidget(widgetId, views);
 	}
 	
 	public void setupEvents(int[] widgetIds) {
@@ -118,29 +142,48 @@ public class WidgetController {
 			appWidgetManager.updateAppWidget(id, views);	
 		}	
 	}
-	
-	public void notifyUpdateCompleted() {
-		Intent intent = new Intent(TASKS_UPDATED_ACTION);
-		m_context.sendBroadcast(intent);
-	}
-	
-	public void notifySyncCompleted() {
-		Intent intent = new Intent(TASKS_SYNC_FINISHED);
+
+	public void notifySyncState(int flag) {
+		Intent intent = new Intent(TASKS_SYNC_STATE);
+		intent.setFlags(flag);
 		m_context.sendBroadcast(intent);
 	}
 	
 	public void performAction(String actionName, Intent intent) {
-        if (actionName.equals(WidgetController.LIST_CLICK_ACTION)) {     
+        if (actionName.equals(LIST_CLICK_ACTION)) {     
         	int wId = intent.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
-        	openCfgGUI(wId);        	
-        } else if (actionName.equals(WidgetController.TASKS_CLICK_ACTION)) {
+        	openCfgGUI(wId);    
+        	
+        } else if (actionName.equals(TASKS_CLICK_ACTION)) {
         	openTasksGUI();
-        } else if (actionName.equals(TASKS_UPDATED_ACTION)) {
-        	updateWidgets();
+        	
+        } else if (actionName.equals(TASKS_SYNC_STATE)) {
+        	int flag = intent.getFlags();
+        	
+        	if (flag == SYNC_STATE_STARTED) {
+        		showUpdateState(true);
+        		
+        	} else if (flag == SYNC_STATE_TASKS_UPDATED) {
+        		updateWidgets();
+        		
+        	} else if (flag == SYNC_STATE_FINISHED) {
+        		showUpdateState(false);
+        	}
         }
 	}
 	
 	
+	protected void showUpdateState(Boolean updating) {
+		RemoteViews views = new RemoteViews(m_context.getPackageName(), R.layout.taskwidget);
+		int[] widgetIds = getWidgetsIds();
+		
+		for (int id : widgetIds) {
+			int v = updating ? View.VISIBLE : View.GONE;
+			views.setViewVisibility(R.id.imageRefresh, v);
+			
+			m_manager.updateAppWidget(id, views);
+		}
+	}
 	
 	protected void openTasksGUI() {
     	LogHelper.i("widget textViewList clicked");
@@ -231,10 +274,7 @@ public class WidgetController {
 	protected List<AccountWidgets> getGroupedAccounts(int[] widgetIds) {
 		List<AccountWidgets> result = new ArrayList<AccountWidgets>();
 		
-		for (int wId : widgetIds) {
-			LogHelper.d("Updating widget with id:");
-			LogHelper.d(String.valueOf(wId));
-			
+		for (int wId : widgetIds) {	
 			String accName = m_settings.loadWidgetAccount(wId);
 			if (accName == null) {
 				continue;

@@ -30,7 +30,7 @@ import com.google.api.services.tasks.model.TaskList;
 
 public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 	
-	private int[] m_appWidgetIds;
+	private int m_appWidgetIds;
 	private Preference m_tasksListPreference;
 	private Preference m_accountPreference;
 	private SwitchPreference m_marginPreference;
@@ -53,19 +53,19 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	    initCustomPrefs();
 	    
 	    LogHelper.d("onCreate cfg activity");
-	    LogHelper.d(String.valueOf(m_appWidgetIds[0]));
+	    LogHelper.d(String.valueOf(m_appWidgetIds));
 	    
 	    Context context = super.getActivity();
 	    m_widgetController = new WidgetController(context);
 	    m_taskProvider = new TaskProvider(context);
 	    m_settings = new SettingsController(context);
-	    m_accountName = m_settings.loadWidgetAccount(m_appWidgetIds[0]);
+	    m_accountName = m_settings.loadWidgetAccount(m_appWidgetIds);
 	    m_tasksListPreference.setEnabled(m_accountName != null);
 	    
 	    checkAccounts();
 	    checkList();
 	    
-	    Boolean margin = m_settings.loadWidgetMargin(m_appWidgetIds[0]);
+	    Boolean margin = m_settings.loadWidgetMargin(m_appWidgetIds);
 	    m_marginPreference.setChecked(margin);
 	}
 	
@@ -86,9 +86,9 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 		Intent intent = act.getIntent();
 		Bundle extras = intent.getExtras();
 		
-		m_appWidgetIds = new int[] { extras.getInt(
+		m_appWidgetIds = extras.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID, 
-            AppWidgetManager.INVALID_APPWIDGET_ID) };
+            AppWidgetManager.INVALID_APPWIDGET_ID);
 	
 	    m_accountManager = AccountManager.get(act);
 	}
@@ -117,7 +117,7 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	}
 	
 	private void checkList() {
-		String listName = m_settings.loadWidgetListName(m_appWidgetIds[0]);
+		String listName = m_settings.loadWidgetListName(m_appWidgetIds);
 		String summary;
 		
 		if (listName == null) {
@@ -147,7 +147,7 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 		@Override
 		public boolean onPreferenceChange(Preference preference, Object newValue) {
 			m_widgetController.setMargin((Boolean)newValue, m_appWidgetIds);
-			m_settings.saveWidgetMargin(m_appWidgetIds[0], (Boolean)newValue);
+			m_settings.saveWidgetMargin(m_appWidgetIds, (Boolean)newValue);
 			return true;
 		}
 	};
@@ -181,7 +181,7 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	}
 	
 	private void storeAccount(String accountName) {
-		m_settings.saveWidgetAccount(m_appWidgetIds[0], accountName);
+		m_settings.saveWidgetAccount(m_appWidgetIds, accountName);
 		m_accountName = accountName;
 		m_tasksListPreference.setEnabled(m_accountName != null);
 		checkAccounts();
@@ -205,7 +205,7 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 		    public void onClick(DialogInterface dialog, int item) {
 		    	int ix = Arrays.asList(listsNames).indexOf(listsNames[item]);
 		    	m_settings.saveWidgetList(
-		    			m_appWidgetIds[0], 
+		    			m_appWidgetIds, 
 		    			lists.get(ix).getId(),
 		    			lists.get(ix).getTitle());
 		    	checkList();

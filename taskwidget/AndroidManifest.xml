@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 	<uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
 	<uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+	<uses-permission android:name="android.permission.READ_SYNC_STATS"/>
 
     <application
         android:icon="@drawable/tasks"
@@ -48,13 +49,13 @@
         	android:taskAffinity="com.dima.widgetaction"
         	android:theme="@style/Transparent"
             >
-<!-- 			android:theme="@style/Holo.Theme.Light" -->
         </activity>
         
 	    <receiver android:name=".TaskWidgetProvider" >
 		    <intent-filter>
 		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
 		        <action android:name="com.dima.taskwidget.TASKS_UPDATED" />
+		        <action android:name="com.dima.taskwidget.TASKS_SYNC_STATE" />
 		    </intent-filter>
 		    <meta-data android:name="android.appwidget.provider"
 		               android:resource="@xml/widgetinfo" />

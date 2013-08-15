@@ -40,6 +40,8 @@ public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
 	    	WidgetController ctrl = new WidgetController(m_context);
 	    	
 	        try {
+	        	ctrl.notifySyncState(WidgetController.SYNC_STATE_STARTED);
+	        	
 	        	GoogleServiceAuthentificator servAuth = new GoogleServiceAuthentificator(account.name, m_context);
 	        	token = servAuth.authentificateSyncAdapter(authority, extras);
 	        	
@@ -55,6 +57,7 @@ public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
 					listsValues[i] = getTaskListValues(taskList);
 				}
 	        	provider.bulkInsert(TaskMetadata.TASK_LIST_INFO.CONTENT_DIR, listsValues);
+	        	ctrl.notifySyncState(WidgetController.SYNC_STATE_LISTS_UPDATED);
 	        	
 	        	for (TaskList taskList : taskLists) {
 	        		String taskListId = taskList.getId();
@@ -68,8 +71,8 @@ public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
 	        		provider.bulkInsert(TaskMetadata.TASK_INFO.CONTENT_DIR, tasksValues);
 	        	}
 	        	
-	        	ctrl.notifyUpdateCompleted();
-	        	ctrl.notifySyncCompleted();
+	        	ctrl.notifySyncState(WidgetController.SYNC_STATE_TASKS_UPDATED);
+	        	ctrl.notifySyncState(WidgetController.SYNC_STATE_FINISHED);
 	        	return;
 	        	
 	        } catch (final RemoteException e) {
@@ -95,7 +98,7 @@ public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
 	        	}
 			}
 	        
-	        ctrl.notifySyncCompleted();
+	        ctrl.notifySyncState(WidgetController.SYNC_STATE_FINISHED);
 	    }
 	    
 	    private ContentValues getTaskListValues(TaskList list) {

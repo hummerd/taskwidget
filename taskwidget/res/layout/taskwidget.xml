@@ -5,26 +5,26 @@
     android:layout_height="match_parent"
     android:padding="@dimen/widget_margin" >
     
-    <TextView
+    <RelativeLayout
         android:id="@+id/spacer_top"
         android:layout_width="match_parent"
         android:layout_height="8dp" />
     
-    <TextView
+    <RelativeLayout
         android:id="@+id/spacer_left"
         android:layout_width="8dp"
         android:layout_height="match_parent" 
         android:layout_below="@+id/spacer_top"
         android:layout_alignParentLeft="true" />
     
-    <TextView
+    <RelativeLayout
         android:id="@+id/spacer_right"
         android:layout_width="8dp"
         android:layout_height="match_parent"
         android:layout_below="@+id/spacer_top"
         android:layout_alignParentRight="true" />
   
-    <TextView
+    <RelativeLayout
         android:id="@+id/spacer_bottom"
         android:layout_width="match_parent"
         android:layout_height="8dp"
@@ -33,7 +33,9 @@
     
 	<RelativeLayout
 	    android:id="@+id/left_block"
+	    style="@style/mytheme"
 	    android:layout_marginRight="1dp"
+	    android:padding="12dp"
         android:layout_width="@dimen/left_block_width"
         android:layout_height="match_parent"
         android:layout_below="@+id/spacer_top" 
@@ -41,22 +43,22 @@
         android:layout_toRightOf="@+id/spacer_left"
         >
 
-        <ImageView
-            android:id="@+id/imageRefresh"
-            android:layout_width="8dip"
-            android:layout_height="8dip"
-            android:contentDescription="@string/updating"
-            android:src="@drawable/ic_navigation_refresh"
-            android:visibility="invisible" />
-
         <TextView
             android:id="@+id/textViewList"
-            style="@style/mytheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:padding="8dp"
+            android:textColor="#ffffff"
             android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imageRefresh"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:contentDescription="@string/updating"
+            android:scaleType="fitEnd"
+            android:src="@drawable/ic_navigation_refresh_dark"
+            android:visibility="invisible" />
 
     </RelativeLayout>
 

@@ -46,6 +46,7 @@ public class TaskWidgetProvider extends AppWidgetProvider {
     	WidgetController controller = new WidgetController(context);
     	controller.setupEvents(appWidgetIds);
     	controller.updateWidgets(appWidgetIds);
+    	controller.applySettings(appWidgetIds);
     	
         super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}
