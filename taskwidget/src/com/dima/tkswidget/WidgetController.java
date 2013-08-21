@@ -141,7 +141,7 @@ public class WidgetController {
         actionPendingIntent = PendingIntent.getBroadcast(m_context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.textViewTasks, actionPendingIntent);
 	}
-
+	
 	public void notifySyncState(int flag) {
 		Intent intent = new Intent(m_context, TaskWidgetProvider.class);
 		intent.setAction(TASKS_SYNC_STATE);
