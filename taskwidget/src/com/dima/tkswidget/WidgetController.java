@@ -96,7 +96,18 @@ public class WidgetController {
 		return new RemoteViews(m_context.getPackageName(), R.layout.taskwidget);
 	}
 
-	public void updateWidgets(RemoteViews views, int widgetId) {
+    public RemoteViews prepareWidgets(int widgetId)
+    {
+        RemoteViews views = getWidgetViews();
+
+        setupEvents(views, widgetId);
+        updateWidgets(views, widgetId);
+        applySettings(views, widgetId);
+
+        return views;
+    }
+
+    public void updateWidgets(RemoteViews views, int widgetId) {
 		LogHelper.d("Updating widget with id:");
 		LogHelper.d(String.valueOf(widgetId));
 

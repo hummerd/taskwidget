@@ -11,26 +11,29 @@ public class TaskWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
+        LogHelper.d("delete widgets started ", appWidgetIds);
         super.onDeleted(context, appWidgetIds);
-        
+
         SettingsController controller = new SettingsController(context);
         controller.clearPrefs(appWidgetIds);
     }
 
     @Override
     public void onDisabled(Context context) {
+        LogHelper.d("onDisabled");
         super.onDisabled(context);
     }
 
     @Override
     public void onEnabled(Context context) {
+        LogHelper.d("onEnabled");
         super.onEnabled(context);
     }
     
     @Override
     public void onReceive(Context context, Intent intent) {
-    	super.onReceive(context, intent);
-    	LogHelper.d("onReceive");
+        LogHelper.d("onReceive");
+        super.onReceive(context, intent);
 
     	String action = intent.getAction();
     	LogHelper.d(action);
@@ -40,18 +43,14 @@ public class TaskWidgetProvider extends AppWidgetProvider {
 	
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        LogHelper.d("update widgets started ", appWidgetIds);
 
     	WidgetController controller = new WidgetController(context);
     	for (int id : appWidgetIds) {
-        	RemoteViews views = controller.getWidgetViews();
-        	controller.setupEvents(views, id);
-        	controller.updateWidgets(views, id);
-        	controller.applySettings(views, id);
-
+        	RemoteViews views = controller.prepareWidgets(id);
         	appWidgetManager.updateAppWidget(id, views);
 		}
 
     	super.onUpdate(context, appWidgetManager, appWidgetIds);
-    	LogHelper.i("update widgets started ");
 	}
 }

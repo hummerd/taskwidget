@@ -16,7 +16,14 @@ public class LogHelper {
 	public static void d(String msg) {
 		Log.d(tag, msg);
 	}
-	
+
+    public static void d(String msg, int[] array) {
+        Log.d(tag, msg);
+        for (int i : array){
+            Log.d(tag, Integer.toString(i));
+        }
+    }
+
 	public static void w(String msg) {
 		Log.w(tag, msg);
 	}

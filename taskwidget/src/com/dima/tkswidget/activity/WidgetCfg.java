@@ -153,10 +153,7 @@ public class WidgetCfg extends PreferenceActivity {
 		finish();	
 		
 		AppWidgetManager manager = AppWidgetManager.getInstance(this);
-    	RemoteViews views = m_widgetController.getWidgetViews();
-    	m_widgetController.setupEvents(views, m_appWidgetId);
-    	m_widgetController.updateWidgets(views, m_appWidgetId);
-    	m_widgetController.applySettings(views, m_appWidgetId);
+        RemoteViews views = m_widgetController.prepareWidgets(m_appWidgetId);
     	manager.updateAppWidget(m_appWidgetId, views);
 	}
 	
