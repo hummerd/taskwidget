@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.RemoteViews;
 
 
 public class TaskWidgetProvider extends AppWidgetProvider {
@@ -28,26 +29,29 @@ public class TaskWidgetProvider extends AppWidgetProvider {
     
     @Override
     public void onReceive(Context context, Intent intent) {
-    	String action = intent.getAction();
-    	    	
+    	super.onReceive(context, intent);
     	LogHelper.d("onReceive");
+    	
+    	String action = intent.getAction();
     	LogHelper.d(action);
-
     	WidgetController controller = new WidgetController(context);
     	controller.performAction(action,  intent);
-    	
-        super.onReceive(context, intent);
     }    
 	
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-    	LogHelper.i("update widgets started ");
-        
+
     	WidgetController controller = new WidgetController(context);
-    	controller.setupEvents(appWidgetIds);
-    	controller.updateWidgets(appWidgetIds);
-    	controller.applySettings(appWidgetIds);
+    	for (int id : appWidgetIds) {
+        	RemoteViews views = controller.getWidgetViews();
+        	controller.setupEvents(views, id);
+        	controller.updateWidgets(views, id);
+        	controller.applySettings(views, id);
+        	
+        	appWidgetManager.updateAppWidget(id, views);		
+		}
     	
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
+    	super.onUpdate(context, appWidgetManager, appWidgetIds);
+    	LogHelper.i("update widgets started ");
 	}
 }

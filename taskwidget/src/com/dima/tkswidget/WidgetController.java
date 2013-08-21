@@ -45,14 +45,12 @@ public class WidgetController {
 	
 	protected final Context m_context;
 	protected final TaskProvider m_taskSource;
-	protected final AppWidgetManager m_manager;
 	protected final ComponentName m_name;
 	protected final SettingsController m_settings;
 	
 	
 	public WidgetController(Context context) {
 		m_context = context;
-		m_manager = AppWidgetManager.getInstance(m_context);
 		m_name = new ComponentName(m_context, TaskWidgetProvider.class.getName());
 		m_settings = new SettingsController(m_context);
 		m_taskSource = new TaskProvider(m_context);
@@ -85,66 +83,68 @@ public class WidgetController {
 	
 	public void updateWidgets() {
 		int[] ids = getWidgetsIds();
-		updateWidgets(ids);
-	}
-	
-	public void updateWidgets(int[] widgetIds) {
-		RemoteViews views = new RemoteViews(m_context.getPackageName(), R.layout.taskwidget);
+		AppWidgetManager manager = AppWidgetManager.getInstance(m_context);
 		
-		for (int id : widgetIds) {
-			LogHelper.d("Updating widget with id:");
-			LogHelper.d(String.valueOf(id));
-			
-			String listId = m_settings.loadWidgetList(id);
-			if (listId == null) {
-				continue;
-			}
-			TaskList list = m_taskSource.getList(listId);
-			List<Task> tasks = m_taskSource.getListTasks(listId);
-			
-			updateWidget(views, list, tasks);
-			
-			m_manager.updateAppWidget(id, views);	
+		for (int id : ids) {
+			RemoteViews views = getWidgetViews();
+			updateWidgets(views, id);	
+			manager.updateAppWidget(id, views);			
 		}
 	}
 	
-	public void applySettings(int[] widgetIds) {
-		RemoteViews views = new RemoteViews(m_context.getPackageName(), R.layout.taskwidget);
-		
-		for (int id : widgetIds) {
-			Boolean margin = m_settings.loadWidgetMargin(id);
-			setMargin(margin, id);
-			
-			m_manager.updateAppWidget(id, views);
-		}
+	public RemoteViews getWidgetViews(){
+		return new RemoteViews(m_context.getPackageName(), R.layout.taskwidget);
 	}
 	
-	public void setMargin(Boolean margin, int widgetId) {
-		RemoteViews views = new RemoteViews(m_context.getPackageName(), R.layout.taskwidget);
-		
+	public void updateWidgets(RemoteViews views, int widgetId) {
+		LogHelper.d("Updating widget with id:");
+		LogHelper.d(String.valueOf(widgetId));
+
+		String listId = m_settings.loadWidgetList(widgetId);
+		if (listId == null) {
+			return;
+		}
+		TaskList list = m_taskSource.getList(listId);
+		List<Task> tasks = m_taskSource.getListTasks(listId);
+
+		updateWidget(views, list, tasks);
+	}
+	
+	public void applySettings(RemoteViews views, int widgetId) {
+		Boolean margin = m_settings.loadWidgetMargin(widgetId);
+		setMargin(views, margin, widgetId);
+	}
+	
+	public void setMargin(RemoteViews views, Boolean margin, int widgetId) {
 		int v = margin ? View.VISIBLE : View.GONE;
 		views.setViewVisibility(R.id.spacer_bottom, v);
 		views.setViewVisibility(R.id.spacer_top, v);
 		views.setViewVisibility(R.id.spacer_left, v);
 		views.setViewVisibility(R.id.spacer_right, v);
-		
-		m_manager.updateAppWidget(widgetId, views);
 	}
 	
-	public void setupEvents(int[] widgetIds) {
-		RemoteViews views = new RemoteViews(m_context.getPackageName(), R.layout.taskwidget);
-		
-		for (int id : widgetIds) {
-			LogHelper.i("updating widget events");
-			setupEvents(views, id);
-			
-			AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(m_context);
-			appWidgetManager.updateAppWidget(id, views);	
-		}	
+	public void setupEvents(RemoteViews views, int widgetId) {
+        Intent intent = new Intent(m_context, TaskWidgetProvider.class);
+        intent.setAction(LIST_CLICK_ACTION);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+        
+        PendingIntent actionPendingIntent = PendingIntent.getBroadcast(m_context, 0, intent, 0);
+        views.setOnClickPendingIntent(R.id.textViewList, actionPendingIntent);
+        	       
+        
+        intent = new Intent(m_context, TaskWidgetProvider.class);
+        intent.setAction(TASKS_CLICK_ACTION);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+        
+        actionPendingIntent = PendingIntent.getBroadcast(m_context, 0, intent, 0);
+        views.setOnClickPendingIntent(R.id.textViewTasks, actionPendingIntent);
 	}
-
+	
 	public void notifySyncState(int flag) {
-		Intent intent = new Intent(TASKS_SYNC_STATE);
+		Intent intent = new Intent(m_context, TaskWidgetProvider.class);
+		intent.setAction(TASKS_SYNC_STATE);
 		intent.setFlags(flag);
 		m_context.sendBroadcast(intent);
 	}
@@ -174,14 +174,15 @@ public class WidgetController {
 	
 	
 	protected void showUpdateState(Boolean updating) {
-		RemoteViews views = new RemoteViews(m_context.getPackageName(), R.layout.taskwidget);
 		int[] widgetIds = getWidgetsIds();
+		AppWidgetManager manager = AppWidgetManager.getInstance(m_context);
 		
 		for (int id : widgetIds) {
+			RemoteViews views = getWidgetViews();
+				
 			int v = updating ? View.VISIBLE : View.GONE;
 			views.setViewVisibility(R.id.imageRefresh, v);
-			
-			m_manager.updateAppWidget(id, views);
+			manager.updateAppWidget(id, views);
 		}
 	}
 	
@@ -203,26 +204,8 @@ public class WidgetController {
     }
     
 	protected int[] getWidgetsIds() {
-		return m_manager.getAppWidgetIds(m_name);
-	}
-	
-	protected void setupEvents(RemoteViews views, int widgetId) {
-        Intent intent = new Intent(m_context, TaskWidgetProvider.class);
-        intent.setAction(LIST_CLICK_ACTION);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
-        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-        
-        PendingIntent actionPendingIntent = PendingIntent.getBroadcast(m_context, 0, intent, 0);
-        views.setOnClickPendingIntent(R.id.textViewList, actionPendingIntent);
-        	       
-        
-        intent = new Intent(m_context, TaskWidgetProvider.class);
-        intent.setAction(TASKS_CLICK_ACTION);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
-        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-        
-        actionPendingIntent = PendingIntent.getBroadcast(m_context, 0, intent, 0);
-        views.setOnClickPendingIntent(R.id.textViewTasks, actionPendingIntent);
+		AppWidgetManager manager = AppWidgetManager.getInstance(m_context);
+		return manager.getAppWidgetIds(m_name);
 	}
 	
 	protected boolean updateWidget(

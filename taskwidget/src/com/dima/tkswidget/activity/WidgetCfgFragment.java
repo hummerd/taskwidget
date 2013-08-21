@@ -11,6 +11,7 @@ import org.holoeverywhere.preference.PreferenceFragment;
 import org.holoeverywhere.preference.SharedPreferences;
 import org.holoeverywhere.preference.SharedPreferences.OnSharedPreferenceChangeListener;
 import org.holoeverywhere.preference.SwitchPreference;
+import org.holoeverywhere.widget.Toast;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -35,7 +36,6 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	private Preference m_accountPreference;
 	private SwitchPreference m_marginPreference;
 	private String m_accountName;
-	private WidgetController m_widgetController;
 	private TaskProvider m_taskProvider;
 	private AccountManager m_accountManager;
 	private SettingsController m_settings;
@@ -56,14 +56,14 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	    LogHelper.d(String.valueOf(m_appWidgetIds));
 	    
 	    Context context = super.getActivity();
-	    m_widgetController = new WidgetController(context);
 	    m_taskProvider = new TaskProvider(context);
 	    m_settings = new SettingsController(context);
 	    m_accountName = m_settings.loadWidgetAccount(m_appWidgetIds);
 	    m_tasksListPreference.setEnabled(m_accountName != null);
 	    
-	    checkAccounts();
-	    checkList();
+	    setDefaultAccount();
+	    setAccountSummary();
+	    setListSummary();
 	    
 	    Boolean margin = m_settings.loadWidgetMargin(m_appWidgetIds);
 	    m_marginPreference.setChecked(margin);
@@ -93,7 +93,10 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	    m_accountManager = AccountManager.get(act);
 	}
 	
-	private void checkAccounts() {
+	private void setDefaultAccount() {
+		if (m_accountName != null)
+			return;
+		
 	    Account[] accounts = m_accountManager.getAccountsByType(WidgetController.ACCOUNT_TYPE);
 	    if (accounts.length <= 0) {
 	    	m_accountPreference.setEnabled(false);
@@ -101,11 +104,13 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	    } else if (accounts.length > 0) {
 	    	m_accountPreference.setEnabled(true);
 	    	
-	    	if (accounts.length == 1 && m_accountName == null) {
-	    		m_accountName = accounts[0].name;
+	    	if (accounts.length == 1) {
+	    		storeAccount(accounts[0].name);
 	    	}
-	    }
-	    
+	    }	
+	}
+	
+	private void setAccountSummary() {    
 	    String summary;
 	    if (m_accountName != null) {
 	    	summary = super.getResources().getString(R.string.usingaccount, m_accountName);
@@ -116,7 +121,7 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	    m_accountPreference.setSummary(summary);
 	}
 	
-	private void checkList() {
+	private void setListSummary() {
 		String listName = m_settings.loadWidgetListName(m_appWidgetIds);
 		String summary;
 		
@@ -146,7 +151,6 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	private OnPreferenceChangeListener onMarginPreferenceChange = new OnPreferenceChangeListener() {
 		@Override
 		public boolean onPreferenceChange(Preference preference, Object newValue) {
-			m_widgetController.setMargin((Boolean)newValue, m_appWidgetIds);
 			m_settings.saveWidgetMargin(m_appWidgetIds, (Boolean)newValue);
 			return true;
 		}
@@ -184,13 +188,18 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 		m_settings.saveWidgetAccount(m_appWidgetIds, accountName);
 		m_accountName = accountName;
 		m_tasksListPreference.setEnabled(m_accountName != null);
-		checkAccounts();
+		setAccountSummary();
 	}
 	
 	private void selectList() {
 		final List<TaskList> lists = m_taskProvider.getLists();
 		if (lists.size() <= 0)
+		{
+			Toast
+				.makeText(super.getActivity(), "No lists found, sync your lists or create new one.", Toast.LENGTH_LONG)
+				.show();
 			return;
+		}
 		
 		final String[] listsNames = new String[lists.size()];
 		for (int i = 0; i < listsNames.length; i++) {
@@ -208,7 +217,7 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 		    			m_appWidgetIds, 
 		    			lists.get(ix).getId(),
 		    			lists.get(ix).getTitle());
-		    	checkList();
+		    	setListSummary();
 		    }
 		});
 		AlertDialog alert = builder.create();

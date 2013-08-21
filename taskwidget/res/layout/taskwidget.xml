@@ -35,7 +35,6 @@
 	    android:id="@+id/left_block"
 	    style="@style/mytheme"
 	    android:layout_marginRight="1dp"
-	    android:padding="12dp"
         android:layout_width="@dimen/left_block_width"
         android:layout_height="match_parent"
         android:layout_below="@+id/spacer_top" 
@@ -47,18 +46,19 @@
             android:id="@+id/textViewList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="12dp"
             android:gravity="center"
             android:textColor="#ffffff"
             android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/imageRefresh"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
             android:contentDescription="@string/updating"
             android:scaleType="fitEnd"
             android:src="@drawable/ic_navigation_refresh_dark"
-            android:visibility="invisible" />
+            android:visibility="gone" />
 
     </RelativeLayout>
 

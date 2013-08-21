@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.RemoteViews;
 
 
 /**
@@ -35,7 +36,7 @@ public class WidgetCfg extends PreferenceActivity {
 	private WidgetController m_widgetController;
 	private SettingsController m_settings;
 	private ProgressDialog m_progressDialog = null;
-	private int[] m_appWidgetIds;
+	private int m_appWidgetId;
 	private MenuItem m_refreshMenu = null;
 	
 	private final BroadcastReceiver m_syncFinishedReceiver = new BroadcastReceiver() {
@@ -69,9 +70,9 @@ public class WidgetCfg extends PreferenceActivity {
 		
 		m_widgetController = new WidgetController(this);
 		m_settings = new SettingsController(this);
-		m_appWidgetIds = new int[] { extras.getInt(
+		m_appWidgetId = extras.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID, 
-            AppWidgetManager.INVALID_APPWIDGET_ID) };
+            AppWidgetManager.INVALID_APPWIDGET_ID);
     }
     
 	@Override
@@ -104,7 +105,7 @@ public class WidgetCfg extends PreferenceActivity {
     	boolean r = super.onPrepareOptionsMenu(menu);
     	
     	 m_refreshMenu = menu.findItem(R.id.cfgmenu_refresh);
-		boolean syncInProgress = m_widgetController.isSyncInProgress(m_appWidgetIds[0]);
+		boolean syncInProgress = m_widgetController.isSyncInProgress(m_appWidgetId);
 		if (syncInProgress) {
 			refresh();
 		}
@@ -129,6 +130,10 @@ public class WidgetCfg extends PreferenceActivity {
     }
     
     public void refresh() {
+		View v = m_refreshMenu.getActionView();
+		if (v != null)
+			return;
+
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ImageView iv = (ImageView) inflater.inflate(R.layout.refresh_view, null);
 
@@ -142,17 +147,21 @@ public class WidgetCfg extends PreferenceActivity {
 	private void finishWithOk() {
 		LogHelper.i("finishWithOk");
 		
-		m_widgetController.setupEvents(m_appWidgetIds);
-		m_widgetController.updateWidgets(m_appWidgetIds);
-		
 		Intent resultValue = new Intent();
-		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, m_appWidgetIds[0]);
+		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, m_appWidgetId);
 		setResult(Activity.RESULT_OK, resultValue);
 		finish();	
+		
+		AppWidgetManager manager = AppWidgetManager.getInstance(this);
+    	RemoteViews views = m_widgetController.getWidgetViews();
+    	m_widgetController.setupEvents(views, m_appWidgetId);
+    	m_widgetController.updateWidgets(views, m_appWidgetId);
+    	m_widgetController.applySettings(views, m_appWidgetId);
+    	manager.updateAppWidget(m_appWidgetId, views);
 	}
 	
 	private void updateLists() {
-		String accountName = m_settings.loadWidgetAccount(m_appWidgetIds[0]);
+		String accountName = m_settings.loadWidgetAccount(m_appWidgetId);
 		
 		if (accountName == null) {
 			stopUpdating();
