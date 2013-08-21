@@ -69,5 +69,5 @@ public class GoogleTasksLoader {
 			.tasklists()
 			.get(listId)
 			.execute();
-		}
+	}
 }
