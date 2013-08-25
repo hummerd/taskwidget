@@ -37,12 +37,12 @@ public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
 	        SyncResult syncResult) {
 	    	
 	    	String token = null;
-	    	WidgetController ctrl = new WidgetController(m_context);
+	    	WidgetController ctrl = new WidgetController(m_context, null);
 	    	
 	        try {
 	        	ctrl.notifySyncState(WidgetController.SYNC_STATE_STARTED);
 	        	
-	        	GoogleServiceAuthentificator servAuth = new GoogleServiceAuthentificator(account.name, m_context);
+	        	GoogleServiceAuthenticator servAuth = new GoogleServiceAuthenticator(account.name, m_context);
 	        	token = servAuth.authentificateSyncAdapter(authority, extras);
 	        	
 	        	GoogleTasksLoader taskLoader = new GoogleTasksLoader(servAuth.getAccessProtectedResource());	

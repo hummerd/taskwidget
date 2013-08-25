@@ -36,7 +36,9 @@ public class WidgetController {
     public static final int SYNC_STATE_LISTS_UPDATED = 2;
     public static final int SYNC_STATE_TASKS_UPDATED = 3;
     public static final int SYNC_STATE_FINISHED = 4;
-    
+
+    public static final Uri GOOGLE_TASKS_URI = Uri.parse("https://mail.google.com/tasks/android");
+
 	private static class AccountWidgets {			
 		public String accountName;
 		public List<Integer> widgetsIds;
@@ -44,17 +46,22 @@ public class WidgetController {
 	
 	
 	protected final Context m_context;
-	protected final TaskProvider m_taskSource;
+    protected final AppWidgetManager m_widgetManager;
+    protected final TaskProvider m_taskSource;
 	protected final ComponentName m_name;
 	protected final SettingsController m_settings;
 	
 	
-	public WidgetController(Context context) {
+	public WidgetController(Context context, AppWidgetManager widgetManager) {
 		m_context = context;
+        m_widgetManager = widgetManager == null
+            ? AppWidgetManager.getInstance(m_context)
+            : widgetManager;
 		m_name = new ComponentName(m_context, TaskWidgetProvider.class.getName());
 		m_settings = new SettingsController(m_context);
 		m_taskSource = new TaskProvider(m_context);
 	}
+
 	
 	public void startSync() {
 		int[] ids = getWidgetsIds();
@@ -80,61 +87,112 @@ public class WidgetController {
 		boolean r = ContentResolver.isSyncActive(acc, TaskMetadata.AUTHORITY);
 		return r;
 	}
-	
+
+    public void updateWidgetsAsync() {
+        int[] ids = getWidgetsIds();
+        updateWidgetsAsync(ids);
+    }
+
+    public void updateWidgetsAsync(int[] widgetIds) {
+        WidgetControllerService.updateWidgets(m_context, widgetIds);
+    }
+
 	public void updateWidgets() {
-		int[] ids = getWidgetsIds();
-		AppWidgetManager manager = AppWidgetManager.getInstance(m_context);
-
-		for (int id : ids) {
-			RemoteViews views = getWidgetViews();
-			updateWidgets(views, id);
-			manager.updateAppWidget(id, views);
-		}
+        int[] ids = getWidgetsIds();
+        updateWidgets(ids);
 	}
 
-	public RemoteViews getWidgetViews(){
-		return new RemoteViews(m_context.getPackageName(), R.layout.taskwidget);
+    public void updateWidgets(int[] widgetIds) {
+        for (int id : widgetIds) {
+            updateWidget(id);
+        }
+    }
+
+    public void updateWidget(int widgetId) {
+        LogHelper.d("Updating widget with id:");
+        LogHelper.d(String.valueOf(widgetId));
+
+        RemoteViews views = prepareWidget(widgetId);
+        m_widgetManager.updateAppWidget(widgetId, views);
+    }
+
+	public void notifySyncState(int flag) {
+		Intent intent = new Intent(m_context, TaskWidgetProvider.class);
+		intent.setAction(TASKS_SYNC_STATE);
+		intent.setFlags(flag);
+		m_context.sendBroadcast(intent);
+	}
+	
+	public void performAction(String actionName, Intent intent) {
+        if (actionName == null) {
+            return;
+        }
+
+        if (actionName.equals(LIST_CLICK_ACTION)) {     
+        	int wId = intent.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
+        	openCfgGUI(wId);    
+        	
+        } else if (actionName.equals(TASKS_CLICK_ACTION)) {
+        	openTasksGUI();
+        	
+        } else if (actionName.equals(TASKS_SYNC_STATE)) {
+        	int flag = intent.getFlags();
+        	
+        	if (flag == SYNC_STATE_STARTED) {
+        		setUpdateState(true);
+        		
+        	} else if (flag == SYNC_STATE_FINISHED) {
+                updateWidgetsAsync(); //to restore remote view state
+        	}
+        }
 	}
 
-    public RemoteViews prepareWidgets(int widgetId)
-    {
+
+    protected RemoteViews getWidgetViews(){
+        String packName = m_context.getPackageName();
+        LogHelper.d(packName);
+        return new RemoteViews(packName, R.layout.taskwidget);
+    }
+
+    protected RemoteViews prepareWidget(int widgetId) {
+        LogHelper.d("Preparing widget with id:");
+        LogHelper.d(String.valueOf(widgetId));
+
         RemoteViews views = getWidgetViews();
 
         setupEvents(views, widgetId);
-        updateWidgets(views, widgetId);
+        updateWidget(views, widgetId);
         applySettings(views, widgetId);
+        setUpdateState(views, widgetId, false);
 
         return views;
     }
 
-    public void updateWidgets(RemoteViews views, int widgetId) {
-		LogHelper.d("Updating widget with id:");
-		LogHelper.d(String.valueOf(widgetId));
+    protected void updateWidget(RemoteViews views, int widgetId) {
+        String listId = m_settings.loadWidgetList(widgetId);
+        if (listId == null) {
+            return;
+        }
+        TaskList list = m_taskSource.getList(listId);
+        List<Task> tasks = m_taskSource.getListTasks(listId);
 
-		String listId = m_settings.loadWidgetList(widgetId);
-		if (listId == null) {
-			return;
-		}
-		TaskList list = m_taskSource.getList(listId);
-		List<Task> tasks = m_taskSource.getListTasks(listId);
+        updateWidget(views, list, tasks);
+    }
 
-		updateWidget(views, list, tasks);
-	}
+    protected void applySettings(RemoteViews views, int widgetId) {
+        Boolean margin = m_settings.loadWidgetMargin(widgetId);
+        setMargin(views, margin);
+    }
 
-	public void applySettings(RemoteViews views, int widgetId) {
-		Boolean margin = m_settings.loadWidgetMargin(widgetId);
-		setMargin(views, margin);
-	}
+    protected void setMargin(RemoteViews views, Boolean margin) {
+        int v = margin ? View.VISIBLE : View.GONE;
+        views.setViewVisibility(R.id.spacer_bottom, v);
+        views.setViewVisibility(R.id.spacer_top, v);
+        views.setViewVisibility(R.id.spacer_left, v);
+        views.setViewVisibility(R.id.spacer_right, v);
+    }
 
-	public void setMargin(RemoteViews views, Boolean margin) {
-		int v = margin ? View.VISIBLE : View.GONE;
-		views.setViewVisibility(R.id.spacer_bottom, v);
-		views.setViewVisibility(R.id.spacer_top, v);
-		views.setViewVisibility(R.id.spacer_left, v);
-		views.setViewVisibility(R.id.spacer_right, v);
-	}
-	
-	public void setupEvents(RemoteViews views, int widgetId) {
+    protected void setupEvents(RemoteViews views, int widgetId) {
         Intent intent = new Intent(m_context, TaskWidgetProvider.class);
         intent.setAction(LIST_CLICK_ACTION);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
@@ -151,55 +209,26 @@ public class WidgetController {
 
         actionPendingIntent = PendingIntent.getBroadcast(m_context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.textViewTasks, actionPendingIntent);
-	}
-	
-	public void notifySyncState(int flag) {
-		Intent intent = new Intent(m_context, TaskWidgetProvider.class);
-		intent.setAction(TASKS_SYNC_STATE);
-		intent.setFlags(flag);
-		m_context.sendBroadcast(intent);
-	}
-	
-	public void performAction(String actionName, Intent intent) {
-        if (actionName.equals(LIST_CLICK_ACTION)) {     
-        	int wId = intent.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
-        	openCfgGUI(wId);    
-        	
-        } else if (actionName.equals(TASKS_CLICK_ACTION)) {
-        	openTasksGUI();
-        	
-        } else if (actionName.equals(TASKS_SYNC_STATE)) {
-        	int flag = intent.getFlags();
-        	
-        	if (flag == SYNC_STATE_STARTED) {
-        		showUpdateState(true);
-        		
-        	} else if (flag == SYNC_STATE_TASKS_UPDATED) {
-        		updateWidgets();
-        		
-        	} else if (flag == SYNC_STATE_FINISHED) {
-        		showUpdateState(false);
-        	}
-        }
-	}
-	
-	
-	protected void showUpdateState(Boolean updating) {
-		int[] widgetIds = getWidgetsIds();
-		AppWidgetManager manager = AppWidgetManager.getInstance(m_context);
+    }
+
+	protected void setUpdateState(Boolean updating) {
+        int[] widgetIds = getWidgetsIds();
 
 		for (int id : widgetIds) {
 			RemoteViews views = getWidgetViews();
-
-			int v = updating ? View.VISIBLE : View.GONE;
-			views.setViewVisibility(R.id.imageRefresh, v);
-			manager.updateAppWidget(id, views);
+            setUpdateState(views, id, updating);
+			m_widgetManager.updateAppWidget(id, views);
 		}
 	}
-	
+
+    protected void setUpdateState(RemoteViews views, int widgetId, Boolean updating) {
+        int v = updating ? View.VISIBLE : View.GONE;
+        views.setViewVisibility(R.id.imageRefresh, v);
+    }
+
 	protected void openTasksGUI() {
     	LogHelper.i("widget textViewList clicked");
-        Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse("https://mail.google.com/tasks/android"));
+        Intent openBrowser = new Intent(Intent.ACTION_VIEW, GOOGLE_TASKS_URI);
         openBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         m_context.startActivity(openBrowser);    	
     }
@@ -214,11 +243,10 @@ public class WidgetController {
         m_context.startActivity(openCfg);
     }
     
-	protected int[] getWidgetsIds() {
-		AppWidgetManager manager = AppWidgetManager.getInstance(m_context);
-		return manager.getAppWidgetIds(m_name);
-	}
-	
+    protected int[] getWidgetsIds() {
+        return m_widgetManager.getAppWidgetIds(m_name);
+    }
+
 	protected boolean updateWidget(
 		RemoteViews views,
 		TaskList list,

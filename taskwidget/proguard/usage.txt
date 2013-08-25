@@ -1995,7 +1995,7 @@ com.actionbarsherlock.widget.SuggestionsAdapter:
     690:701:private android.graphics.drawable.Drawable getActivityIconWithCache(android.content.ComponentName)
     712:729:private android.graphics.drawable.Drawable getActivityIcon(android.content.ComponentName)
 com.dima.tkswidget.BuildConfig
-com.dima.tkswidget.GoogleServiceAuthentificator:
+com.dima.tkswidget.GoogleServiceAuthenticator:
     102:109:public java.lang.String authentificateActivity(android.app.Activity,int,int)
 com.dima.tkswidget.GoogleTasksLoader:
     protected static final java.lang.String APP_NAME

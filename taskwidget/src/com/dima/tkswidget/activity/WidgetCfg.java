@@ -1,13 +1,12 @@
 package com.dima.tkswidget.activity;
 
 import org.holoeverywhere.LayoutInflater;
-import org.holoeverywhere.app.ProgressDialog;
 import org.holoeverywhere.preference.PreferenceActivity;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.dima.tkswidget.GoogleServiceAuthentificator;
+import com.dima.tkswidget.GoogleServiceAuthenticator;
 import com.dima.tkswidget.LogHelper;
 import com.dima.tkswidget.R;
 import com.dima.tkswidget.SettingsController;
@@ -35,7 +34,6 @@ public class WidgetCfg extends PreferenceActivity {
 	
 	private WidgetController m_widgetController;
 	private SettingsController m_settings;
-	private ProgressDialog m_progressDialog = null;
 	private int m_appWidgetId;
 	private MenuItem m_refreshMenu = null;
 	
@@ -58,6 +56,7 @@ public class WidgetCfg extends PreferenceActivity {
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        LogHelper.d("Resume activity");
         super.onCreate(savedInstanceState);
         
         super.getSupportFragmentManager()
@@ -68,7 +67,7 @@ public class WidgetCfg extends PreferenceActivity {
 		Intent intent = getIntent();
 		Bundle extras = intent.getExtras();
 		
-		m_widgetController = new WidgetController(this);
+		m_widgetController = new WidgetController(this, null);
 		m_settings = new SettingsController(this);
 		m_appWidgetId = extras.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID, 
@@ -77,18 +76,18 @@ public class WidgetCfg extends PreferenceActivity {
     
 	@Override
 	public void onPause() {
-		super.onPause();
-		LogHelper.d("Pause activity");
-		
+        LogHelper.d("Pause activity");
+        super.onPause();
+
 		unregisterReceiver(m_syncFinishedReceiver);
 		stopUpdating();
 	}
 	
 	@Override
 	public void onResume() {
-		super.onResume();
-		LogHelper.d("Resume activity");
-		
+        LogHelper.d("Resume activity");
+        super.onResume();
+
 		registerReceiver(m_syncFinishedReceiver, new IntentFilter(WidgetController.TASKS_SYNC_STATE));
 	}
 	
@@ -150,11 +149,9 @@ public class WidgetCfg extends PreferenceActivity {
 		Intent resultValue = new Intent();
 		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, m_appWidgetId);
 		setResult(Activity.RESULT_OK, resultValue);
-		finish();	
+		finish();
 		
-		AppWidgetManager manager = AppWidgetManager.getInstance(this);
-        RemoteViews views = m_widgetController.prepareWidgets(m_appWidgetId);
-    	manager.updateAppWidget(m_appWidgetId, views);
+        m_widgetController.updateWidgetsAsync(new int[] { m_appWidgetId });
 	}
 	
 	private void updateLists() {
@@ -165,7 +162,7 @@ public class WidgetCfg extends PreferenceActivity {
 			return;
 		}
 		
-		GoogleServiceAuthentificator auth = new GoogleServiceAuthentificator(accountName, this);
+		GoogleServiceAuthenticator auth = new GoogleServiceAuthenticator(accountName, this);
 		auth.authentificateActivityAsync(this, 2, 3, 
 			new Runnable() {
 				@Override
@@ -182,10 +179,6 @@ public class WidgetCfg extends PreferenceActivity {
 	}
 	
 	private void stopUpdating() {	
-		if (m_progressDialog != null) {
-			m_progressDialog.cancel();
-		}
-		
 		if (m_refreshMenu != null) {
 			View v = m_refreshMenu.getActionView();
 			if (v != null) {
