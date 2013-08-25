@@ -62,7 +62,21 @@ public class WidgetController {
 		m_taskSource = new TaskProvider(m_context);
 	}
 
-	
+
+    public void setSyncFreq(long freq) {
+        int[] ids = getWidgetsIds();
+        setSyncFreq(ids, freq);
+    }
+
+    public void setSyncFreq(int[] widgetIds, long freq) {
+        List<AccountWidgets> aw = getGroupedAccounts(widgetIds);
+
+        for (AccountWidgets accountWidgets : aw) {
+            Account acc = getAccount(accountWidgets.accountName);
+            ContentResolver.addPeriodicSync(acc, TaskMetadata.AUTHORITY, Bundle.EMPTY, freq);
+        }
+    }
+
 	public void startSync() {
 		int[] ids = getWidgetsIds();
 		startSync(ids);

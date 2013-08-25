@@ -10,7 +10,7 @@ import android.content.Intent;
 public class WidgetControllerService extends IntentService {
     private static final String UPDATE_ACTION = "com.dima.taskwidget.controller.service.UPDATE";
     private static final String WIDGET_IDS  = "com.dima.taskwidget.extra.WIDGETIDS";
-    private static final String WIDGET_ID  = "com.dima.taskwidget.extra.WIDGETID";
+    //private static final String WIDGET_ID  = "com.dima.taskwidget.extra.WIDGETID";
 
 
     public static void updateWidgets(Context context, int[] widgetIds) {
@@ -21,8 +21,8 @@ public class WidgetControllerService extends IntentService {
     }
 
 
-    public WidgetControllerService(String name) {
-        super(name);
+    public WidgetControllerService() {
+        super("com.dima.taskwidget.controller.service");
     }
 
     @Override

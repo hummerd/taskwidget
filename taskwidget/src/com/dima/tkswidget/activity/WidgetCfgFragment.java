@@ -236,7 +236,24 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	}
 
     private void selectUpdateFreq() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(super.getActivity());
+        builder.setTitle("Select update freq");
+        builder.setItems(
+                getResources().getStringArray(R.array.updateFreq),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                        int[] arr = getResources().getIntArray(R.array.updateFreqVal);
+                        setUpdateFreq(arr[item]);
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
 
+    }
+
+    private void setUpdateFreq(long freq) {
+        WidgetController controller = new WidgetController(super.getActivity(), null);
+        controller.setSyncFreq(freq);
     }
 
 	@Override
