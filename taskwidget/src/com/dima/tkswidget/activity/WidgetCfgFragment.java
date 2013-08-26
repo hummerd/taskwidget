@@ -31,7 +31,7 @@ import com.google.api.services.tasks.model.TaskList;
 
 public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 	
-	private int m_appWidgetIds;
+	private int m_appWidgetId;
 	private Preference m_tasksListPreference;
 	private Preference m_accountPreference;
     private Preference m_updateFreqPreference;
@@ -54,19 +54,20 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	    initCustomPrefs();
 	    
 	    LogHelper.d("onCreate cfg activity");
-	    LogHelper.d(String.valueOf(m_appWidgetIds));
+	    LogHelper.d(String.valueOf(m_appWidgetId));
 	    
 	    Context context = super.getActivity();
 	    m_taskProvider = new TaskProvider(context);
 	    m_settings = new SettingsController(context);
-	    m_accountName = m_settings.loadWidgetAccount(m_appWidgetIds);
+	    m_accountName = m_settings.loadWidgetAccount(m_appWidgetId);
 	    m_tasksListPreference.setEnabled(m_accountName != null);
 	    
 	    setDefaultAccount();
 	    setAccountSummary();
 	    setListSummary();
+	    setUpdateFreqSummary();
 	    
-	    Boolean margin = m_settings.loadWidgetMargin(m_appWidgetIds);
+	    Boolean margin = m_settings.loadWidgetMargin(m_appWidgetId);
 	    m_marginPreference.setChecked(margin);
 	}
 	
@@ -90,7 +91,7 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 		Intent intent = act.getIntent();
 		Bundle extras = intent.getExtras();
 		
-		m_appWidgetIds = extras.getInt(
+		m_appWidgetId = extras.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID, 
             AppWidgetManager.INVALID_APPWIDGET_ID);
 	
@@ -126,7 +127,7 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	}
 	
 	private void setListSummary() {
-		String listName = m_settings.loadWidgetListName(m_appWidgetIds);
+		String listName = m_settings.loadWidgetListName(m_appWidgetId);
 		String summary;
 		
 		if (listName == null) {
@@ -138,14 +139,23 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 		m_tasksListPreference.setSummary(summary);
 	}
 	
+	private void setUpdateFreqSummary() {
+        WidgetController controller = new WidgetController(super.getActivity(), null);
+        long freq = controller.getSyncFreq(m_appWidgetId);
+        
+        String summary = findFreqLabel(freq);
+		m_updateFreqPreference.setSummary(summary);
+	}
 	
 	private OnPreferenceClickListener onAccountSelect = new OnPreferenceClickListener() {
+		@Override
 		public boolean onPreferenceClick(Preference preference) {
 			return selectAccount();
 	    }
 	};
 	
 	private OnPreferenceClickListener onTasksListSelect = new OnPreferenceClickListener() {
+		@Override
 		public boolean onPreferenceClick(Preference preference) {
 			selectList();
 			return true;
@@ -153,7 +163,8 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	};
 
     private OnPreferenceClickListener onUpdateFrequencySelect = new OnPreferenceClickListener() {
-        public boolean onPreferenceClick(Preference preference) {
+    	@Override
+    	public boolean onPreferenceClick(Preference preference) {
             selectUpdateFreq();
             return true;
         }
@@ -162,10 +173,23 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	private OnPreferenceChangeListener onMarginPreferenceChange = new OnPreferenceChangeListener() {
 		@Override
 		public boolean onPreferenceChange(Preference preference, Object newValue) {
-			m_settings.saveWidgetMargin(m_appWidgetIds, (Boolean)newValue);
+			m_settings.saveWidgetMargin(m_appWidgetId, (Boolean)newValue);
 			return true;
 		}
 	};
+	
+	private String findFreqLabel(long freq) {
+		String[] labels = getResources().getStringArray(R.array.updateFreq);
+		
+		int[] arr = getResources().getIntArray(R.array.updateFreqVal);
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i] == freq) {
+				return labels[i];
+			}
+		}
+		
+		return "";
+	}
 	
 	private boolean selectAccount() {
 		Account[] accounts = m_accountManager.getAccountsByType(WidgetController.ACCOUNT_TYPE);
@@ -196,7 +220,7 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	}
 	
 	private void storeAccount(String accountName) {
-		m_settings.saveWidgetAccount(m_appWidgetIds, accountName);
+		m_settings.saveWidgetAccount(m_appWidgetId, accountName);
 		m_accountName = accountName;
 		m_tasksListPreference.setEnabled(m_accountName != null);
 		setAccountSummary();
@@ -220,16 +244,16 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 		AlertDialog.Builder builder = new AlertDialog.Builder(super.getActivity());
 		builder.setTitle("Select list");
 		builder.setItems(
-			listsNames, 
-			new DialogInterface.OnClickListener() {
-		    public void onClick(DialogInterface dialog, int item) {
-		    	int ix = Arrays.asList(listsNames).indexOf(listsNames[item]);
-		    	m_settings.saveWidgetList(
-		    			m_appWidgetIds, 
-		    			lists.get(ix).getId(),
-		    			lists.get(ix).getTitle());
-		    	setListSummary();
-		    }
+				listsNames, 
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int item) {
+						int ix = Arrays.asList(listsNames).indexOf(listsNames[item]);
+						m_settings.saveWidgetList(
+								m_appWidgetId, 
+								lists.get(ix).getId(),
+								lists.get(ix).getTitle());
+						setListSummary();
+					}
 		});
 		AlertDialog alert = builder.create();
 		alert.show();
@@ -237,18 +261,19 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 
     private void selectUpdateFreq() {
         AlertDialog.Builder builder = new AlertDialog.Builder(super.getActivity());
+        String[] labels = getResources().getStringArray(R.array.updateFreq);
         builder.setTitle("Select update freq");
         builder.setItems(
-                getResources().getStringArray(R.array.updateFreq),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-                        int[] arr = getResources().getIntArray(R.array.updateFreqVal);
-                        setUpdateFreq(arr[item]);
-                    }
-                });
+        		labels,
+        		new DialogInterface.OnClickListener() {
+        			public void onClick(DialogInterface dialog, int item) {
+        				int[] arr = getResources().getIntArray(R.array.updateFreqVal);
+        				setUpdateFreq(arr[item]);
+        				setUpdateFreqSummary();
+        			}
+        		});
         AlertDialog alert = builder.create();
         alert.show();
-
     }
 
     private void setUpdateFreq(long freq) {

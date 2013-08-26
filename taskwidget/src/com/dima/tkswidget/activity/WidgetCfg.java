@@ -19,11 +19,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.RemoteViews;
 
 
 /**
@@ -79,7 +79,9 @@ public class WidgetCfg extends PreferenceActivity {
         LogHelper.d("Pause activity");
         super.onPause();
 
-		unregisterReceiver(m_syncFinishedReceiver);
+		LocalBroadcastManager bm = LocalBroadcastManager.getInstance(this);
+		bm.unregisterReceiver(m_syncFinishedReceiver);        
+
 		stopUpdating();
 	}
 	
@@ -88,7 +90,8 @@ public class WidgetCfg extends PreferenceActivity {
         LogHelper.d("Resume activity");
         super.onResume();
 
-		registerReceiver(m_syncFinishedReceiver, new IntentFilter(WidgetController.TASKS_SYNC_STATE));
+		LocalBroadcastManager bm = LocalBroadcastManager.getInstance(this);
+		bm.registerReceiver(m_syncFinishedReceiver, new IntentFilter(WidgetController.TASKS_SYNC_STATE));
 	}
 	
     @Override

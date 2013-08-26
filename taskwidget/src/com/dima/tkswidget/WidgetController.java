@@ -11,8 +11,10 @@ import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.PeriodicSync;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -76,7 +78,21 @@ public class WidgetController {
             ContentResolver.addPeriodicSync(acc, TaskMetadata.AUTHORITY, Bundle.EMPTY, freq);
         }
     }
+    
+    public long getSyncFreq(int widgetId) {
+		String accName = m_settings.loadWidgetAccount(widgetId);
+		if (accName == null) {
+			return 0;
+		}
 
+		Account acc = getAccount(accName);
+    	List<PeriodicSync> sync = ContentResolver.getPeriodicSyncs(acc, TaskMetadata.AUTHORITY);
+    	if (sync.size() <= 0)
+    		return 0;
+    	
+    	return sync.get(0).period;
+    }
+    
 	public void startSync() {
 		int[] ids = getWidgetsIds();
 		startSync(ids);
@@ -134,7 +150,9 @@ public class WidgetController {
 		Intent intent = new Intent(m_context, TaskWidgetProvider.class);
 		intent.setAction(TASKS_SYNC_STATE);
 		intent.setFlags(flag);
-		m_context.sendBroadcast(intent);
+		
+		LocalBroadcastManager bm = LocalBroadcastManager.getInstance(m_context);
+		bm.sendBroadcast(intent);
 	}
 	
 	public void performAction(String actionName, Intent intent) {
