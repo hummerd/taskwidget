@@ -46,7 +46,7 @@ public class ActionSelect extends Activity {
 	private void executeAction(int actionId) {
     	switch (actionId) {
 		case 0: // 0 - update
-			WidgetController controller = new WidgetController(this);
+			WidgetController controller = new WidgetController(this, null);
 			controller.startSync(new int[] { m_appWidgetId });
 			break;
 		case 1: // 1 - configure

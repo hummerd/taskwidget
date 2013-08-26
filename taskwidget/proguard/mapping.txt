@@ -4325,7 +4325,7 @@ com.actionbarsherlock.widget.SuggestionsAdapter$ChildViewCache -> com.actionbars
     android.widget.ImageView mIcon1 -> c
     android.widget.ImageView mIcon2 -> d
     android.widget.ImageView mIconRefine -> e
-com.dima.tkswidget.GoogleServiceAuthentificator -> com.dima.tkswidget.a:
+com.dima.tkswidget.GoogleServiceAuthenticator -> com.dima.tkswidget.a:
     java.lang.String m_accountName -> a
     com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential m_accessProtectedResource -> b
     java.lang.String m_scope -> c
@@ -4335,8 +4335,8 @@ com.dima.tkswidget.GoogleServiceAuthentificator -> com.dima.tkswidget.a:
     java.lang.String authentificateSyncAdapter(java.lang.String,android.os.Bundle) -> a
     com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential getAccessProtectedResource() -> a
     void access$0(java.lang.Exception,android.app.Activity,int,int) -> a
-com.dima.tkswidget.GoogleServiceAuthentificator$1 -> com.dima.tkswidget.b:
-    com.dima.tkswidget.GoogleServiceAuthentificator this$0 -> a
+com.dima.tkswidget.GoogleServiceAuthenticator$1 -> com.dima.tkswidget.b:
+    com.dima.tkswidget.GoogleServiceAuthenticator this$0 -> a
     java.lang.Runnable val$onAuthFailed -> b
     java.lang.Runnable val$onAuthSucceded -> c
     android.app.Activity val$activity -> d

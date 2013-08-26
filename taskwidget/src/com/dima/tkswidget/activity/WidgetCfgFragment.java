@@ -34,6 +34,7 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	private int m_appWidgetIds;
 	private Preference m_tasksListPreference;
 	private Preference m_accountPreference;
+    private Preference m_updateFreqPreference;
 	private SwitchPreference m_marginPreference;
 	private String m_accountName;
 	private TaskProvider m_taskProvider;
@@ -79,6 +80,9 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	    
 	    m_marginPreference = (SwitchPreference)findPreference(R.id.pref_margin);
 	    m_marginPreference.setOnPreferenceChangeListener(onMarginPreferenceChange);
+
+        m_updateFreqPreference = (Preference)findPreference(R.id.pref_update_freq);
+        m_updateFreqPreference.setOnPreferenceClickListener(onUpdateFrequencySelect);
 	}
 	
 	private void initActivity() {
@@ -147,6 +151,13 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 			return true;
 	    }
 	};
+
+    private OnPreferenceClickListener onUpdateFrequencySelect = new OnPreferenceClickListener() {
+        public boolean onPreferenceClick(Preference preference) {
+            selectUpdateFreq();
+            return true;
+        }
+    };
 
 	private OnPreferenceChangeListener onMarginPreferenceChange = new OnPreferenceChangeListener() {
 		@Override
@@ -223,7 +234,27 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
-	
+
+    private void selectUpdateFreq() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(super.getActivity());
+        builder.setTitle("Select update freq");
+        builder.setItems(
+                getResources().getStringArray(R.array.updateFreq),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                        int[] arr = getResources().getIntArray(R.array.updateFreqVal);
+                        setUpdateFreq(arr[item]);
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+
+    }
+
+    private void setUpdateFreq(long freq) {
+        WidgetController controller = new WidgetController(super.getActivity(), null);
+        controller.setSyncFreq(freq);
+    }
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {

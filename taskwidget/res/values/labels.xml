@@ -21,4 +21,31 @@
     <string name="pref_sel_acc">Select Google account</string>
     <string name="pref_sel_list">Select tasks list</string>
     <string name="pref_margin">Widget margin</string>
+    <string name="pref_update_freq">Sync frequency</string>
+
+    <string-array name="updateFreq">
+        <item>Never</item>
+        <item>Every 5 minutes</item>
+        <item>Every 10 minutes</item>
+        <item>Every 15 minutes</item>
+        <item>Every 30 minutes</item>
+        <item>Every hour</item>
+        <item>Every 3 hour</item>
+        <item>Every 6 hour</item>
+        <item>Every 12 hour</item>
+        <item>Every 24 hour</item>
+    </string-array>
+
+    <array name="updateFreqVal">
+        <item>0</item>
+        <item>300</item>
+        <item>600</item>
+        <item>900</item>
+        <item>1800</item>
+        <item>3600</item>
+        <item>10800</item>
+        <item>21600</item>
+        <item>43200</item>
+        <item>86400</item>
+    </array>
 </resources>

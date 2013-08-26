@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:holo="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory holo:title="Tasks list preferencies" >
+    <PreferenceCategory holo:title="Tasks list preferences" >
         <Preference
             holo:id="@+id/pref_account"
             holo:key="prefAcc"
@@ -16,7 +16,11 @@
             holo:id="@+id/pref_margin"
             holo:title="@string/pref_margin"
             android:persistent="false"
-            />        
+            />
+        <Preference
+            holo:id="@+id/pref_update_freq"
+            holo:title="@string/pref_update_freq"
+            />
     </PreferenceCategory>
 
 </PreferenceScreen>

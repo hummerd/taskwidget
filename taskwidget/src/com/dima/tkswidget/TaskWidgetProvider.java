@@ -34,7 +34,7 @@ public class TaskWidgetProvider extends AppWidgetProvider {
 
     	String action = intent.getAction();
     	LogHelper.d(action);
-    	WidgetController controller = new WidgetController(context);
+    	WidgetController controller = new WidgetController(context, null);
     	controller.performAction(action,  intent);
     }    
 	
@@ -42,10 +42,7 @@ public class TaskWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         LogHelper.d("update widgets started ", appWidgetIds);
 
-    	WidgetController controller = new WidgetController(context);
-    	for (int id : appWidgetIds) {
-        	RemoteViews views = controller.prepareWidgets(id);
-        	appWidgetManager.updateAppWidget(id, views);
-		}
+    	WidgetController controller = new WidgetController(context, appWidgetManager);
+        controller.updateWidgetsAsync(appWidgetIds);
 	}
 }

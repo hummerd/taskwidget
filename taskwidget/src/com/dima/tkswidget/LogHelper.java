@@ -2,6 +2,8 @@ package com.dima.tkswidget;
 
 import android.util.Log;
 
+import java.util.Arrays;
+
 public class LogHelper {
 	private static final String tag = "gtw";
 	
@@ -19,9 +21,7 @@ public class LogHelper {
 
     public static void d(String msg, int[] array) {
         Log.d(tag, msg);
-        for (int i : array){
-            Log.d(tag, Integer.toString(i));
-        }
+        Log.d(tag, Arrays.toString(array));
     }
 
 	public static void w(String msg) {

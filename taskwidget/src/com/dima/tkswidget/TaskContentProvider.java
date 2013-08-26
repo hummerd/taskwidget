@@ -219,11 +219,11 @@ public class TaskContentProvider extends ContentProvider {
         // If the insert succeeded, the row ID exists.
         if (rowId > 0) {
             // Creates a URI with the note ID pattern and the new row ID appended to it.
-            Uri notifUri = ContentUris.withAppendedId(metaInfo.CONTENT_ITEM_PATTERN, rowId);
+            Uri notifyUri = ContentUris.withAppendedId(metaInfo.CONTENT_ITEM_PATTERN, rowId);
 
             // Notifies observers registered against this provider that the data changed.
-            getContext().getContentResolver().notifyChange(notifUri, null);
-            return notifUri;
+            getContext().getContentResolver().notifyChange(notifyUri, null);
+            return notifyUri;
         }
 
         // If the insert didn't succeed, then the rowID is <= 0. Throws an exception.
