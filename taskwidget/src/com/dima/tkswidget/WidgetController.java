@@ -161,7 +161,13 @@ public class WidgetController {
 	}
 	
 	public void performAction(String actionName, Intent intent) {
-        if (actionName.equals(LIST_CLICK_ACTION)) {     
+		if (actionName == null)
+			return;
+		
+        if (actionName.equals(LIST_CLICK_ACTION)) {
+        	if (intent == null)
+        		return;
+        	
         	int wId = intent.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
         	openCfgGUI(wId);    
         	

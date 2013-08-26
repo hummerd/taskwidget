@@ -12,7 +12,6 @@ public class TaskWidgetProvider extends AppWidgetProvider {
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         LogHelper.d("delete widgets started ", appWidgetIds);
-        super.onDeleted(context, appWidgetIds);
 
         SettingsController controller = new SettingsController(context);
         controller.clearPrefs(appWidgetIds);
@@ -21,13 +20,11 @@ public class TaskWidgetProvider extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         LogHelper.d("onDisabled");
-        super.onDisabled(context);
     }
 
     @Override
     public void onEnabled(Context context) {
         LogHelper.d("onEnabled");
-        super.onEnabled(context);
     }
     
     @Override
@@ -50,7 +47,5 @@ public class TaskWidgetProvider extends AppWidgetProvider {
         	RemoteViews views = controller.prepareWidgets(id);
         	appWidgetManager.updateAppWidget(id, views);
 		}
-
-    	super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}
 }
