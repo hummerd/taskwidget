@@ -150,9 +150,8 @@ public class WidgetController {
 		Intent intent = new Intent(m_context, TaskWidgetProvider.class);
 		intent.setAction(TASKS_SYNC_STATE);
 		intent.setFlags(flag);
-		
-		LocalBroadcastManager bm = LocalBroadcastManager.getInstance(m_context);
-		bm.sendBroadcast(intent);
+
+        m_context.sendBroadcast(intent);
 	}
 	
 	public void performAction(String actionName, Intent intent) {
