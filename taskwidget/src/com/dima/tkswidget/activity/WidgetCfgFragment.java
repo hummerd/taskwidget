@@ -1,26 +1,18 @@
 package com.dima.tkswidget.activity;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.holoeverywhere.app.AlertDialog;
-import org.holoeverywhere.preference.Preference;
-import org.holoeverywhere.preference.Preference.OnPreferenceChangeListener;
-import org.holoeverywhere.preference.Preference.OnPreferenceClickListener;
-import org.holoeverywhere.preference.PreferenceFragment;
-import org.holoeverywhere.preference.SharedPreferences;
-import org.holoeverywhere.preference.SharedPreferences.OnSharedPreferenceChangeListener;
-import org.holoeverywhere.preference.SwitchPreference;
-import org.holoeverywhere.widget.Toast;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.preference.Preference;
+import android.preference.PreferenceFragment;
+import android.preference.SwitchPreference;
+import android.widget.Toast;
 
 import com.dima.tkswidget.LogHelper;
 import com.dima.tkswidget.R;
@@ -29,7 +21,10 @@ import com.dima.tkswidget.TaskProvider;
 import com.dima.tkswidget.WidgetController;
 import com.google.api.services.tasks.model.TaskList;
 
-public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
+import java.util.Arrays;
+import java.util.List;
+
+public class WidgetCfgFragment extends PreferenceFragment {
 	
 	private int m_appWidgetId;
 	private Preference m_tasksListPreference;
@@ -73,21 +68,21 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	
 	
 	private void initCustomPrefs() {
-	    m_accountPreference = (Preference)findPreference(R.id.pref_account);
+	    m_accountPreference = (Preference)findPreference("prefAcc");
 	    m_accountPreference.setOnPreferenceClickListener(onAccountSelect);
 
-	    m_tasksListPreference = (Preference)findPreference(R.id.pref_tasks_list);
+	    m_tasksListPreference = (Preference)findPreference("prefList");
 	    m_tasksListPreference.setOnPreferenceClickListener(onTasksListSelect);
 	    
-	    m_marginPreference = (SwitchPreference)findPreference(R.id.pref_margin);
+	    m_marginPreference = (SwitchPreference)findPreference("prefMargin");
 	    m_marginPreference.setOnPreferenceChangeListener(onMarginPreferenceChange);
 
-        m_updateFreqPreference = (Preference)findPreference(R.id.pref_update_freq);
+        m_updateFreqPreference = (Preference)findPreference("prefUpdateFreq");
         m_updateFreqPreference.setOnPreferenceClickListener(onUpdateFrequencySelect);
 	}
 	
 	private void initActivity() {
-		FragmentActivity act = super.getActivity();
+		Activity act = super.getActivity();
 		Intent intent = act.getIntent();
 		Bundle extras = intent.getExtras();
 		
@@ -101,7 +96,7 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	private void setDefaultAccount() {
 		if (m_accountName != null)
 			return;
-		
+
 	    Account[] accounts = m_accountManager.getAccountsByType(WidgetController.ACCOUNT_TYPE);
 	    if (accounts.length <= 0) {
 	    	m_accountPreference.setEnabled(false);
@@ -147,14 +142,14 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 		m_updateFreqPreference.setSummary(summary);
 	}
 	
-	private OnPreferenceClickListener onAccountSelect = new OnPreferenceClickListener() {
+	private Preference.OnPreferenceClickListener onAccountSelect = new Preference.OnPreferenceClickListener() {
 		@Override
 		public boolean onPreferenceClick(Preference preference) {
 			return selectAccount();
 	    }
 	};
 	
-	private OnPreferenceClickListener onTasksListSelect = new OnPreferenceClickListener() {
+	private Preference.OnPreferenceClickListener onTasksListSelect = new Preference.OnPreferenceClickListener() {
 		@Override
 		public boolean onPreferenceClick(Preference preference) {
 			selectList();
@@ -162,7 +157,7 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	    }
 	};
 
-    private OnPreferenceClickListener onUpdateFrequencySelect = new OnPreferenceClickListener() {
+    private Preference.OnPreferenceClickListener onUpdateFrequencySelect = new Preference.OnPreferenceClickListener() {
     	@Override
     	public boolean onPreferenceClick(Preference preference) {
             selectUpdateFreq();
@@ -170,7 +165,7 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
         }
     };
 
-	private OnPreferenceChangeListener onMarginPreferenceChange = new OnPreferenceChangeListener() {
+	private Preference.OnPreferenceChangeListener onMarginPreferenceChange = new Preference.OnPreferenceChangeListener() {
 		@Override
 		public boolean onPreferenceChange(Preference preference, Object newValue) {
 			m_settings.saveWidgetMargin(m_appWidgetId, (Boolean)newValue);
@@ -280,8 +275,4 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
         WidgetController controller = new WidgetController(super.getActivity(), null);
         controller.setSyncFreq(freq);
     }
-
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-	}
 }
