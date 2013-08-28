@@ -1,13 +1,14 @@
 package com.dima.tkswidget;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
+import android.appwidget.AppWidgetProviderInfo;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -50,7 +51,6 @@ public class WidgetController {
 	protected final Context m_context;
     protected final AppWidgetManager m_widgetManager;
     protected final TaskProvider m_taskSource;
-	protected final ComponentName m_name;
 	protected final SettingsController m_settings;
 	
 	
@@ -59,7 +59,6 @@ public class WidgetController {
         m_widgetManager = widgetManager == null
             ? AppWidgetManager.getInstance(m_context)
             : widgetManager;
-		m_name = new ComponentName(m_context, TaskWidgetProvider.class.getName());
 		m_settings = new SettingsController(m_context);
 		m_taskSource = new TaskProvider(m_context);
 	}
@@ -147,12 +146,21 @@ public class WidgetController {
     }
 
 	public void notifySyncState(int flag) {
-		Intent intent = new Intent(m_context, TaskWidgetProvider.class);
-		intent.setAction(TASKS_SYNC_STATE);
-		intent.setFlags(flag);
+		List<AppWidgetProviderInfo> installedProviders = m_widgetManager.getInstalledProviders();
 		
-		LocalBroadcastManager bm = LocalBroadcastManager.getInstance(m_context);
-		bm.sendBroadcast(intent);
+		for (AppWidgetProviderInfo appWidgetProviderInfo : installedProviders) {
+			try {
+				Intent intent = new Intent(m_context, Class.forName(appWidgetProviderInfo.provider.getClassName()));
+
+				intent.setAction(TASKS_SYNC_STATE);
+				intent.setFlags(flag);
+				
+				LocalBroadcastManager bm = LocalBroadcastManager.getInstance(m_context);
+				bm.sendBroadcast(intent);	
+			} catch (ClassNotFoundException e) {
+				LogHelper.e("Provider class not found", e);
+			}
+		}
 	}
 	
 	public void performAction(String actionName, Intent intent) {
@@ -180,17 +188,18 @@ public class WidgetController {
 	}
 
 
-    protected RemoteViews getWidgetViews(){
+    protected RemoteViews getWidgetViews(int widgetId){
         String packName = m_context.getPackageName();
         LogHelper.d(packName);
-        return new RemoteViews(packName, R.layout.taskwidget);
+        AppWidgetProviderInfo appWidgetInfo = m_widgetManager.getAppWidgetInfo(widgetId);
+        return new RemoteViews(packName, appWidgetInfo.initialLayout);
     }
 
     protected RemoteViews prepareWidget(int widgetId) {
         LogHelper.d("Preparing widget with id:");
         LogHelper.d(String.valueOf(widgetId));
 
-        RemoteViews views = getWidgetViews();
+        RemoteViews views = getWidgetViews(widgetId);
 
         setupEvents(views, widgetId);
         updateWidget(views, widgetId);
@@ -225,29 +234,34 @@ public class WidgetController {
     }
 
     protected void setupEvents(RemoteViews views, int widgetId) {
-        Intent intent = new Intent(m_context, TaskWidgetProvider.class);
-        intent.setAction(LIST_CLICK_ACTION);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
-        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+		try {
+			AppWidgetProviderInfo appWidgetInfo = m_widgetManager.getAppWidgetInfo(widgetId);
+			Class<?> providerClass = Class.forName(appWidgetInfo.provider.getClassName());
 
-        PendingIntent actionPendingIntent = PendingIntent.getBroadcast(m_context, 0, intent, 0);
-        views.setOnClickPendingIntent(R.id.textViewList, actionPendingIntent);
+	        PendingIntent actionPendingIntent = setupEvent(widgetId, providerClass, LIST_CLICK_ACTION);
+	        views.setOnClickPendingIntent(R.id.textViewList, actionPendingIntent);
 
-
-        intent = new Intent(m_context, TaskWidgetProvider.class);
-        intent.setAction(TASKS_CLICK_ACTION);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
-        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-
-        actionPendingIntent = PendingIntent.getBroadcast(m_context, 0, intent, 0);
-        views.setOnClickPendingIntent(R.id.textViewTasks, actionPendingIntent);
+	        actionPendingIntent = setupEvent(widgetId, providerClass, TASKS_CLICK_ACTION);
+	        views.setOnClickPendingIntent(R.id.textViewTasks, actionPendingIntent);        
+		} catch (ClassNotFoundException e) {
+			LogHelper.e("Provider class not found", e);
+		}
 	}
 
+    protected PendingIntent setupEvent(int widgetId, Class<?> providerClass, String action) {
+        Intent intent = new Intent(m_context, providerClass);
+        intent.setAction(action);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+        
+        return PendingIntent.getBroadcast(m_context, 0, intent, 0);
+    }
+    
 	protected void setUpdateState(Boolean updating) {
         int[] widgetIds = getWidgetsIds();
 
 		for (int id : widgetIds) {
-			RemoteViews views = getWidgetViews();
+			RemoteViews views = getWidgetViews(id);
             setUpdateState(views, id, updating);
 			m_widgetManager.updateAppWidget(id, views);
 		}
@@ -276,7 +290,32 @@ public class WidgetController {
     }
     
     protected int[] getWidgetsIds() {
-        return m_widgetManager.getAppWidgetIds(m_name);
+    	List<AppWidgetProviderInfo> installedProviders = m_widgetManager.getInstalledProviders();
+    	if (installedProviders.size() == 1) {
+    		return m_widgetManager.getAppWidgetIds(installedProviders.get(0).provider);
+    	}
+    	
+    	List<int[]> result = new ArrayList<int[]>();
+    	for (AppWidgetProviderInfo appWidgetProviderInfo : installedProviders) {
+    		int[] appWidgetIds = m_widgetManager.getAppWidgetIds(appWidgetProviderInfo.provider);
+    		result.add(appWidgetIds);
+		}
+    	
+        return combine(result);
+    }
+
+    public static int[] combine(Collection<int[]> arrays){
+        int length = 0;
+        for (int[] arr : arrays) {
+        	length += arr.length;
+		}
+        
+        int[] result = new int[length];
+        for (int[] arr : arrays) {
+        	System.arraycopy(arr, 0, result.length, 0, arr.length);
+		}
+
+        return result;
     }
 
 	protected boolean updateWidget(
