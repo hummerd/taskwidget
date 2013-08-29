@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:holo="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <PreferenceCategory android:title="Tasks list preferences" >
-        <Preference
-            android:key="prefAcc"
-            android:title="@string/pref_sel_acc"
-            />
-        <Preference
-            android:key="prefList"
-            android:enabled="false"
-            android:title="@string/pref_sel_list"
-            />
-        <SwitchPreference
-            android:key="prefMargin"
-            android:title="@string/pref_margin"
-            android:persistent="false"
-            />
-        <Preference
-            android:key="prefUpdateFreq"
-            android:title="@string/pref_update_freq"
-            />
-    </PreferenceCategory>
-
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<Preference
+	    android:key="prefAcc"
+	    android:title="@string/pref_sel_acc"
+	    />
+	<Preference
+	    android:key="prefList"
+	    android:enabled="false"
+	    android:title="@string/pref_sel_list"
+	    />
+	<SwitchPreference
+	    android:key="prefMargin"
+	    android:title="@string/pref_margin"
+	    android:persistent="false"
+	    />
+	<Preference
+	    android:key="prefUpdateFreq"
+	    android:title="@string/pref_update_freq"
+	    />
 </PreferenceScreen>

@@ -13,14 +13,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-<<<<<<< HEAD
 import android.preference.PreferenceActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-=======
->>>>>>> refs/heads/master
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -80,11 +77,7 @@ public class WidgetCfg extends PreferenceActivity {
         LogHelper.d("Pause activity");
         super.onPause();
 
-<<<<<<< HEAD
         unregisterReceiver(m_syncFinishedReceiver);
-=======
-		unregisterReceiver(m_syncFinishedReceiver);        
->>>>>>> refs/heads/master
 		stopUpdating();
 	}
 	
