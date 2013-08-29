@@ -15,7 +15,6 @@ import android.content.Intent;
 import android.content.PeriodicSync;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -155,8 +154,7 @@ public class WidgetController {
 				intent.setAction(TASKS_SYNC_STATE);
 				intent.setFlags(flag);
 				
-				LocalBroadcastManager bm = LocalBroadcastManager.getInstance(m_context);
-				bm.sendBroadcast(intent);	
+				m_context.sendBroadcast(intent);	
 			} catch (ClassNotFoundException e) {
 				LogHelper.e("Provider class not found", e);
 			}

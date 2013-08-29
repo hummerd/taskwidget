@@ -35,7 +35,8 @@ public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
 	    	String authority,
 	        ContentProviderClient provider, 
 	        SyncResult syncResult) {
-	    	
+
+            LogHelper.d("TaskSyncAdapter started");
 	    	String token = null;
 	    	WidgetController ctrl = new WidgetController(m_context, null);
 	    	

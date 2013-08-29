@@ -19,7 +19,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -79,9 +78,7 @@ public class WidgetCfg extends PreferenceActivity {
         LogHelper.d("Pause activity");
         super.onPause();
 
-		LocalBroadcastManager bm = LocalBroadcastManager.getInstance(this);
-		bm.unregisterReceiver(m_syncFinishedReceiver);        
-
+		unregisterReceiver(m_syncFinishedReceiver);        
 		stopUpdating();
 	}
 	
@@ -90,8 +87,7 @@ public class WidgetCfg extends PreferenceActivity {
         LogHelper.d("Resume activity");
         super.onResume();
 
-		LocalBroadcastManager bm = LocalBroadcastManager.getInstance(this);
-		bm.registerReceiver(m_syncFinishedReceiver, new IntentFilter(WidgetController.TASKS_SYNC_STATE));
+		registerReceiver(m_syncFinishedReceiver, new IntentFilter(WidgetController.TASKS_SYNC_STATE));
 	}
 	
     @Override
@@ -106,7 +102,7 @@ public class WidgetCfg extends PreferenceActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
     	boolean r = super.onPrepareOptionsMenu(menu);
     	
-    	 m_refreshMenu = menu.findItem(R.id.cfgmenu_refresh);
+    	m_refreshMenu = menu.findItem(R.id.cfgmenu_refresh);
 		boolean syncInProgress = m_widgetController.isSyncInProgress(m_appWidgetId);
 		if (syncInProgress) {
 			refresh();
