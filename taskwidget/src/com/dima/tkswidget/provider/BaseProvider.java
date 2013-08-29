@@ -1,4 +1,8 @@
-package com.dima.tkswidget;
+package com.dima.tkswidget.provider;
+
+import com.dima.tkswidget.LogHelper;
+import com.dima.tkswidget.SettingsController;
+import com.dima.tkswidget.WidgetController;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -6,7 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 
 
-public class TaskWidgetProvider extends AppWidgetProvider {
+public class BaseProvider extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {

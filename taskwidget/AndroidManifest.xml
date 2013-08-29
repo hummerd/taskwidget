@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dima.tkswidget"
-    android:versionCode="33"
-    android:versionName="1.0 (33)"
+    android:versionCode="38"
+    android:versionName="1.0 (38)"
     android:installLocation="internalOnly">
 
     <uses-sdk 
@@ -51,14 +51,30 @@
             >
         </activity>
         
-	    <receiver android:name=".TaskWidgetProvider" >
+	    <receiver android:name="com.dima.tkswidget.provider.TransparentProvider" android:label="Transparent widget" >
 		    <intent-filter>
 		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
 		    </intent-filter>
 		    <meta-data android:name="android.appwidget.provider"
-		               android:resource="@xml/widgetinfo" />
+		               android:resource="@xml/widgetinfo_transparent" />    
 		</receiver>  
 	    
+	    <receiver android:name="com.dima.tkswidget.provider.BlackProvider" android:label="Black widget">
+		    <intent-filter>
+		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+		    </intent-filter>
+			<meta-data android:name="android.appwidget.provider"
+		               android:resource="@xml/widgetinfo_black" />	    
+		</receiver>
+		
+	    <receiver android:name="com.dima.tkswidget.provider.BlueProvider" android:label="Blue widget">
+		    <intent-filter>
+		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+		    </intent-filter>
+			<meta-data android:name="android.appwidget.provider"
+		               android:resource="@xml/widgetinfo_blue" />	    
+		</receiver>
+		
         <service
                 android:name=".TaskSyncService"
                 android:exported="false">

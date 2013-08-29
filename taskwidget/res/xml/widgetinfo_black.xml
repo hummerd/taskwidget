@@ -3,13 +3,11 @@
     android:minWidth="296dp"
     android:minHeight="48dp"
     android:updatePeriodMillis="0"    
-    android:initialLayout="@layout/taskwidget"
-
-    >
-</appwidget-provider>
+    android:initialLayout="@layout/widget_black"
+    android:configure="com.dima.tkswidget.activity.WidgetCfg"
+    />
 
 <!--
-android:configure="com.dima.tkswidget.activity.WidgetCfg"
 android:updatePeriodMillis="86400000"
 android:previewImage="@drawable/preview"
 -->
