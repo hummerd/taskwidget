@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dima.tkswidget"
-    android:versionCode="38"
-    android:versionName="1.0 (38)"
+    android:versionCode="40"
+    android:versionName="1.0 (40)"
     android:installLocation="internalOnly">
 
     <uses-sdk 
@@ -27,6 +27,7 @@
 
         <activity 
             android:name=".activity.About"
+            android:taskAffinity="com.dima.tkswidget.main"
             android:theme="@style/Holo.Theme.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,7 +47,7 @@
             android:name=".activity.ActionSelect"
         	android:excludeFromRecents="true" 
         	android:launchMode="singleInstance"
-        	android:taskAffinity="com.dima.widgetaction"
+        	android:taskAffinity="com.dima.tkswidget.widgetaction"
         	android:theme="@style/Transparent"
             >
         </activity>
@@ -73,6 +74,9 @@
 		    </intent-filter>
 			<meta-data android:name="android.appwidget.provider"
 		               android:resource="@xml/widgetinfo_blue" />	    
+		</receiver>
+		
+	    <receiver android:name="com.dima.tkswidget.provider.BaseProvider">
 		</receiver>
 		
         <service

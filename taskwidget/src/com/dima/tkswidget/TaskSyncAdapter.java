@@ -99,6 +99,7 @@ public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
 	        	}
 			}
 	        
+	        LogHelper.d("TaskSyncAdapter failed to sync");
 	        ctrl.notifySyncState(WidgetController.SYNC_STATE_FINISHED);
 	    }
 	    
