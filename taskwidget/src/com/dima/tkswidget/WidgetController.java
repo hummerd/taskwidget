@@ -25,10 +25,8 @@ import com.google.api.services.tasks.model.TaskList;
 
 
 public class WidgetController {
-	public static String ACCOUNT_TYPE = "com.google";
+	public final static String ACCOUNT_TYPE = "com.google";
 	
-    //private static final String WIDGET_IDS_EXTRA = "widgetIds";
-    //private static final String SILENT_MODE_EXTRA = "silent";
     private final static String NEW_LINE = System.getProperty("line.separator");
     
     private static final String LIST_CLICK_ACTION = "com.dima.taskwidget.OPEN_TASKS";
@@ -194,7 +192,6 @@ public class WidgetController {
 
         setupEvents(views, widgetId);
         updateWidget(views, widgetId);
-        applySettings(views, widgetId);
         setUpdateState(views, widgetId, false);
 
         return views;
@@ -209,11 +206,6 @@ public class WidgetController {
         List<Task> tasks = m_taskSource.getListTasks(listId);
 
         updateWidget(views, list, tasks);
-    }
-
-    protected void applySettings(RemoteViews views, int widgetId) {
-        Boolean margin = m_settings.loadWidgetMargin(widgetId);
-        setMargin(views, margin);
     }
 
     protected void setMargin(RemoteViews views, Boolean margin) {

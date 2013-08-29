@@ -10,8 +10,6 @@ public class SettingsController {
 	private static final String PREF_ACCOUNT_NAME = "tw.prefs.account";
 	private static final String PREF_LIST_ID = "tw.prefs.listid";
 	private static final String PREF_LIST_NAME = "tw.prefs.listname";
-	private static final String PREF_LIST_MARGIN = "tw.prefs.margin";
-	//private static final String PREF_LIST_UPDATE_FREQ = "tw.prefs.updatefreq";
 	
 	protected final Context m_context;
 	
@@ -58,18 +56,6 @@ public class SettingsController {
 	public String loadWidgetListName(int widgetId) {
 		SharedPreferences customSharedPreference = getPrefs(widgetId);
 		return customSharedPreference.getString(PREF_LIST_NAME, null);		
-	}
-	
-	public void saveWidgetMargin(int widgetId, Boolean margin) {
-        SharedPreferences customSharedPreference = getPrefs(widgetId);
-        SharedPreferences.Editor editor = customSharedPreference.edit();
-        editor.putBoolean(PREF_LIST_MARGIN, margin);
-        editor.commit();
-	}
-
-	public Boolean loadWidgetMargin(int widgetId) {
-		SharedPreferences customSharedPreference = getPrefs(widgetId);
-		return customSharedPreference.getBoolean(PREF_LIST_MARGIN, false);
 	}
 	
 	

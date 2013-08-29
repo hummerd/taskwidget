@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.SwitchPreference;
 import android.widget.Toast;
 
 import com.dima.tkswidget.LogHelper;
@@ -30,7 +29,6 @@ public class WidgetCfgFragment extends PreferenceFragment {
 	private Preference m_tasksListPreference;
 	private Preference m_accountPreference;
     private Preference m_updateFreqPreference;
-	private SwitchPreference m_marginPreference;
 	private String m_accountName;
 	private TaskProvider m_taskProvider;
 	private AccountManager m_accountManager;
@@ -44,7 +42,6 @@ public class WidgetCfgFragment extends PreferenceFragment {
 	    initActivity();
 	    
 	    addPreferencesFromResource(R.xml.cfgpref);
-	    //setContentView(R.layout.preflayout);
 
 	    initCustomPrefs();
 	    
@@ -61,9 +58,6 @@ public class WidgetCfgFragment extends PreferenceFragment {
 	    setAccountSummary();
 	    setListSummary();
 	    setUpdateFreqSummary();
-	    
-	    Boolean margin = m_settings.loadWidgetMargin(m_appWidgetId);
-	    m_marginPreference.setChecked(margin);
 	}
 	
 	
@@ -73,9 +67,6 @@ public class WidgetCfgFragment extends PreferenceFragment {
 
 	    m_tasksListPreference = (Preference)findPreference("prefList");
 	    m_tasksListPreference.setOnPreferenceClickListener(onTasksListSelect);
-	    
-	    m_marginPreference = (SwitchPreference)findPreference("prefMargin");
-	    m_marginPreference.setOnPreferenceChangeListener(onMarginPreferenceChange);
 
         m_updateFreqPreference = (Preference)findPreference("prefUpdateFreq");
         m_updateFreqPreference.setOnPreferenceClickListener(onUpdateFrequencySelect);
@@ -164,14 +155,6 @@ public class WidgetCfgFragment extends PreferenceFragment {
             return true;
         }
     };
-
-	private Preference.OnPreferenceChangeListener onMarginPreferenceChange = new Preference.OnPreferenceChangeListener() {
-		@Override
-		public boolean onPreferenceChange(Preference preference, Object newValue) {
-			m_settings.saveWidgetMargin(m_appWidgetId, (Boolean)newValue);
-			return true;
-		}
-	};
 	
 	private String findFreqLabel(long freq) {
 		String[] labels = getResources().getStringArray(R.array.updateFreq);
@@ -197,8 +180,6 @@ public class WidgetCfgFragment extends PreferenceFragment {
 			accountNames[i] = accounts[i].name;
 		}
 
-		//m_accountPreference = (ListPreference)findPreference(R.id.pref_account);
-		//m_accountPreference.setEntryValues(accountNames);
 		AlertDialog.Builder builder = new AlertDialog.Builder(super.getActivity());
 		builder.setTitle("Select account");
 		builder.setItems(
