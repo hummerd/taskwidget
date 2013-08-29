@@ -23,6 +23,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import java.util.List;
+
 
 /**
  * @author Dima Kozlov
@@ -57,10 +59,10 @@ public class WidgetCfg extends PreferenceActivity {
         LogHelper.d("Resume activity");
         super.onCreate(savedInstanceState);
         
-        super.getFragmentManager()
-        	.beginTransaction()
-        	.replace(android.R.id.content, new WidgetCfgFragment())
-            .commit();
+//        super.getFragmentManager()
+//        	.beginTransaction()
+//        	.replace(android.R.id.content, new WidgetCfgFragment())
+//            .commit();
         
 		Intent intent = getIntent();
 		Bundle extras = intent.getExtras();
@@ -71,8 +73,14 @@ public class WidgetCfg extends PreferenceActivity {
             AppWidgetManager.EXTRA_APPWIDGET_ID, 
             AppWidgetManager.INVALID_APPWIDGET_ID);
     }
-    
-	@Override
+
+    @Override
+    public void onBuildHeaders(List<Header> target) {
+        super.onBuildHeaders(target);
+        loadHeadersFromResource(R.xml.preference_headers, target);
+    }
+
+    @Override
 	public void onPause() {
         LogHelper.d("Pause activity");
         super.onPause();
