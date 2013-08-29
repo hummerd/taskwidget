@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.dima.tkswidget.activity.ActionSelect;
+import com.dima.tkswidget.provider.BaseProvider;
 import com.google.api.services.tasks.model.Task;
 import com.google.api.services.tasks.model.TaskList;
 
@@ -145,20 +146,12 @@ public class WidgetController {
     }
 
 	public void notifySyncState(int flag) {
-		List<AppWidgetProviderInfo> installedProviders = m_widgetManager.getInstalledProviders();
-		
-		for (AppWidgetProviderInfo appWidgetProviderInfo : installedProviders) {
-			try {
-				Intent intent = new Intent(m_context, Class.forName(appWidgetProviderInfo.provider.getClassName()));
+		Intent intent = new Intent(m_context, BaseProvider.class);
 
-				intent.setAction(TASKS_SYNC_STATE);
-				intent.setFlags(flag);
-				
-				m_context.sendBroadcast(intent);	
-			} catch (ClassNotFoundException e) {
-				LogHelper.e("Provider class not found", e);
-			}
-		}
+		intent.setAction(TASKS_SYNC_STATE);
+		intent.setFlags(flag);
+		
+		m_context.sendBroadcast(intent);	
 	}
 	
 	public void performAction(String actionName, Intent intent) {
@@ -288,7 +281,7 @@ public class WidgetController {
     }
     
     protected int[] getWidgetsIds() {
-    	List<AppWidgetProviderInfo> installedProviders = m_widgetManager.getInstalledProviders();
+    	List<AppWidgetProviderInfo> installedProviders = getMyProviders();
     	if (installedProviders.size() == 1) {
     		return m_widgetManager.getAppWidgetIds(installedProviders.get(0).provider);
     	}
@@ -301,16 +294,32 @@ public class WidgetController {
     	
         return combine(result);
     }
-
-    public static int[] combine(Collection<int[]> arrays){
+    
+    protected List<AppWidgetProviderInfo> getMyProviders() {
+    	String myPackName = m_context.getPackageName();
+    	List<AppWidgetProviderInfo> installedProviders = m_widgetManager.getInstalledProviders();
+    	
+    	for (int i = installedProviders.size() - 1; i >= 0; i--) {
+    		AppWidgetProviderInfo info = installedProviders.get(i);
+    		String pack = info.provider.getPackageName();
+    		if (!pack.equals(myPackName))
+    			installedProviders.remove(i);
+		}
+    	
+    	return installedProviders;
+    }
+    
+    private static int[] combine(Collection<int[]> arrays){
         int length = 0;
         for (int[] arr : arrays) {
         	length += arr.length;
 		}
         
         int[] result = new int[length];
+        int pos = 0;
         for (int[] arr : arrays) {
-        	System.arraycopy(arr, 0, result.length, 0, arr.length);
+        	System.arraycopy(arr, 0, result, pos, arr.length);
+        	pos += arr.length;
 		}
 
         return result;
