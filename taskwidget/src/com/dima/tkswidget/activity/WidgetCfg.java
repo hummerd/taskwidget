@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,14 +22,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
-import java.util.List;
-
 
 /**
  * @author Dima Kozlov
  *
  */
-public class WidgetCfg extends PreferenceActivity {
+public class WidgetCfg extends Activity {
 	
 	private WidgetController m_widgetController;
 	private SettingsController m_settings;
@@ -59,10 +56,10 @@ public class WidgetCfg extends PreferenceActivity {
         LogHelper.d("Resume activity");
         super.onCreate(savedInstanceState);
         
-//        super.getFragmentManager()
-//        	.beginTransaction()
-//        	.replace(android.R.id.content, new WidgetCfgFragment())
-//            .commit();
+        super.getFragmentManager()
+        	.beginTransaction()
+        	.replace(android.R.id.content, new WidgetCfgFragment())
+            .commit();
         
 		Intent intent = getIntent();
 		Bundle extras = intent.getExtras();
@@ -72,12 +69,6 @@ public class WidgetCfg extends PreferenceActivity {
 		m_appWidgetId = extras.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID, 
             AppWidgetManager.INVALID_APPWIDGET_ID);
-    }
-
-    @Override
-    public void onBuildHeaders(List<Header> target) {
-        super.onBuildHeaders(target);
-        loadHeadersFromResource(R.xml.preference_headers, target);
     }
 
     @Override
