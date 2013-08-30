@@ -9,11 +9,6 @@
 	    android:enabled="false"
 	    android:title="@string/pref_sel_list"
 	    />
-	<SwitchPreference
-	    android:key="prefMargin"
-	    android:title="@string/pref_margin"
-	    android:persistent="false"
-	    />
 	<Preference
 	    android:key="prefUpdateFreq"
 	    android:title="@string/pref_update_freq"

@@ -3,43 +3,14 @@
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/widget_margin" >
-    
-    <RelativeLayout
-        android:id="@+id/spacer_top"
-        android:layout_width="match_parent"
-        android:layout_height="8dp" />
-    
-    <RelativeLayout
-        android:id="@+id/spacer_left"
-        android:layout_width="8dp"
-        android:layout_height="match_parent" 
-        android:layout_below="@+id/spacer_top"
-        android:layout_alignParentLeft="true" />
-    
-    <RelativeLayout
-        android:id="@+id/spacer_right"
-        android:layout_width="8dp"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/spacer_top"
-        android:layout_alignParentRight="true" />
-  
-    <RelativeLayout
-        android:id="@+id/spacer_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:layout_alignParentBottom="true" />
-    
+    >
     
 	<RelativeLayout
 	    android:id="@+id/left_block"
 	    style="@style/mytheme"
 	    android:layout_marginRight="1dp"
-        android:layout_width="@dimen/left_block_width"
+        android:layout_width="90dp"
         android:layout_height="match_parent"
-        android:layout_below="@+id/spacer_top" 
-        android:layout_above="@+id/spacer_bottom"
-        android:layout_toRightOf="@+id/spacer_left"
         >
 
         <TextView
@@ -68,10 +39,7 @@
         android:layout_height="match_parent"     
         android:orientation="vertical"
         android:padding="12dp"
-        android:layout_below="@+id/spacer_top" 
-        android:layout_above="@+id/spacer_bottom"
         android:layout_toRightOf="@+id/left_block"
-        android:layout_toLeftOf="@+id/spacer_right"
         >
 	    <TextView
 	        android:id="@+id/textViewTasks"
