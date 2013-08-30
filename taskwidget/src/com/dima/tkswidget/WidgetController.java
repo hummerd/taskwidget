@@ -145,11 +145,11 @@ public class WidgetController {
         m_widgetManager.updateAppWidget(widgetId, views);
     }
 
-	public void notifySyncState(int flag) {
+	public void notifySyncState(int state) {
 		Intent intent = new Intent(m_context, BaseProvider.class);
 
 		intent.setAction(TASKS_SYNC_STATE);
-		intent.setFlags(flag);
+		intent.putExtra(TASKS_SYNC_STATE, state);
 		
 		m_context.sendBroadcast(intent);	
 	}
@@ -161,13 +161,13 @@ public class WidgetController {
 
         if (actionName.equals(LIST_CLICK_ACTION)) {     
         	int wId = intent.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
-        	openCfgGUI(wId);    
+        	openCfgGUI(wId);
         	
         } else if (actionName.equals(TASKS_CLICK_ACTION)) {
         	openTasksGUI();
         	
         } else if (actionName.equals(TASKS_SYNC_STATE)) {
-        	int flag = intent.getFlags();
+        	int flag = intent.getIntExtra(TASKS_SYNC_STATE, -1);
         	
         	if (flag == SYNC_STATE_STARTED) {
         		setUpdateState(true);
