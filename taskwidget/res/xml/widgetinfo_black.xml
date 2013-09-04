@@ -6,8 +6,3 @@
     android:initialLayout="@layout/widget_black"
     android:configure="com.dima.tkswidget.activity.WidgetCfg"
     />
-
-<!--
-android:updatePeriodMillis="86400000"
-android:previewImage="@drawable/preview"
--->

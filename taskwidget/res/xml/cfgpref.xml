@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:holo="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory holo:title="Tasks list preferences" >
+    <PreferenceCategory 
+        holo:title="Tasks list preferences" 
+        holo:id="@+id/pref_cat_main" >
+        
         <Preference
             holo:id="@+id/pref_account"
             holo:key="prefAcc"

@@ -177,6 +177,12 @@ public class WidgetController {
         	}
         }
 	}
+	
+	public boolean canHaveMargin(int widgetId) {
+        AppWidgetProviderInfo appWidgetInfo = m_widgetManager.getAppWidgetInfo(widgetId);
+        return appWidgetInfo.initialLayout == R.layout.widget_black_flat ||
+        		appWidgetInfo.initialLayout == R.layout.widget_transparent;
+	}
 
 
     protected RemoteViews getWidgetViews(int widgetId){

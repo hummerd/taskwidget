@@ -1,99 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
     
+    android:background="@drawable/bg_white" 
+    android:orientation="vertical"      
+    >
     <RelativeLayout
-        android:id="@+id/spacer_top"
+        android:id="@+id/top_block"
         android:layout_width="match_parent"
-        android:layout_height="8dp" />
-    
-    <RelativeLayout
-        android:id="@+id/spacer_left"
-        android:layout_width="8dp"
-        android:layout_height="match_parent" 
-        android:layout_below="@+id/spacer_top"
-        android:layout_alignParentLeft="true" />
-    
-    <RelativeLayout
-        android:id="@+id/spacer_right"
-        android:layout_width="8dp"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/spacer_top"
-        android:layout_alignParentRight="true" />
-  
-    <RelativeLayout
-        android:id="@+id/spacer_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:layout_alignParentBottom="true" />
-    
-    <LinearLayout
-        android:layout_width="match_parent"
-    	android:layout_height="match_parent"
-    	
-        android:layout_above="@+id/spacer_bottom"
-        android:layout_below="@+id/spacer_top"
-        android:layout_toRightOf="@+id/spacer_left"
-        android:layout_toLeftOf="@+id/spacer_right"
-        
-        android:background="@drawable/appwidget_bg" 
-        android:orientation="vertical"      
+        android:layout_height="@dimen/top_block_height"
+        android:background="@drawable/header_blue" 
         >
-        <RelativeLayout
-            android:id="@+id/top_block"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/appwidget_calendar_bgtop_blue" 
-            >
-
-            <TextView
-                android:id="@+id/textViewList"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="12dp"
-                android:gravity="left|center"
-                android:textColor="#ff000000"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/imageRefresh"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:contentDescription="@string/updating"
-                android:scaleType="fitEnd"
-                android:src="@drawable/ic_navigation_refresh_dark"
-                android:visibility="gone" />
-        </RelativeLayout>
-        
-        <LinearLayout
-            android:id="@+id/bottom_block"
+        <TextView
+            android:id="@+id/textViewList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="12dp" 
-            >
+            android:layout_margin="12dp"
+            android:gravity="left|center"
+            android:textColor="#ff000000"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/textViewTasks"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left|top"
-                android:lineSpacingMultiplier="1.1"
-                android:text="@string/loading_text"
-                android:textColor="#ff000000"
-                android:textSize="12sp" />
+        <ImageView
+            android:id="@+id/imageRefresh"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:contentDescription="@string/updating"
+            android:scaleType="fitEnd"
+            android:src="@drawable/ic_navigation_refresh_dark"
+            android:visibility="gone" />
+    </RelativeLayout>
+        
+    <LinearLayout
+        android:id="@+id/bottom_block"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="12dp" 
+        >
+        <TextView
+            android:id="@+id/textViewTasks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|top"
+            android:lineSpacingMultiplier="1.1"
+            android:text="@string/loading_text"
+            android:textColor="#ff000000"
+            android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/textViewCompletedTasks"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left|top"
-                android:lineSpacingMultiplier="1.1"
-                android:textColor="#ff666666"
-                android:textSize="12sp" />
-
-        </LinearLayout>        
+        <TextView
+            android:id="@+id/textViewCompletedTasks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|top"
+            android:lineSpacingMultiplier="1.1"
+            android:textColor="#ff666666"
+            android:textSize="12sp" />     
 	</LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

@@ -2,20 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_dark"
+    
+    android:background="@drawable/bg_white" 
+    android:orientation="vertical"      
     >
     <RelativeLayout
-        android:id="@+id/left_block"
-        android:layout_width="@dimen/left_block_width"
-        android:layout_height="match_parent">
-
+        android:id="@+id/top_block"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/top_block_height"
+        android:background="@drawable/header_red" 
+        >
         <TextView
             android:id="@+id/textViewList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="12dp"
-            android:gravity="center"
-            android:textColor="#ffffff"
+            android:gravity="left|center"
+            android:textColor="#ff000000"
             android:textStyle="bold" />
 
         <ImageView
@@ -27,13 +30,14 @@
             android:src="@drawable/ic_navigation_refresh_dark"
             android:visibility="gone" />
     </RelativeLayout>
-
+        
     <LinearLayout
+        android:id="@+id/bottom_block"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="12dp" >
-
+        android:padding="12dp" 
+        >
         <TextView
             android:id="@+id/textViewTasks"
             android:layout_width="match_parent"
@@ -41,7 +45,7 @@
             android:gravity="left|top"
             android:lineSpacingMultiplier="1.1"
             android:text="@string/loading_text"
-            android:textColor="#ffffff"
+            android:textColor="#ff000000"
             android:textSize="12sp" />
 
         <TextView
@@ -50,7 +54,8 @@
             android:layout_height="wrap_content"
             android:gravity="left|top"
             android:lineSpacingMultiplier="1.1"
-            android:textSize="12sp" />
-    </LinearLayout>
-</LinearLayout>
+            android:textColor="#ff666666"
+            android:textSize="12sp" />     
+	</LinearLayout>
 
+</LinearLayout>

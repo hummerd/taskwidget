@@ -7,6 +7,7 @@ import org.holoeverywhere.app.AlertDialog;
 import org.holoeverywhere.preference.Preference;
 import org.holoeverywhere.preference.Preference.OnPreferenceChangeListener;
 import org.holoeverywhere.preference.Preference.OnPreferenceClickListener;
+import org.holoeverywhere.preference.PreferenceCategory;
 import org.holoeverywhere.preference.PreferenceFragment;
 import org.holoeverywhere.preference.SharedPreferences;
 import org.holoeverywhere.preference.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -46,11 +47,8 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    
-	    initActivity();
-	    
 	    addPreferencesFromResource(R.xml.cfgpref);
-	    //setContentView(R.layout.preflayout);
-
+	    initActivity();
 	    initCustomPrefs();
 	    
 	    LogHelper.d("onCreate cfg activity");
@@ -71,6 +69,17 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 	    m_marginPreference.setChecked(margin);
 	}
 	
+	private void initActivity() {
+		FragmentActivity act = super.getActivity();
+		Intent intent = act.getIntent();
+		Bundle extras = intent.getExtras();
+		
+		m_appWidgetId = extras.getInt(
+            AppWidgetManager.EXTRA_APPWIDGET_ID, 
+            AppWidgetManager.INVALID_APPWIDGET_ID);
+	
+	    m_accountManager = AccountManager.get(act);
+	}
 	
 	private void initCustomPrefs() {
 	    m_accountPreference = (Preference)findPreference(R.id.pref_account);
@@ -84,18 +93,12 @@ public class WidgetCfgFragment extends PreferenceFragment implements OnSharedPre
 
         m_updateFreqPreference = (Preference)findPreference(R.id.pref_update_freq);
         m_updateFreqPreference.setOnPreferenceClickListener(onUpdateFrequencySelect);
-	}
-	
-	private void initActivity() {
-		FragmentActivity act = super.getActivity();
-		Intent intent = act.getIntent();
-		Bundle extras = intent.getExtras();
-		
-		m_appWidgetId = extras.getInt(
-            AppWidgetManager.EXTRA_APPWIDGET_ID, 
-            AppWidgetManager.INVALID_APPWIDGET_ID);
-	
-	    m_accountManager = AccountManager.get(act);
+        
+        WidgetController widgetController = new WidgetController(super.getActivity(), null);
+        if (!widgetController.canHaveMargin(m_appWidgetId)) {
+            PreferenceCategory parent = (PreferenceCategory)findPreference(R.id.pref_cat_main);
+        	parent.removePreference(m_marginPreference);
+        }
 	}
 	
 	private void setDefaultAccount() {
