@@ -218,8 +218,10 @@ public class WidgetController {
     }
 
     protected void applySettings(RemoteViews views, int widgetId) {
-        Boolean margin = m_settings.loadWidgetMargin(widgetId);
-        setMargin(views, margin);
+    	if (canHaveMargin(widgetId)) {
+    		Boolean margin = m_settings.loadWidgetMargin(widgetId);
+    		setMargin(views, margin);
+    	}
     }
 
     protected void setMargin(RemoteViews views, Boolean margin) {

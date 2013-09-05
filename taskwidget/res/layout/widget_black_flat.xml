@@ -36,7 +36,7 @@
         android:layout_below="@+id/spacer_top"
         android:layout_toRightOf="@+id/spacer_left"
         android:layout_toLeftOf="@+id/spacer_right"
-        android:background="@drawable/bg_dark" >
+        android:background="@drawable/bg_dark_flat" >
 
         <RelativeLayout
             android:id="@+id/left_block"
