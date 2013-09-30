@@ -60,6 +60,17 @@
                 android:scaleType="fitEnd"
                 android:src="@drawable/ic_navigation_refresh_dark"
                 android:visibility="gone" />
+        
+	        <ImageView
+	            android:id="@+id/imageConfig"
+	            android:layout_width="64dp"
+	            android:layout_height="64dp"
+	            android:layout_margin="12dp"
+	            android:contentDescription="@string/updating"
+	            android:scaleType="fitEnd"
+	            android:src="@drawable/ic_navigation_refresh_dark"
+	            android:visibility="visible" />
+	                    
         </RelativeLayout>
 
         <LinearLayout

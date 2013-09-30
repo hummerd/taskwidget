@@ -83,8 +83,14 @@ public class WidgetController {
 		if (accName == null) {
 			return 0;
 		}
-
+		
 		Account acc = getAccount(accName);
+		
+		int isSync = ContentResolver.getIsSyncable(acc, TaskMetadata.AUTHORITY);
+		if (isSync <= 0) {
+			return 0;
+		}
+		
     	List<PeriodicSync> sync = ContentResolver.getPeriodicSyncs(acc, TaskMetadata.AUTHORITY);
     	if (sync.size() <= 0)
     		return 0;
@@ -99,10 +105,12 @@ public class WidgetController {
 	
 	public void startSync(int[] widgetIds) {
 		List<AccountWidgets> aw = getGroupedAccounts(widgetIds);
-		
+		Bundle settingsBundle = new Bundle();
+        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        
 		for (AccountWidgets accountWidgets : aw) {
 			Account acc = getAccount(accountWidgets.accountName);
-			ContentResolver.requestSync(acc, TaskMetadata.AUTHORITY, Bundle.EMPTY);
+			ContentResolver.requestSync(acc, TaskMetadata.AUTHORITY, settingsBundle);
 		}
 	}
 	
