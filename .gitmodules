@@ -1,4 +1,0 @@
-
-[submodule "./dependency/HoloEverywhere"]
-	path = dependency/HoloEverywhere
-	url = git://github.com/Prototik/HoloEverywhere.git

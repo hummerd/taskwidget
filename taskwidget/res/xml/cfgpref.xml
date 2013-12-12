@@ -3,25 +3,25 @@
 
     <PreferenceCategory 
         holo:title="Tasks list preferences" 
-        holo:id="@+id/pref_cat_main" >
+        android:id="@+id/pref_cat_main" >
         
         <Preference
-            holo:id="@+id/pref_account"
-            holo:key="prefAcc"
+            android:id="@+id/pref_account"
+            android:key="prefAcc"
             holo:title="@string/pref_sel_acc"
             />
         <Preference
-            holo:id="@+id/pref_tasks_list"
-            holo:enabled="false"
+            android:id="@+id/pref_tasks_list"
+            android:enabled="false"
             holo:title="@string/pref_sel_list"
             />
         <SwitchPreference
-            holo:id="@+id/pref_margin"
+            android:id="@+id/pref_margin"
             holo:title="@string/pref_margin"
             android:persistent="false"
             />
         <Preference
-            holo:id="@+id/pref_update_freq"
+            android:id="@+id/pref_update_freq"
             holo:title="@string/pref_update_freq"
             />
     </PreferenceCategory>

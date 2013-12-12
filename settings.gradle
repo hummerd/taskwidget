@@ -1,0 +1,2 @@
+include ':taskwidget'
+include ':dependency:google-play-services_lib'

@@ -3,9 +3,6 @@ package com.dima.tkswidget.activity;
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.preference.PreferenceActivity;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.dima.tkswidget.GoogleServiceAuthenticator;
 import com.dima.tkswidget.LogHelper;
 import com.dima.tkswidget.R;
@@ -19,6 +16,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -92,7 +92,7 @@ public class WidgetCfg extends PreferenceActivity {
 	
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = super.getSupportMenuInflater();
+        MenuInflater inflater = super.getMenuInflater();
         inflater.inflate(R.menu.cfgmenu, menu);
         boolean r = super.onCreateOptionsMenu(menu);
         return r;
