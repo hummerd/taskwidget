@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:holo="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory 
-        holo:title="Tasks list preferences" 
+    <PreferenceCategory
+        android:title="Tasks list preferences"
         android:id="@+id/pref_cat_main" >
         
         <Preference
             android:id="@+id/pref_account"
             android:key="prefAcc"
-            holo:title="@string/pref_sel_acc"
+            android:title="@string/pref_sel_acc"
             />
         <Preference
             android:id="@+id/pref_tasks_list"
             android:enabled="false"
-            holo:title="@string/pref_sel_list"
+            android:title="@string/pref_sel_list"
             />
         <SwitchPreference
             android:id="@+id/pref_margin"
-            holo:title="@string/pref_margin"
+            android:title="@string/pref_margin"
             android:persistent="false"
             />
         <Preference
             android:id="@+id/pref_update_freq"
-            holo:title="@string/pref_update_freq"
+            android:title="@string/pref_update_freq"
             />
     </PreferenceCategory>
 

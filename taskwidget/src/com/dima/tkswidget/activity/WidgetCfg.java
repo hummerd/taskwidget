@@ -1,7 +1,7 @@
 package com.dima.tkswidget.activity;
 
 import org.holoeverywhere.LayoutInflater;
-import org.holoeverywhere.preference.PreferenceActivity;
+import org.holoeverywhere.app.Activity;
 
 import com.dima.tkswidget.GoogleServiceAuthenticator;
 import com.dima.tkswidget.LogHelper;
@@ -9,13 +9,13 @@ import com.dima.tkswidget.R;
 import com.dima.tkswidget.SettingsController;
 import com.dima.tkswidget.WidgetController;
 
-import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,7 +29,7 @@ import android.widget.ImageView;
  * @author Dima Kozlov
  *
  */
-public class WidgetCfg extends PreferenceActivity {
+public class WidgetCfg extends Activity {
 	
 	private WidgetController m_widgetController;
 	private SettingsController m_settings;
@@ -97,7 +97,7 @@ public class WidgetCfg extends PreferenceActivity {
         boolean r = super.onCreateOptionsMenu(menu);
         return r;
     }
-    
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
     	boolean r = super.onPrepareOptionsMenu(menu);
@@ -107,8 +107,8 @@ public class WidgetCfg extends PreferenceActivity {
 		if (syncInProgress) {
 			refresh();
 		}
-		
-		return r;
+
+        return r;
     }
     
     @Override
@@ -128,7 +128,7 @@ public class WidgetCfg extends PreferenceActivity {
     }
     
     public void refresh() {
-		View v = m_refreshMenu.getActionView();
+		View v = MenuItemCompat.getActionView(m_refreshMenu);
 		if (v != null)
 			return;
 
@@ -139,7 +139,7 @@ public class WidgetCfg extends PreferenceActivity {
         rotation.setRepeatCount(Animation.INFINITE);
         iv.startAnimation(rotation);
 
-        m_refreshMenu.setActionView(iv);
+        MenuItemCompat.setActionView(m_refreshMenu, iv);
     }
     
 	private void finishWithOk() {
@@ -179,10 +179,10 @@ public class WidgetCfg extends PreferenceActivity {
 	
 	private void stopUpdating() {	
 		if (m_refreshMenu != null) {
-			View v = m_refreshMenu.getActionView();
+			View v = MenuItemCompat.getActionView(m_refreshMenu);
 			if (v != null) {
 				v.clearAnimation();
-				m_refreshMenu.setActionView(null);	
+                MenuItemCompat.setActionView(m_refreshMenu, null);
 			}
 		}
 	}
