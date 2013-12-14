@@ -60,7 +60,7 @@ public class WidgetCfg extends Activity {
         
         super.getSupportFragmentManager()
         	.beginTransaction()
-        	.replace(android.R.id.content, new WidgetCfgFragment())
+        	.replace(org.holoeverywhere.R.id.action_bar_activity_content, new WidgetCfgFragment())
             .commit();
         
 		Intent intent = getIntent();
@@ -92,10 +92,9 @@ public class WidgetCfg extends Activity {
 	
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = super.getMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.cfgmenu, menu);
-        boolean r = super.onCreateOptionsMenu(menu);
-        return r;
+        return true;
     }
 
     @Override
@@ -132,7 +131,7 @@ public class WidgetCfg extends Activity {
 		if (v != null)
 			return;
 
-        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = getLayoutInflater(); // (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ImageView iv = (ImageView) inflater.inflate(R.layout.refresh_view, null);
 
         Animation rotation = AnimationUtils.loadAnimation(this, R.drawable.anim_rotate);

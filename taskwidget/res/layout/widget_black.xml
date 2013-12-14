@@ -35,7 +35,7 @@
             android:contentDescription="@string/updating"
             android:scaleType="fitEnd"
             android:src="@drawable/ic_navigation_refresh_dark"
-            android:visibility="visible" />
+            android:visibility="gone" />
                 
     </RelativeLayout>
 
