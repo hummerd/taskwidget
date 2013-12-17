@@ -37,7 +37,7 @@
             android:layout_margin="12dp"
             android:contentDescription="@string/updating"
             android:scaleType="fitStart"
-            android:src="@drawable/ic_navigation_refresh_dark"
+            android:src="@drawable/ic_action_settings_light"
             android:visibility="gone" />
                 
     </RelativeLayout>

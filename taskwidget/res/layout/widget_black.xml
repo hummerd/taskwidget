@@ -29,12 +29,12 @@
 
         <ImageView
             android:id="@+id/imageConfig"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_margin="12dp"
-            android:contentDescription="@string/updating"
-            android:scaleType="fitEnd"
-            android:src="@drawable/ic_navigation_refresh_dark"
+            android:contentDescription="@string/configure"
+            android:scaleType="center"
+            android:src="@drawable/ic_action_settings_light"
             android:visibility="gone" />
                 
     </RelativeLayout>

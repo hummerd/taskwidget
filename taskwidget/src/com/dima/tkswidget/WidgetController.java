@@ -217,8 +217,10 @@ public class WidgetController {
     protected void updateWidget(RemoteViews views, int widgetId) {
         String listId = m_settings.loadWidgetList(widgetId);
         if (listId == null) {
+            views.setViewVisibility(R.id.imageConfig, View.VISIBLE);
             return;
         }
+        views.setViewVisibility(R.id.imageConfig, View.GONE);
         TaskList list = m_taskSource.getList(listId);
         List<Task> tasks = m_taskSource.getListTasks(listId);
 
@@ -350,17 +352,15 @@ public class WidgetController {
     	{
 	    	StringBuffer bufferTasks = new StringBuffer();
 	    	StringBuffer bufferCompletedTasks = new StringBuffer();
-	    	for (int i = 0; i < tasks.size(); i++) {
-	    		Task tsk = tasks.get(i);
-	    		
-	    		if (tsk.getStatus().equals("completed")) {
-	    			bufferCompletedTasks.append(tsk.getTitle());
-	    			bufferCompletedTasks.append(NEW_LINE);
-	    		} else {
-		    		bufferTasks.append(tsk.getTitle());
-		    		bufferTasks.append(NEW_LINE);	    			
-	    		}
-			}
+            for (Task tsk : tasks) {
+                if (tsk.getStatus().equals("completed")) {
+                    bufferCompletedTasks.append(tsk.getTitle());
+                    bufferCompletedTasks.append(NEW_LINE);
+                } else {
+                    bufferTasks.append(tsk.getTitle());
+                    bufferTasks.append(NEW_LINE);
+                }
+            }
 	    	
 	    	if (bufferTasks.length() > 0)
 	    		bufferTasks.delete(bufferTasks.length() - NEW_LINE.length(), bufferTasks.length());
@@ -426,11 +426,11 @@ public class WidgetController {
 		if (accounts.length <= 0)
 			return null;
 
-		for (int i = 0; i < accounts.length; i++) {
-			if (accountName.equals(accounts[i].name)) {
-				return accounts[i];
-			}
-		}
+        for (Account account : accounts) {
+            if (accountName.equals(account.name)) {
+                return account;
+            }
+        }
 		
 		return null;
 	}

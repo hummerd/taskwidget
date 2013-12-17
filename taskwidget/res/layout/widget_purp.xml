@@ -29,6 +29,17 @@
             android:scaleType="fitEnd"
             android:src="@drawable/ic_navigation_refresh_dark"
             android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/imageConfig"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="12dp"
+            android:contentDescription="@string/updating"
+            android:scaleType="fitStart"
+            android:src="@drawable/ic_action_settings_light"
+            android:visibility="gone" />
+
     </RelativeLayout>
         
     <LinearLayout
