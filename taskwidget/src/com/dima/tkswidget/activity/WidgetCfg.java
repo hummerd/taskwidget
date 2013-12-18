@@ -51,7 +51,13 @@ public class WidgetCfg extends Activity {
 			}
 	    }
 	};
-	
+
+    public static void showWidgetCfg(Context context, int widgetId) {
+        Intent openCfg = new Intent(context, WidgetCfg.class);
+        openCfg.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+        openCfg.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(openCfg);
+    }
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
