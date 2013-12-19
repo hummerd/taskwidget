@@ -1,3 +1,16 @@
+# IntelliJ IDEA
+.idea
+*.iml
+*.ipr
+*.iws
+classes
+gen-external-apklibs
+
+# Gradle
+.gradle
+build
+
+# Google play
 /dependency/google-play-services_lib/gen
 /dependency/google-play-services_lib/bin
 /dependency/google-play-services_lib/.settings
