@@ -39,10 +39,8 @@ public class WidgetCfgFragment extends PreferenceFragment {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    
-	    initActivity();
-	    
 	    addPreferencesFromResource(R.xml.cfgpref);
-
+        initActivity();
 	    initCustomPrefs();
 	    
 	    LogHelper.d("onCreate cfg activity");
@@ -60,6 +58,17 @@ public class WidgetCfgFragment extends PreferenceFragment {
 	    setUpdateFreqSummary();
 	}
 	
+	private void initActivity() {
+		FragmentActivity act = super.getActivity();
+		Intent intent = act.getIntent();
+		Bundle extras = intent.getExtras();
+		
+		m_appWidgetId = extras.getInt(
+            AppWidgetManager.EXTRA_APPWIDGET_ID, 
+            AppWidgetManager.INVALID_APPWIDGET_ID);
+	
+	    m_accountManager = AccountManager.get(act);
+	}
 	
 	private void initCustomPrefs() {
 	    m_accountPreference = (Preference)findPreference("prefAcc");
@@ -70,18 +79,6 @@ public class WidgetCfgFragment extends PreferenceFragment {
 
         m_updateFreqPreference = (Preference)findPreference("prefUpdateFreq");
         m_updateFreqPreference.setOnPreferenceClickListener(onUpdateFrequencySelect);
-	}
-	
-	private void initActivity() {
-		Activity act = super.getActivity();
-		Intent intent = act.getIntent();
-		Bundle extras = intent.getExtras();
-		
-		m_appWidgetId = extras.getInt(
-            AppWidgetManager.EXTRA_APPWIDGET_ID, 
-            AppWidgetManager.INVALID_APPWIDGET_ID);
-	
-	    m_accountManager = AccountManager.get(act);
 	}
 	
 	private void setDefaultAccount() {
@@ -256,4 +253,8 @@ public class WidgetCfgFragment extends PreferenceFragment {
         WidgetController controller = new WidgetController(super.getActivity(), null);
         controller.setSyncFreq(freq);
     }
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+	}
 }

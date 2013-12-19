@@ -49,11 +49,8 @@ public class ActionSelect extends Activity {
 			controller.startSync(new int[] { m_appWidgetId });
 			break;
 		case 1: // 1 - configure
-	        Intent openCfg = new Intent(this, WidgetCfg.class);
-	        openCfg.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, m_appWidgetId);
-	        openCfg.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	        startActivity(openCfg);					
-			break;					
+            WidgetCfg.showWidgetCfg(this, m_appWidgetId);
+			break;
 		}
     	
     	finish();

@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<Preference
-	    android:key="prefAcc"
-	    android:title="@string/pref_sel_acc"
-	    />
-	<Preference
-	    android:key="prefList"
-	    android:enabled="false"
-	    android:title="@string/pref_sel_list"
-	    />
-	<Preference
-	    android:key="prefUpdateFreq"
-	    android:title="@string/pref_update_freq"
-	    />
+
+    <PreferenceCategory
+        android:title="Tasks list preferences"
+        android:id="@+id/pref_cat_main" >
+        
+        <Preference
+            android:id="@+id/pref_account"
+            android:title="@string/pref_sel_acc"
+            />
+        <Preference
+            android:id="@+id/pref_tasks_list"
+            android:enabled="false"
+            android:title="@string/pref_sel_list"
+            />
+        <Preference
+            android:id="@+id/pref_update_freq"
+            android:title="@string/pref_update_freq"
+            />
+    </PreferenceCategory>
+
 </PreferenceScreen>

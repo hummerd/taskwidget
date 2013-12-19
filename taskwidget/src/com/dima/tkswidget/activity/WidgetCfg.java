@@ -49,7 +49,13 @@ public class WidgetCfg extends Activity {
 			}
 	    }
 	};
-	
+
+    public static void showWidgetCfg(Context context, int widgetId) {
+        Intent openCfg = new Intent(context, WidgetCfg.class);
+        openCfg.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+        openCfg.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(openCfg);
+    }
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,10 +98,9 @@ public class WidgetCfg extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = super.getMenuInflater();
         inflater.inflate(R.menu.cfgmenu, menu);
-        boolean r = super.onCreateOptionsMenu(menu);
-        return r;
+        return true;
     }
-    
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
     	boolean r = super.onPrepareOptionsMenu(menu);
@@ -105,8 +110,8 @@ public class WidgetCfg extends Activity {
 		if (syncInProgress) {
 			refresh();
 		}
-		
-		return r;
+
+        return r;
     }
     
     @Override

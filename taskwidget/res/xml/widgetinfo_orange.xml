@@ -3,6 +3,6 @@
     android:minWidth="110dp"
     android:minHeight="110dp"
     android:updatePeriodMillis="0"    
-    android:initialLayout="@layout/widget_blue"
+    android:initialLayout="@layout/widget_orange"
     android:configure="com.dima.tkswidget.activity.WidgetCfg"
     />

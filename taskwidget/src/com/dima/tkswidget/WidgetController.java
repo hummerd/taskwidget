@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.dima.tkswidget.activity.ActionSelect;
+import com.dima.tkswidget.activity.WidgetCfg;
 import com.dima.tkswidget.provider.BaseProvider;
 import com.google.api.services.tasks.model.Task;
 import com.google.api.services.tasks.model.TaskList;
@@ -81,8 +82,14 @@ public class WidgetController {
 		if (accName == null) {
 			return 0;
 		}
-
+		
 		Account acc = getAccount(accName);
+		
+		int isSync = ContentResolver.getIsSyncable(acc, TaskMetadata.AUTHORITY);
+		if (isSync <= 0) {
+			return 0;
+		}
+		
     	List<PeriodicSync> sync = ContentResolver.getPeriodicSyncs(acc, TaskMetadata.AUTHORITY);
     	if (sync.size() <= 0)
     		return 0;
@@ -97,10 +104,12 @@ public class WidgetController {
 	
 	public void startSync(int[] widgetIds) {
 		List<AccountWidgets> aw = getGroupedAccounts(widgetIds);
-		
+		Bundle settingsBundle = new Bundle();
+        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        
 		for (AccountWidgets accountWidgets : aw) {
 			Account acc = getAccount(accountWidgets.accountName);
-			ContentResolver.requestSync(acc, TaskMetadata.AUTHORITY, Bundle.EMPTY);
+			ContentResolver.requestSync(acc, TaskMetadata.AUTHORITY, settingsBundle);
 		}
 	}
 	
@@ -157,19 +166,21 @@ public class WidgetController {
             return;
         }
 
-        if (actionName.equals(LIST_CLICK_ACTION)) {     
+        if (actionName.equals(LIST_CLICK_ACTION) || actionName.equals(TASKS_CLICK_ACTION)) {
         	int wId = intent.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
-        	openCfgGUI(wId);
-        	
-        } else if (actionName.equals(TASKS_CLICK_ACTION)) {
-        	openTasksGUI();
-        	
+            if (m_settings.loadWidgetList(wId) == null) {
+                WidgetCfg.showWidgetCfg(m_context, wId);
+                return;
+            }
+            if (actionName.equals(LIST_CLICK_ACTION))
+                openCfgGUI(wId);
+            else
+                openTasksGUI();
         } else if (actionName.equals(TASKS_SYNC_STATE)) {
         	int flag = intent.getIntExtra(TASKS_SYNC_STATE, -1);
         	
         	if (flag == SYNC_STATE_STARTED) {
         		setUpdateState(true);
-        		
         	} else if (flag == SYNC_STATE_FINISHED) {
                 updateWidgetsAsync(); //to restore remote view state
         	}
@@ -200,8 +211,11 @@ public class WidgetController {
     protected void updateWidget(RemoteViews views, int widgetId) {
         String listId = m_settings.loadWidgetList(widgetId);
         if (listId == null) {
+            views.setTextViewText(R.id.textViewTasks, "Touch to configure widget");
+            views.setViewVisibility(R.id.imageConfig, View.VISIBLE);
             return;
         }
+        views.setViewVisibility(R.id.imageConfig, View.GONE);
         TaskList list = m_taskSource.getList(listId);
         List<Task> tasks = m_taskSource.getListTasks(listId);
 
@@ -225,7 +239,7 @@ public class WidgetController {
 	        views.setOnClickPendingIntent(R.id.textViewList, actionPendingIntent);
 
 	        actionPendingIntent = setupEvent(widgetId, providerClass, TASKS_CLICK_ACTION);
-	        views.setOnClickPendingIntent(R.id.textViewTasks, actionPendingIntent);        
+	        views.setOnClickPendingIntent(R.id.tasksArea, actionPendingIntent);
 		} catch (ClassNotFoundException e) {
 			LogHelper.e("Provider class not found", e);
 		}
@@ -262,7 +276,7 @@ public class WidgetController {
         m_context.startActivity(openBrowser);    	
     }
     
-	protected void openCfgGUI( final int widgetId) {
+	protected void openCfgGUI(final int widgetId) {
     	LogHelper.i("widget textViewTasks clicked");
 
         Intent openCfg = new Intent(m_context, ActionSelect.class);
@@ -326,17 +340,15 @@ public class WidgetController {
     	{
 	    	StringBuffer bufferTasks = new StringBuffer();
 	    	StringBuffer bufferCompletedTasks = new StringBuffer();
-	    	for (int i = 0; i < tasks.size(); i++) {
-	    		Task tsk = tasks.get(i);
-	    		
-	    		if (tsk.getStatus().equals("completed")) {
-	    			bufferCompletedTasks.append(tsk.getTitle());
-	    			bufferCompletedTasks.append(NEW_LINE);
-	    		} else {
-		    		bufferTasks.append(tsk.getTitle());
-		    		bufferTasks.append(NEW_LINE);	    			
-	    		}
-			}
+            for (Task tsk : tasks) {
+                if (tsk.getStatus().equals("completed")) {
+                    bufferCompletedTasks.append(tsk.getTitle());
+                    bufferCompletedTasks.append(NEW_LINE);
+                } else {
+                    bufferTasks.append(tsk.getTitle());
+                    bufferTasks.append(NEW_LINE);
+                }
+            }
 	    	
 	    	if (bufferTasks.length() > 0)
 	    		bufferTasks.delete(bufferTasks.length() - NEW_LINE.length(), bufferTasks.length());
@@ -402,11 +414,11 @@ public class WidgetController {
 		if (accounts.length <= 0)
 			return null;
 
-		for (int i = 0; i < accounts.length; i++) {
-			if (accountName.equals(accounts[i].name)) {
-				return accounts[i];
-			}
-		}
+        for (Account account : accounts) {
+            if (accountName.equals(account.name)) {
+                return account;
+            }
+        }
 		
 		return null;
 	}

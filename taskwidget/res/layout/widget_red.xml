@@ -10,7 +10,7 @@
         android:id="@+id/top_block"
         android:layout_width="match_parent"
         android:layout_height="@dimen/top_block_height"
-        android:background="@drawable/header_blue" 
+        android:background="@drawable/header_red" 
         >
         <TextView
             android:id="@+id/textViewList"
@@ -29,7 +29,7 @@
             android:scaleType="fitEnd"
             android:src="@drawable/ic_navigation_refresh_dark"
             android:visibility="gone" />
-        
+
         <ImageView
             android:id="@+id/imageConfig"
             android:layout_width="fill_parent"
@@ -39,7 +39,6 @@
             android:scaleType="fitStart"
             android:src="@drawable/ic_action_settings_light"
             android:visibility="gone" />
-                
     </RelativeLayout>
         
     <LinearLayout
