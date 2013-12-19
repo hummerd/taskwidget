@@ -6,16 +6,16 @@
         android:id="@+id/pref_cat_main" >
         
         <Preference
-            android:id="@+id/pref_account"
+            android:key="prefAcc"
             android:title="@string/pref_sel_acc"
             />
         <Preference
-            android:id="@+id/pref_tasks_list"
-            android:enabled="false"
+            android:key="prefList"
             android:title="@string/pref_sel_list"
+            android:enabled="false"
             />
         <Preference
-            android:id="@+id/pref_update_freq"
+            android:key="prefUpdateFreq"
             android:title="@string/pref_update_freq"
             />
     </PreferenceCategory>

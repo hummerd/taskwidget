@@ -59,7 +59,7 @@ public class WidgetCfgFragment extends PreferenceFragment {
 	}
 	
 	private void initActivity() {
-		FragmentActivity act = super.getActivity();
+		Activity act = super.getActivity();
 		Intent intent = act.getIntent();
 		Bundle extras = intent.getExtras();
 		
@@ -253,8 +253,4 @@ public class WidgetCfgFragment extends PreferenceFragment {
         WidgetController controller = new WidgetController(super.getActivity(), null);
         controller.setSyncFreq(freq);
     }
-
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-	}
 }

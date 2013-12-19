@@ -1,72 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    
-    android:background="@drawable/bg_white" 
-    android:orientation="vertical"      
-    >
-    <RelativeLayout
-        android:id="@+id/top_block"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/top_block_height"
-        android:background="@drawable/header_blue" 
-        >
+<LinearLayout android:orientation="vertical" android:focusable="true" android:clickable="true" android:layout_width="fill_parent" android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:gravity="left|center"
+        android:orientation="vertical"
+        android:id="@id/top_block"
+        android:background="@drawable/header_blue"
+        android:paddingLeft="8.0dip"
+        android:paddingRight="2.0dip"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48.0dip">
         <TextView
-            android:id="@+id/textViewList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="12dp"
-            android:gravity="left|center"
-            android:textColor="#ff000000"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/imageRefresh"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:contentDescription="@string/updating"
-            android:scaleType="fitEnd"
-            android:src="@drawable/ic_navigation_refresh_dark"
-            android:visibility="gone" />
-        
-        <ImageView
-            android:id="@+id/imageConfig"
+            android:id="@id/textViewList"
+            android:layout_marginTop="4.0dip"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_margin="12dp"
-            android:contentDescription="@string/updating"
-            android:scaleType="fitStart"
-            android:src="@drawable/ic_action_settings_light"
-            android:visibility="gone" />
-                
-    </RelativeLayout>
-        
-    <LinearLayout
-        android:id="@+id/tasksArea"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="12dp" 
-        >
-        <TextView
-            android:id="@+id/textViewTasks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left|top"
-            android:lineSpacingMultiplier="1.1"
-            android:text="@string/loading_text"
-            android:textColor="#ff000000"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/textViewCompletedTasks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left|top"
-            android:lineSpacingMultiplier="1.1"
-            android:textColor="#ff666666"
-            android:textSize="12sp" />     
-	</LinearLayout>
-
+            android:shadowColor="#0dffffff"
+            android:shadowRadius="3.0"
+            style="@style/WidgetDateStyle" />
+    </LinearLayout>
+    <ListView
+        android:id="@id/tasksArea"
+        android:background="@drawable/bg_event_cal_widget_holo"
+        android:layout_width="fill_parent"
+        android:layout_height="0.0dip"
+        android:layout_marginLeft="4.0dip"
+        android:layout_marginRight="4.0dip"
+        android:listSelector="@android:color/transparent"
+        android:cacheColorHint="@null"
+        android:divider="@null"
+        android:dividerHeight="3.0dip"
+        android:layout_weight="1.0" />
 </LinearLayout>
