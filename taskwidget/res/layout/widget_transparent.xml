@@ -42,25 +42,15 @@
         android:padding="12dp"
         android:layout_toRightOf="@+id/left_block"
         >
-	    <TextView
-	        android:id="@+id/textViewTasks"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"	        
-	        android:gravity="left|top"
-	        android:lineSpacingMultiplier="1.1"
-	        android:textSize="12sp"
-	        android:textColor="#ffffff"
-	        android:text="@string/loading_text"
-	        />
-	    
-	    <TextView
-	        android:id="@+id/textViewCompletedTasks"
-        	android:layout_width="match_parent"
-        	android:layout_height="wrap_content"	        
-	        android:gravity="left|top"
-	        android:lineSpacingMultiplier="1.1"
-	        android:textSize="12sp"
-	        />	    
+        <ListView
+            android:id="@+id/tasksArea"
+            android:layout_width="fill_parent"
+            android:layout_height="0.0dip"
+            android:listSelector="@android:color/transparent"
+            android:cacheColorHint="@null"
+            android:divider="@null"
+            android:dividerHeight="3.0dip"
+            android:layout_weight="1.0" />
     </LinearLayout>
     
 </RelativeLayout>

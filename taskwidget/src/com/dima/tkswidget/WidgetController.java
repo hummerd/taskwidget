@@ -21,8 +21,7 @@ import android.widget.RemoteViews;
 import com.dima.tkswidget.activity.ActionSelect;
 import com.dima.tkswidget.activity.WidgetCfg;
 import com.dima.tkswidget.provider.BaseProvider;
-import com.google.api.services.tasks.model.Task;
-import com.google.api.services.tasks.model.TaskList;
+import com.dima.tkswidget.remote.view.WidgetService;
 
 
 public class WidgetController {
@@ -209,25 +208,20 @@ public class WidgetController {
     }
 
     protected void updateWidget(RemoteViews views, int widgetId) {
-        String listId = m_settings.loadWidgetList(widgetId);
-        if (listId == null) {
-            views.setTextViewText(R.id.textViewTasks, "Touch to configure widget");
-            views.setViewVisibility(R.id.imageConfig, View.VISIBLE);
-            return;
-        }
-        views.setViewVisibility(R.id.imageConfig, View.GONE);
-        TaskList list = m_taskSource.getList(listId);
-        List<Task> tasks = m_taskSource.getListTasks(listId);
+//        String listId = m_settings.loadWidgetList(widgetId);
+//        if (listId == null) {
+//            views.setTextViewText(R.id.textViewTasks, "Touch to configure widget");
+//            views.setViewVisibility(R.id.imageConfig, View.VISIBLE);
+//            return;
+//        }
+//        views.setViewVisibility(R.id.imageConfig, View.GONE);
 
-        updateWidget(views, list, tasks);
-    }
-
-    protected void setMargin(RemoteViews views, Boolean margin) {
-        int v = margin ? View.VISIBLE : View.GONE;
-        views.setViewVisibility(R.id.spacer_bottom, v);
-        views.setViewVisibility(R.id.spacer_top, v);
-        views.setViewVisibility(R.id.spacer_left, v);
-        views.setViewVisibility(R.id.spacer_right, v);
+        Intent intent = new Intent(m_context, WidgetService.class);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+        // When intents are compared, the extras are ignored, so we need to embed the extras
+        // into the data so that the extras will not be ignored.
+        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+        views.setRemoteAdapter(R.id.tasksArea, intent);
     }
 
     protected void setupEvents(RemoteViews views, int widgetId) {
@@ -331,50 +325,6 @@ public class WidgetController {
         return result;
     }
 
-	protected boolean updateWidget(
-		RemoteViews views,
-		TaskList list,
-		List<Task> tasks) {
-	    	
-    	try
-    	{
-	    	StringBuffer bufferTasks = new StringBuffer();
-	    	StringBuffer bufferCompletedTasks = new StringBuffer();
-            for (Task tsk : tasks) {
-                if (tsk.getStatus().equals("completed")) {
-                    bufferCompletedTasks.append(tsk.getTitle());
-                    bufferCompletedTasks.append(NEW_LINE);
-                } else {
-                    bufferTasks.append(tsk.getTitle());
-                    bufferTasks.append(NEW_LINE);
-                }
-            }
-	    	
-	    	if (bufferTasks.length() > 0)
-	    		bufferTasks.delete(bufferTasks.length() - NEW_LINE.length(), bufferTasks.length());
-
-	    	if (bufferCompletedTasks.length() > 0)
-	    		bufferCompletedTasks.delete(bufferCompletedTasks.length() - NEW_LINE.length(), bufferCompletedTasks.length());
-	    	
-	    	LogHelper.i("widget update successful");
-	    	views.setTextViewText(R.id.textViewList, list.getTitle());
-	    	views.setTextViewText(R.id.textViewTasks, bufferTasks);
-	    	views.setTextViewText(R.id.textViewCompletedTasks, bufferCompletedTasks);
-    	}
-    	catch(Exception ex)
-    	{
-    		LogHelper.w("failed to update tasks list");
-    		String msg = ex.toString();
-    		if (msg != null && msg.length() != 0) {
-    			LogHelper.w(msg);
-    		}
-    		ex.printStackTrace();
-    		return false;
-    	}			
-    	
-    	return true;
-    }	
-	
 	protected List<AccountWidgets> getGroupedAccounts(int[] widgetIds) {
 		List<AccountWidgets> result = new ArrayList<AccountWidgets>();
 		

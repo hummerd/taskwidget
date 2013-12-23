@@ -5,11 +5,11 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
-    compile project(':dependency:google-play-services_lib')
-    compile 'com.android.support:support-v4:18.0.+@jar'
+    compile 'com.google.apis:google-api-services-tasks:v1-rev19-1.17.0-rc' exclude module: 'httpclient'
+    compile 'com.google.api-client:google-api-client-android:1.17.0-rc' exclude module: 'httpclient'
+    compile 'com.google.http-client:google-http-client-gson:1.17.0-rc' exclude module: 'httpclient'
+    compile 'com.google.android.gms:play-services:3.2.25'
 }
-
 
 android {
     compileSdkVersion 19
@@ -37,5 +37,13 @@ android {
         // by a similar customization.
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
+    }
+
+    buildTypes {
+        release {
+            runProguard true
+            proguardFile 'proguard-google-api-client.txt'
+            proguardFile getDefaultProguardFile('proguard-android.txt')
+        }
     }
 }
