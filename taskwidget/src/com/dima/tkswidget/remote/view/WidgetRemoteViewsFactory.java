@@ -63,7 +63,7 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
         // Construct a RemoteViews item based on the app widget item XML file, and set the
         // text based on the position.
         RemoteViews rv = new RemoteViews(mContext.getPackageName(), android.R.layout.simple_list_item_1);
-        rv.setTextViewText(android.R.id.title, mTasks.get(position).getTitle());
+        rv.setTextViewText(android.R.id.text1, mTasks.get(position).getTitle());
 //
 //        // Next, set a fill-intent, which will be used to fill in the pending intent template
 //        // that is set on the collection view in StackWidgetProvider.
@@ -87,7 +87,7 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
     @Override
     public int getViewTypeCount() {
-        return 0;
+        return 1;
     }
 
     @Override

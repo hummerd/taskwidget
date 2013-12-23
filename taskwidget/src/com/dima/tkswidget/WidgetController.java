@@ -221,7 +221,7 @@ public class WidgetController {
         // When intents are compared, the extras are ignored, so we need to embed the extras
         // into the data so that the extras will not be ignored.
         intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-        views.setRemoteAdapter(R.id.tasksArea, intent);
+        views.setRemoteAdapter(R.id.tasksList, intent);
     }
 
     protected void setupEvents(RemoteViews views, int widgetId) {
