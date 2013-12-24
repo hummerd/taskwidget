@@ -62,11 +62,11 @@
 
         <ImageView
             android:id="@+id/imageConfig"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_margin="12dp"
             android:contentDescription="@string/configure"
-            android:scaleType="fitEnd"
+            android:scaleType="center"
             android:src="@drawable/ic_action_settings_light"
             android:visibility="gone" />
         
