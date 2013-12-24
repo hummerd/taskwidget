@@ -5,6 +5,7 @@
 *.iws
 classes
 gen-external-apklibs
+local.properties
 
 # Gradle
 .gradle
