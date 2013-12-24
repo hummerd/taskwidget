@@ -20,7 +20,7 @@ public class TaskContentProvider extends ContentProvider {
     private static final String DATABASE_NAME = "tkswidget.db";
     private static final String TABLE_NAME_TASK = "task";
     private static final String TABLE_NAME_TASK_LIST = "task_list";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     
     static class DatabaseHelper extends SQLiteOpenHelper {
@@ -43,14 +43,15 @@ public class TaskContentProvider extends ContentProvider {
                     + TaskMetadata.COL_TITLE + " TEXT,"
                     + TaskMetadata.COL_STATUS + " TEXT,"
                     + TaskMetadata.COL_PARENT_LIST_ID + " TEXT,"
-                    + TaskMetadata.COL_PARENT_TASK_ID + " TEXT"
+                    + TaskMetadata.COL_PARENT_TASK_ID + " TEXT,"
+                    + TaskMetadata.COL_POSITION + " TEXT"
                     + ");");
             
             db.execSQL("CREATE TABLE " + TABLE_NAME_TASK_LIST + " ("
                     + TaskMetadata.COL_TL_ID + " TEXT PRIMARY KEY,"
                     + TaskMetadata.COL_TL_TITLE + " TEXT,"
                     + TaskMetadata.COL_TL_CREATE_DATE + " INTEGER"
-                    + ");");            
+                    + ");");
         }
 
         /**

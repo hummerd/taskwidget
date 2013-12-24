@@ -49,6 +49,7 @@ public class TaskMetadata {
 	public static final String COL_TITLE = "title";
 	public static final String COL_STATUS = "status";
 	public static final String COL_CREATE_DATE = "date";
+    public static final String COL_POSITION = "position";
 	public static final String COL_PARENT_TASK_ID = "parent_id";
 	public static final String COL_PARENT_LIST_ID = "list_id";
 	
@@ -70,7 +71,7 @@ public class TaskMetadata {
 	public static final String COL_TL_ID = "id";
 	public static final String COL_TL_TITLE = "title";
 	public static final String COL_TL_CREATE_DATE = "date";
-	
+
 	public static final EntityMetaInfo TASK_LIST_INFO = new EntityMetaInfo(
 		"task_list",
 		COL_TL_ID,

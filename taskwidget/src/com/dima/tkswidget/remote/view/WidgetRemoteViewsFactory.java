@@ -11,6 +11,9 @@ import com.dima.tkswidget.SettingsController;
 import com.dima.tkswidget.TaskProvider;
 import com.google.api.services.tasks.model.Task;
 
+import java.lang.reflect.Array;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -40,6 +43,23 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
         }
 
         mTasks = mTaskProvider.getListTasks(listId);
+        Collections.sort(mTasks, new Comparator<Task>() {
+            @Override
+            public int compare(Task task, Task task2) {
+                String pos1 = task.getPosition();
+                String pos2 = task2.getPosition();
+                if (pos1 == null && pos2 == null)
+                    return 0;
+
+                if (pos1 == null)
+                    return 1;
+
+                if (pos2 == null)
+                    return -1;
+
+                return pos1.compareTo(pos2);
+            }
+        });
     }
 
     @Override
@@ -59,24 +79,16 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
     @Override
     public RemoteViews getViewAt(int position) {
-        // position will always range from 0 to getCount() - 1.
+        RemoteViews rv;
+        Task task = mTasks.get(position);
 
-        // Construct a RemoteViews item based on the app widget item XML file, and set the
-        // text based on the position.
-        RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_item_light);
-        rv.setTextViewText(R.id.widget_item_light_text, mTasks.get(position).getTitle());
-//
-//        // Next, set a fill-intent, which will be used to fill in the pending intent template
-//        // that is set on the collection view in StackWidgetProvider.
-//        Bundle extras = new Bundle();
-//        extras.putInt(StackWidgetProvider.EXTRA_ITEM, position);
-//        Intent fillInIntent = new Intent();
-//        fillInIntent.putExtras(extras);
-//        // Make it possible to distinguish the individual on-click
-//        // action of a given item
-//        rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
-//
+        if (task.getStatus().equals("completed")) {
+            rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_item_light_dimmed);
+        } else {
+            rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_item_light);
+        }
 
+        rv.setTextViewText(R.id.widget_item_light_text, task.getTitle());
         return rv;
     }
 
@@ -87,7 +99,7 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
     @Override
     public int getViewTypeCount() {
-        return 1;
+        return 2;
     }
 
     @Override

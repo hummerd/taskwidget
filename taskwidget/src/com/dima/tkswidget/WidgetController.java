@@ -149,6 +149,7 @@ public class WidgetController {
 
         RemoteViews views = prepareWidget(widgetId);
         m_widgetManager.updateAppWidget(widgetId, views);
+        m_widgetManager.notifyAppWidgetViewDataChanged(widgetId, R.id.tasksList);
     }
 
 	public void notifySyncState(int state) {

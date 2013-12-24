@@ -109,12 +109,12 @@ public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
 	    	result.put(TaskMetadata.COL_TL_ID, list.getId());
 	    	result.put(TaskMetadata.COL_TL_TITLE, list.getTitle());
 	    	result.put(TaskMetadata.COL_TL_CREATE_DATE, list.getUpdated().getValue());
-	    	
+
 	    	return result;
 	    }
 	    
 	    private ContentValues getTaskValues(Task task, String listId) {
-	    	ContentValues result = new ContentValues(5);
+	    	ContentValues result = new ContentValues(7);
 	    	
 	    	result.put(TaskMetadata.COL_ID, task.getId());
 	    	result.put(TaskMetadata.COL_TITLE, task.getTitle());
@@ -122,6 +122,7 @@ public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
 	    	result.put(TaskMetadata.COL_STATUS, task.getStatus());
 	    	result.put(TaskMetadata.COL_PARENT_LIST_ID, listId);
 	    	result.put(TaskMetadata.COL_PARENT_TASK_ID, task.getParent());
+            result.put(TaskMetadata.COL_POSITION, task.getPosition());
 	    		    	
 	    	return result;
 	    }

@@ -2,6 +2,7 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="296dp"
     android:minHeight="48dp"
+    android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="0"    
     android:initialLayout="@layout/widget_transparent"
     android:configure="com.dima.tkswidget.activity.WidgetCfg"

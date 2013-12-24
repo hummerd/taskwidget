@@ -61,7 +61,11 @@ public class TaskProvider {
 	public List<Task> getListTasks(String id) {
 		Cursor cursor = m_content.query(
 				TaskMetadata.TASK_INFO.CONTENT_DIR,
-				new String[] { TaskMetadata.COL_ID, TaskMetadata.COL_TITLE, TaskMetadata.COL_STATUS },  
+				new String[] {
+                        TaskMetadata.COL_ID,
+                        TaskMetadata.COL_TITLE,
+                        TaskMetadata.COL_STATUS,
+                        TaskMetadata.COL_POSITION },
 				TaskMetadata.COL_PARENT_LIST_ID + " = ?",  
 				new String[] { id }, 
 				null);
@@ -72,6 +76,7 @@ public class TaskProvider {
 			task.setId(cursor.getString(0));
 			task.setTitle(cursor.getString(1));
 			task.setStatus(cursor.getString(2));
+            task.setPosition(cursor.getString(3));
 			result.add(task);
 		}
 		
