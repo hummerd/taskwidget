@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.dima.tkswidget.R;
 import com.dima.tkswidget.SettingsController;
 import com.dima.tkswidget.TaskProvider;
 import com.google.api.services.tasks.model.Task;
@@ -62,8 +63,8 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
         // Construct a RemoteViews item based on the app widget item XML file, and set the
         // text based on the position.
-        RemoteViews rv = new RemoteViews(mContext.getPackageName(), android.R.layout.simple_list_item_1);
-        rv.setTextViewText(android.R.id.text1, mTasks.get(position).getTitle());
+        RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_item_light);
+        rv.setTextViewText(R.id.widget_item_light_text, mTasks.get(position).getTitle());
 //
 //        // Next, set a fill-intent, which will be used to fill in the pending intent template
 //        // that is set on the collection view in StackWidgetProvider.
@@ -75,7 +76,6 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 //        // action of a given item
 //        rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
 //
-//        ...
 
         return rv;
     }

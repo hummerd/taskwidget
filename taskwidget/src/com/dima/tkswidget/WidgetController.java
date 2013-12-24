@@ -208,13 +208,20 @@ public class WidgetController {
     }
 
     protected void updateWidget(RemoteViews views, int widgetId) {
-//        String listId = m_settings.loadWidgetList(widgetId);
-//        if (listId == null) {
-//            views.setTextViewText(R.id.textViewTasks, "Touch to configure widget");
-//            views.setViewVisibility(R.id.imageConfig, View.VISIBLE);
-//            return;
-//        }
-//        views.setViewVisibility(R.id.imageConfig, View.GONE);
+        String listId = m_settings.loadWidgetList(widgetId);
+        if (listId == null) {
+            views.setTextViewText(R.id.textViewInfo, "Touch to configure widget");
+            views.setViewVisibility(R.id.textViewInfo, View.VISIBLE);
+            views.setViewVisibility(R.id.imageConfig, View.VISIBLE);
+            views.setViewVisibility(R.id.tasksList, View.GONE);
+            return;
+        }
+        views.setViewVisibility(R.id.textViewInfo, View.GONE);
+        views.setViewVisibility(R.id.imageConfig, View.GONE);
+        views.setViewVisibility(R.id.tasksList, View.VISIBLE);
+
+        String listName = m_settings.loadWidgetListName(widgetId);
+        views.setTextViewText(R.id.textViewList, listName);
 
         Intent intent = new Intent(m_context, WidgetService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);

@@ -31,6 +31,16 @@
             android:src="@drawable/ic_navigation_refresh_dark"
             android:visibility="gone" />
 
+        <ImageView
+            android:id="@+id/imageConfig"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="12dp"
+            android:contentDescription="@string/configure"
+            android:scaleType="center"
+            android:src="@drawable/ic_action_settings_light"
+            android:visibility="gone" />
+
     </RelativeLayout>
 
     <LinearLayout 
@@ -39,18 +49,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"     
         android:orientation="vertical"
-        android:padding="12dp"
         android:layout_toRightOf="@+id/left_block"
         >
+        <TextView
+            android:id="@+id/textViewInfo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="12dp"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:visibility="gone"/>
         <ListView
             android:id="@+id/tasksList"
+            android:padding="12dp"
             android:layout_width="fill_parent"
-            android:layout_height="0.0dip"
+            android:layout_height="fill_parent"
             android:listSelector="@android:color/transparent"
             android:cacheColorHint="@null"
             android:divider="@null"
             android:dividerHeight="3.0dip"
-            android:layout_weight="1.0" />
+            android:visibility="visible"
+            />
     </LinearLayout>
     
 </RelativeLayout>
