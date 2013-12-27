@@ -55,7 +55,7 @@ public class WidgetCfg extends Activity {
     public static void showWidgetCfg(Context context, int widgetId) {
         Intent openCfg = new Intent(context, WidgetCfg.class);
         openCfg.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
-        openCfg.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        openCfg.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(openCfg);
     }
 	
