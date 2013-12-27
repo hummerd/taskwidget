@@ -89,6 +89,11 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
         }
 
         rv.setTextViewText(R.id.widget_item_light_text, task.getTitle());
+
+        Intent fillInIntent = new Intent();
+        fillInIntent.putExtra("not used", task.getId());
+        rv.setOnClickFillInIntent(R.id.widget_item_light_text, fillInIntent);
+
         return rv;
     }
 

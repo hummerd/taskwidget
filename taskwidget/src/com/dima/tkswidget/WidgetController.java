@@ -242,7 +242,9 @@ public class WidgetController {
 
 	        actionPendingIntent = setupEvent(widgetId, providerClass, TASKS_CLICK_ACTION);
 	        views.setOnClickPendingIntent(R.id.tasksArea, actionPendingIntent);
-            views.setOnClickPendingIntent(R.id.tasksList, actionPendingIntent);
+
+            actionPendingIntent = setupEvent(widgetId, providerClass, TASKS_CLICK_ACTION);
+            views.setPendingIntentTemplate(R.id.tasksList, actionPendingIntent);
 		} catch (ClassNotFoundException e) {
 			LogHelper.e("Provider class not found", e);
 		}
