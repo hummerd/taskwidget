@@ -67,35 +67,47 @@ public class WidgetController {
         setSyncFreq(ids, freq);
     }
 
-    public void setSyncFreq(int[] widgetIds, long freq) {
-        List<AccountWidgets> aw = getGroupedAccounts(widgetIds);
-
-        for (AccountWidgets accountWidgets : aw) {
-            Account acc = getAccount(accountWidgets.accountName);
-            ContentResolver.addPeriodicSync(acc, TaskMetadata.AUTHORITY, Bundle.EMPTY, freq);
-        }
-    }
-    
     public long getSyncFreq(int widgetId) {
 		String accName = m_settings.loadWidgetAccount(widgetId);
 		if (accName == null) {
 			return 0;
 		}
-		
+
 		Account acc = getAccount(accName);
-		
+
 		int isSync = ContentResolver.getIsSyncable(acc, TaskMetadata.AUTHORITY);
 		if (isSync <= 0) {
 			return 0;
 		}
-		
+
+        boolean syncAuto = ContentResolver.getSyncAutomatically(acc, TaskMetadata.AUTHORITY);
+        if (!syncAuto) {
+            return 0;
+        }
+
     	List<PeriodicSync> sync = ContentResolver.getPeriodicSyncs(acc, TaskMetadata.AUTHORITY);
     	if (sync.size() <= 0)
     		return 0;
-    	
+
     	return sync.get(0).period;
     }
-    
+
+    public void setSyncFreq(int[] widgetIds, long freq) {
+        List<AccountWidgets> aw = getGroupedAccounts(widgetIds);
+
+        for (AccountWidgets accountWidgets : aw) {
+            Account acc = getAccount(accountWidgets.accountName);
+
+            if (ContentResolver.getIsSyncable(acc, TaskMetadata.AUTHORITY) <= 0)
+                ContentResolver.setIsSyncable(acc, TaskMetadata.AUTHORITY, 1);
+
+            if(!ContentResolver.getSyncAutomatically(acc, TaskMetadata.AUTHORITY))
+                ContentResolver.setSyncAutomatically(acc, TaskMetadata.AUTHORITY, true);
+
+            ContentResolver.addPeriodicSync(acc, TaskMetadata.AUTHORITY, Bundle.EMPTY, freq);
+        }
+    }
+
 	public void startSync() {
 		int[] ids = getWidgetsIds();
 		startSync(ids);
