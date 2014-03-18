@@ -25,6 +25,10 @@
         android:allowBackup="true"
         >
 
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity 
             android:name=".activity.About"
             android:taskAffinity="com.dima.tkswidget.main"

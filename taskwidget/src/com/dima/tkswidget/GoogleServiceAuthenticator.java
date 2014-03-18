@@ -65,34 +65,34 @@ public class GoogleServiceAuthenticator {
 			final int requestCodePlayServ, 
 			final int requestRecoverAuth, 
 			final Runnable onAuthSucceded,
-			final Runnable onAuthFailed) 
-	{
-		AsyncTask<Void, Void, Exception> task = new AsyncTask<Void, Void, Exception>() {
-		    @Override
-		    protected Exception doInBackground(Void... params) {
-		    	try {
-					GoogleAuthUtil.getToken(m_context, m_accountName, m_scope);
-				} catch (Exception e) {
-					LogHelper.e("Exception on GoogleAuthUtil.getToken: " + e.getMessage(), e);
-					e.printStackTrace();
-					return e;
-				}
-				
-				return null;
-		    }
-		    
-		    @Override
-		    protected void onPostExecute(Exception result) {
-		    	super.onPostExecute(result);
-		    	
-		    	if (result == null && onAuthFailed != null) {
-		    		onAuthSucceded.run();	
-		    	} else {
-		    		onAuthFailed.run();
-		    		processAuthError(result, activity, requestCodePlayServ, requestRecoverAuth);
-		    	}
-		    }
-		};
+      final Runnable onAuthFailed)
+  {
+    AsyncTask<Void, Void, Exception> task = new AsyncTask<Void, Void, Exception>() {
+      @Override
+      protected Exception doInBackground(Void... params) {
+        try {
+          GoogleAuthUtil.getToken(m_context, m_accountName, m_scope);
+        } catch (Exception e) {
+          LogHelper.e("Exception on GoogleAuthUtil.getToken: " + e.getMessage(), e);
+          e.printStackTrace();
+          return e;
+        }
+
+        return null;
+      }
+
+      @Override
+      protected void onPostExecute(Exception result) {
+        super.onPostExecute(result);
+
+        if (result == null && onAuthFailed != null) {
+          onAuthSucceded.run();
+        } else {
+          onAuthFailed.run();
+          processAuthError(result, activity, requestCodePlayServ, requestRecoverAuth);
+        }
+      }
+    };
 		task.execute((Void)null);
 	}
 	

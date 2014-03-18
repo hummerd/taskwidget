@@ -8,12 +8,12 @@ dependencies {
     compile 'com.google.apis:google-api-services-tasks:v1-rev25-1.17.0-rc' exclude module: 'httpclient'
     compile 'com.google.api-client:google-api-client-android:1.17.0-rc' exclude module: 'httpclient'
     compile 'com.google.http-client:google-http-client-gson:1.17.0-rc' exclude module: 'httpclient'
-    compile 'com.google.android.gms:play-services:3.2.25'
+    compile 'com.google.android.gms:play-services:4.2.+'
 }
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.0"
+    buildToolsVersion "19.0.3"
 
     sourceSets {
         main {
@@ -44,6 +44,12 @@ android {
             runProguard true
             proguardFile 'proguard-google-api-client.txt'
             proguardFile getDefaultProguardFile('proguard-android.txt')
+        }
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file('../debug.keystore')
         }
     }
 }
