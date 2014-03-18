@@ -2,13 +2,15 @@ apply plugin: 'android'
 
 repositories {
     mavenCentral()
-    maven { url "https://raw.github.com/Prototik/HoloEverywhere/repo" }
+    maven { url "http://192.241.191.41/repo" }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
-    compile project(':dependency:google-play-services_lib')
-    compile 'com.android.support:support-v4:18.0.+@jar'
+    compile 'com.google.apis:google-api-services-tasks:v1-rev25-1.17.0-rc' exclude module: 'httpclient'
+    compile 'com.google.api-client:google-api-client-android:1.17.0-rc' exclude module: 'httpclient'
+    compile 'com.google.http-client:google-http-client-gson:1.17.0-rc' exclude module: 'httpclient'
+    compile 'com.google.android.gms:play-services:4.2.+'
+    compile 'com.android.support:support-v4:19.0.+@jar'
     compile 'org.holoeverywhere:library:2.1.+@aar'
     compile 'org.holoeverywhere:addon-preferences:2.1.+@aar'
     compile 'org.holoeverywhere:addon-slider:2.1.+@aar'
@@ -17,7 +19,7 @@ dependencies {
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.0"
+    buildToolsVersion "19.0.3"
 
     sourceSets {
         main {
