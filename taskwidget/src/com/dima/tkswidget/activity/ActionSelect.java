@@ -49,7 +49,7 @@ public class ActionSelect extends Activity {
 			controller.startSync(new int[] { m_appWidgetId });
 			break;
 		case 1: // 1 - configure
-            WidgetCfg.showWidgetCfg(this, m_appWidgetId);
+      WidgetCfg.showWidgetCfg(this, m_appWidgetId);
 			break;
 		}
     	

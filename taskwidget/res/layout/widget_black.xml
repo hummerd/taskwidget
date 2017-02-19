@@ -47,6 +47,6 @@
         android:orientation="vertical"
         android:cacheColorHint="@null"
         android:divider="@null"
-        android:dividerHeight="3.0dip"
-        android:layout_weight="1.0" />
+        android:dividerHeight="0dp"
+        android:layout_weight="1" />
 </LinearLayout>

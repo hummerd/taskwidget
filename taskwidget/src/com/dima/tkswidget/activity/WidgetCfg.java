@@ -39,13 +39,14 @@ public class WidgetCfg extends Activity {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-      switch (intent.getFlags()) {
+      int flag = intent.getIntExtra(WidgetController.TASKS_SYNC_STATE, -1);
+      LogHelper.d("WidgetCfg got " + flag);
+      switch (flag) {
         case WidgetController.SYNC_STATE_STARTED:
           refresh();
           break;
         case WidgetController.SYNC_STATE_FINISHED:
         case WidgetController.SYNC_STATE_LISTS_UPDATED:
-          LogHelper.d("Stop updating " + intent.getFlags());
           stopUpdating();
           break;
       }
@@ -93,6 +94,11 @@ public class WidgetCfg extends Activity {
     LogHelper.d("Resume activity");
     super.onResume();
 
+    boolean syncInProgress = m_widgetController.isSyncInProgress(m_appWidgetId);
+    if (syncInProgress) {
+      refresh();
+    }
+
     registerReceiver(m_syncFinishedReceiver, new IntentFilter(WidgetController.TASKS_SYNC_STATE));
   }
 
@@ -134,6 +140,10 @@ public class WidgetCfg extends Activity {
 
   public void refresh() {
     LogHelper.d("Refresh");
+
+    if (m_refreshMenu == null)
+      return;
+
     View v = m_refreshMenu.getActionView();
     if (v != null)
       return;
@@ -155,7 +165,7 @@ public class WidgetCfg extends Activity {
     setResult(Activity.RESULT_OK, resultValue);
     finish();
 
-    m_widgetController.updateWidgetsAsync(new int[]{m_appWidgetId});
+    m_widgetController.updateWidgetsAsync(new int[]{ m_appWidgetId });
   }
 
   private void updateLists() {

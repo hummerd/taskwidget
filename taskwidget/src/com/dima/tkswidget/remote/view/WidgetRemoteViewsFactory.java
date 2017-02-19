@@ -88,12 +88,24 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
     }
 
     rv.setTextViewText(R.id.widget_item_light_text, task.getTitle());
+    setPadding(rv, R.id.widget_item_light_text, position == 0, position == getCount() - 1);
 
     Intent fillInIntent = new Intent();
     fillInIntent.putExtra("not used", task.getId());
     rv.setOnClickFillInIntent(R.id.widget_item_light_text, fillInIntent);
 
     return rv;
+  }
+
+  private void setPadding(RemoteViews view, int viewId, boolean isFirst, boolean isLast) {
+    int p = mContext.getResources().getDimensionPixelSize(R.dimen.cw_margin);
+    int
+        l = p,
+        t = isFirst ? p : 0,
+        r = p,
+        b = p;
+
+    view.setViewPadding(viewId, l, t, r, b);
   }
 
   @Override

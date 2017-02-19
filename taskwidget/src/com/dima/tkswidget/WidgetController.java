@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -37,6 +38,7 @@ public class WidgetController {
   private final static String NEW_LINE = System.getProperty("line.separator");
   private static final String LIST_CLICK_ACTION = "com.dima.taskwidget.OPEN_TASKS";
   private static final String TASKS_CLICK_ACTION = "com.dima.taskwidget.OPEN_CFG";
+
   protected final Context m_context;
   protected final AppWidgetManager m_widgetManager;
   protected final TaskProvider m_taskSource;
@@ -171,8 +173,12 @@ public class WidgetController {
 
   public void notifySyncState(int state) {
     Intent intent = new Intent(m_context, BaseProvider.class);
-
     intent.setAction(TASKS_SYNC_STATE);
+    intent.putExtra(TASKS_SYNC_STATE, state);
+
+    m_context.sendBroadcast(intent);
+
+    intent = new Intent(TASKS_SYNC_STATE);
     intent.putExtra(TASKS_SYNC_STATE, state);
 
     m_context.sendBroadcast(intent);
@@ -311,7 +317,7 @@ public class WidgetController {
       return m_widgetManager.getAppWidgetIds(installedProviders.get(0).provider);
     }
 
-    List<int[]> result = new ArrayList<int[]>();
+    List<int[]> result = new ArrayList<>();
     for (AppWidgetProviderInfo appWidgetProviderInfo : installedProviders) {
       int[] appWidgetIds = m_widgetManager.getAppWidgetIds(appWidgetProviderInfo.provider);
       result.add(appWidgetIds);

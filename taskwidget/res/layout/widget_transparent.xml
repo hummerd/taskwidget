@@ -49,6 +49,6 @@
         android:listSelector="@android:color/transparent"
         android:cacheColorHint="@null"
         android:divider="@null"
-        android:dividerHeight="3.0dip"
+        android:dividerHeight="0dp"
         android:layout_toEndOf="@+id/left_block" />
 </RelativeLayout>

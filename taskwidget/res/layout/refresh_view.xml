@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+<ImageView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:src="@drawable/ic_cached_white_24px"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:src="@drawable/ic_action_refresh"
     />
