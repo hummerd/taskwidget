@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mainLayout"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="1dp"
@@ -8,67 +8,47 @@
 	<RelativeLayout
 	    android:id="@+id/left_block"
 	    style="@style/mytheme"
-	    android:layout_marginRight="1dp"
+	    android:layout_marginEnd="1dp"
         android:layout_width="90dp"
         android:layout_height="match_parent"
         >
+        <Button
+            android:id="@+id/headerClick"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="0dp"
+            android:background="?android:selectableItemBackground"
+            />
         <TextView
             android:id="@+id/textViewList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="12dp"
+            android:layout_margin="@dimen/cw_margin"
             android:gravity="center"
             android:textColor="#ffffff"
             android:textStyle="bold"
+            android:elevation="10dp"
             />
         <ImageView
             android:id="@+id/imageRefresh"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="@dimen/cw_image_refresh_size"
+            android:layout_height="@dimen/cw_image_refresh_size"
+            android:layout_margin="@dimen/cw_margin"
             android:contentDescription="@string/updating"
             android:scaleType="fitEnd"
-            android:src="@drawable/ic_navigation_refresh_dark"
+            android:src="@drawable/ic_cached_white_24px"
             android:visibility="gone"
-            />
-        <ImageView
-            android:id="@+id/imageConfig"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="12dp"
-            android:contentDescription="@string/configure"
-            android:scaleType="center"
-            android:src="@drawable/ic_action_settings_light"
-            android:visibility="gone"
+            android:elevation="11dp"
             />
     </RelativeLayout>
-    <LinearLayout 
+    <ListView
         style="@style/mytheme"
-        android:id="@+id/tasksArea"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"     
-        android:orientation="vertical"
-        android:layout_toRightOf="@+id/left_block"
-        >
-        <TextView
-            android:id="@+id/textViewInfo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="12dp"
-            android:gravity="center"
-            android:textColor="#ffffff"
-            android:textStyle="bold"
-            android:visibility="gone"
-            />
-        <ListView
-            android:id="@+id/tasksList"
-            android:padding="12dp"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:listSelector="@android:color/transparent"
-            android:cacheColorHint="@null"
-            android:divider="@null"
-            android:dividerHeight="3.0dip"
-            android:visibility="visible"
-            />
-    </LinearLayout>
+        android:id="@+id/tasksList"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:listSelector="@android:color/transparent"
+        android:cacheColorHint="@null"
+        android:divider="@null"
+        android:dividerHeight="3.0dip"
+        android:layout_toEndOf="@+id/left_block" />
 </RelativeLayout>

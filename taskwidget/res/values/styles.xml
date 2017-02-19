@@ -16,4 +16,7 @@
         <item name="android:layout_marginTop">-4.0dip</item>
         <item name="android:singleLine">true</item>
     </style>
+    <style name="TransparentButtonStyle" parent="android:Widget.DeviceDefault.Button.Borderless">
+        <!--<item name="android:background">@android:color/transparent</item>-->
+    </style>
 </resources>

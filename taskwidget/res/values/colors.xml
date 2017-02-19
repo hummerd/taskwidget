@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <item name="widget_header_blue" type="color">#448AFF</item>
+  <item name="widget_header_green" type="color">#00C853</item>
+  <item name="widget_header_orange" type="color">#FFAB40</item>
+  <item name="widget_header_purple" type="color">#651FFF</item>
+  <item name="widget_header_red" type="color">#FF5252</item>
+</resources>

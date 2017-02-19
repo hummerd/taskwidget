@@ -12,40 +12,40 @@ import android.content.Intent;
 
 public class BaseProvider extends AppWidgetProvider {
 
-    @Override
-    public void onDeleted(Context context, int[] appWidgetIds) {
-        LogHelper.d("delete widgets started ", appWidgetIds);
+  @Override
+  public void onDeleted(Context context, int[] appWidgetIds) {
+    LogHelper.d("delete widgets started ", appWidgetIds);
 
-        SettingsController controller = new SettingsController(context);
-        controller.clearPrefs(appWidgetIds);
-    }
+    SettingsController controller = new SettingsController(context);
+    controller.clearPrefs(appWidgetIds);
+  }
 
-    @Override
-    public void onDisabled(Context context) {
-        LogHelper.d("onDisabled");
-    }
+  @Override
+  public void onDisabled(Context context) {
+    LogHelper.d("onDisabled");
+  }
 
-    @Override
-    public void onEnabled(Context context) {
-        LogHelper.d("onEnabled");
-    }
-    
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        LogHelper.d("onReceive");
-        super.onReceive(context, intent);
+  @Override
+  public void onEnabled(Context context) {
+    LogHelper.d("onEnabled");
+  }
 
-    	String action = intent.getAction();
-    	LogHelper.d(action);
-    	WidgetController controller = new WidgetController(context, null);
-    	controller.performAction(action,  intent);
-    }    
-	
-    @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        LogHelper.d("update widgets started ", appWidgetIds);
+  @Override
+  public void onReceive(Context context, Intent intent) {
+    LogHelper.d("onReceive");
+    super.onReceive(context, intent);
 
-    	WidgetController controller = new WidgetController(context, appWidgetManager);
-        controller.updateWidgetsAsync(appWidgetIds);
-	}
+    String action = intent.getAction();
+    LogHelper.d(action);
+    WidgetController controller = new WidgetController(context, null);
+    controller.performAction(action, intent);
+  }
+
+  @Override
+  public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+    LogHelper.d("update widgets started ", appWidgetIds);
+
+    WidgetController controller = new WidgetController(context, appWidgetManager);
+    controller.updateWidgetsAsync(appWidgetIds);
+  }
 }

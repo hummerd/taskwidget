@@ -1,11 +1,13 @@
 package com.dima.tkswidget.remote.view;
 
 import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProviderInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.dima.tkswidget.LogHelper;
 import com.dima.tkswidget.R;
 import com.dima.tkswidget.SettingsController;
 import com.dima.tkswidget.TaskProvider;
@@ -23,7 +25,9 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
   private int mAppWidgetId;
   private TaskProvider mTaskProvider;
   private SettingsController mSettings;
-  private List<Task> mTasks = null;
+  private volatile List<Task> mTasks = null;
+  private boolean mIsBright;
+
 
   public WidgetRemoteViewsFactory(Context context, Intent intent, TaskProvider taskProvider, SettingsController settings) {
     mSettings = settings;
@@ -32,18 +36,21 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
     mAppWidgetId = intent.getIntExtra(
         AppWidgetManager.EXTRA_APPWIDGET_ID,
         AppWidgetManager.INVALID_APPWIDGET_ID);
+    LogHelper.d("Widget id " + mAppWidgetId);
+    mIsBright = isBright(context);
   }
 
   // Initialize the data set.
+  @Override
   public void onCreate() {
-    loadTasks();
   }
 
   @Override
   public void onDataSetChanged() {
+    LogHelper.d("WidgetRemoteViewsFactory onDataSetChanged");
     Thread thread = new Thread() {
       public void run() {
-        loadTasks();
+        mTasks = loadTasks(); //Task content provider can only be accessed from another thread
       }
     };
     thread.start();
@@ -55,25 +62,29 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
   @Override
   public void onDestroy() {
+    LogHelper.d("WidgetRemoteViewsFactory onDestroy");
     mContext = null;
     mTaskProvider = null;
     mSettings = null;
+    mTasks = null;
   }
 
   @Override
   public int getCount() {
-    return mTasks.size();
+    LogHelper.d("WidgetRemoteViewsFactory getCount");
+    return mTasks == null ? 0 : mTasks.size();
   }
 
   @Override
   public RemoteViews getViewAt(int position) {
+    LogHelper.d("WidgetRemoteViewsFactory getViewAt" + position);
     RemoteViews rv;
     Task task = mTasks.get(position);
 
     if (task.getStatus().equals("completed")) {
-      rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_item_light_dimmed);
+      rv = new RemoteViews(mContext.getPackageName(), getItemViewPassive());
     } else {
-      rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_item_light);
+      rv = new RemoteViews(mContext.getPackageName(), getItemViewActive());
     }
 
     rv.setTextViewText(R.id.widget_item_light_text, task.getTitle());
@@ -92,11 +103,12 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
   @Override
   public int getViewTypeCount() {
-    return 2;
+    return 3;
   }
 
   @Override
   public long getItemId(int i) {
+    LogHelper.d("WidgetRemoteViewsFactory getItemId" + i);
     return mTasks.get(i).getId().hashCode();
   }
 
@@ -105,10 +117,10 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
     return true;
   }
 
-  private void loadTasks() {
+  private List<Task> loadTasks() {
     String listId = mSettings.loadWidgetList(mAppWidgetId);
     if (listId == null) {
-      return;
+      return null;
     }
 
     List<Task> tasks = mTaskProvider.getListTasks(listId);
@@ -129,6 +141,34 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
         return pos1.compareTo(pos2);
       }
     });
-    mTasks = tasks;
+    return tasks;
+  }
+
+  private int getItemViewActive() {
+    return mIsBright
+      ? R.layout.widget_item
+      : R.layout.widget_item_light;
+  }
+
+  private int getItemViewPassive() {
+     return mIsBright
+        ? R.layout.widget_item
+        : R.layout.widget_item_light_dimmed;
+  }
+
+  private boolean isBright(Context context) {
+    AppWidgetManager wm = AppWidgetManager.getInstance(context);
+    AppWidgetProviderInfo wpi = wm.getAppWidgetInfo(mAppWidgetId);
+    if (wpi == null)
+      return true;
+
+    if (wpi.initialLayout == R.layout.widget_blue
+        || wpi.initialLayout == R.layout.widget_green
+        || wpi.initialLayout == R.layout.widget_orange
+        || wpi.initialLayout == R.layout.widget_purp
+        || wpi.initialLayout == R.layout.widget_red)
+      return true;
+
+    return false;
   }
 }

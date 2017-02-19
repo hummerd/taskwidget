@@ -1,19 +1,28 @@
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 dependencies {
-    compile 'com.google.apis:google-api-services-tasks:v1-rev33-1.18.0-rc' exclude module: 'httpclient'
-    compile 'com.google.api-client:google-api-client-android:1.18.0-rc' exclude module: 'httpclient'
-    compile 'com.google.http-client:google-http-client-gson:1.18.0-rc' exclude module: 'httpclient'
-    compile 'com.google.android.gms:play-services:4.3.+'
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.google.android.gms:play-services-auth:10.2.0'
+    compile 'pub.devrel:easypermissions:0.2.1'
+    compile('com.google.api-client:google-api-client-android:1.22.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    compile('com.google.apis:google-api-services-tasks:v1-rev46-1.22.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.1.0"
+    compileSdkVersion 25
+    buildToolsVersion "23.0.3"
+
+    dexOptions {
+        javaMaxHeapSize "2g"
+    }
 
     sourceSets {
         main {
@@ -41,9 +50,8 @@ android {
 
     buildTypes {
         release {
-            runProguard true
-            proguardFile 'proguard-google-api-client.txt'
-            proguardFile getDefaultProguardFile('proguard-android.txt')
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-google-api-client.txt'
         }
     }
 

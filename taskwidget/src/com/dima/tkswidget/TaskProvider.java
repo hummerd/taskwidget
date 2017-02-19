@@ -12,75 +12,81 @@ import android.database.Cursor;
 import android.net.Uri;
 
 public class TaskProvider {
-	protected final Context m_context;
-	protected final ContentResolver m_content;
-	
-	public TaskProvider(Context context) {
-		m_context = context;
-		m_content = m_context.getContentResolver();
-	}
-	
+  protected final Context m_context;
+  protected final ContentResolver m_content;
 
-	public List<TaskList> getLists() {
-		Cursor cursor = m_content.query(
-				TaskMetadata.TASK_LIST_INFO.CONTENT_DIR,
-				new String[] { TaskMetadata.COL_TL_ID, TaskMetadata.COL_TL_TITLE },  
-				null,  
-				null, 
-				null);
-		
-		List<TaskList> result = new ArrayList<TaskList>(cursor.getCount());
-		while (cursor.moveToNext()) {
-			TaskList taskList = new TaskList();
-			taskList.setId(cursor.getString(0));
-			taskList.setTitle(cursor.getString(1));
-			result.add(taskList);
-		}
-		return result;
-	}
-	
-	public TaskList getList(String id) {
-		Cursor cursor = m_content.query(
-				Uri.withAppendedPath(TaskMetadata.TASK_LIST_INFO.CONTENT_ITEM, id),
-				new String[] { TaskMetadata.COL_TL_ID, TaskMetadata.COL_TL_TITLE },  
-				null,  
-				null, 
-				null);
-		
-		if(!cursor.moveToNext()) {
-			return null;
-		}
-		
-		TaskList result = new TaskList();
-		result.setId(cursor.getString(0));
-		result.setTitle(cursor.getString(1));
-		cursor.close();
-		return result;
-	}
-	
-	public List<Task> getListTasks(String id) {
-		Cursor cursor = m_content.query(
-				TaskMetadata.TASK_INFO.CONTENT_DIR,
-				new String[] {
-                        TaskMetadata.COL_ID,
-                        TaskMetadata.COL_TITLE,
-                        TaskMetadata.COL_STATUS,
-                        TaskMetadata.COL_POSITION },
-				TaskMetadata.COL_PARENT_LIST_ID + " = ?",  
-				new String[] { id }, 
-				null);
-		
-		List<Task> result = new ArrayList<Task>(cursor.getCount());
-		while (cursor.moveToNext()) {
-			Task task = new Task();
-			task.setId(cursor.getString(0));
-			task.setTitle(cursor.getString(1));
-			task.setStatus(cursor.getString(2));
-            task.setPosition(cursor.getString(3));
-			result.add(task);
-		}
-		
-		cursor.close();
-		return result;
-	}
+  public TaskProvider(Context context) {
+    m_context = context;
+    m_content = m_context.getContentResolver();
+  }
+
+
+  public List<TaskList> getLists() {
+    Cursor cursor = m_content.query(
+        TaskMetadata.TASK_LIST_INFO.CONTENT_DIR,
+        new String[]{TaskMetadata.COL_TL_ID, TaskMetadata.COL_TL_TITLE},
+        null,
+        null,
+        null);
+
+    if (cursor == null)
+      return new ArrayList<>();
+
+    List<TaskList> result = new ArrayList<>(cursor.getCount());
+    while (cursor.moveToNext()) {
+      TaskList taskList = new TaskList();
+      taskList.setId(cursor.getString(0));
+      taskList.setTitle(cursor.getString(1));
+      result.add(taskList);
+    }
+    cursor.close();
+    return result;
+  }
+
+  public TaskList getList(String id) {
+    Cursor cursor = m_content.query(
+        Uri.withAppendedPath(TaskMetadata.TASK_LIST_INFO.CONTENT_ITEM, id),
+        new String[]{TaskMetadata.COL_TL_ID, TaskMetadata.COL_TL_TITLE},
+        null,
+        null,
+        null);
+
+    if (cursor == null || !cursor.moveToNext()) {
+      return null;
+    }
+
+    TaskList result = new TaskList();
+    result.setId(cursor.getString(0));
+    result.setTitle(cursor.getString(1));
+    cursor.close();
+    return result;
+  }
+
+  public List<Task> getListTasks(String id) {
+    Cursor cursor = m_content.query(
+        TaskMetadata.TASK_INFO.CONTENT_DIR,
+        new String[]{
+            TaskMetadata.COL_ID,
+            TaskMetadata.COL_TITLE,
+            TaskMetadata.COL_STATUS,
+            TaskMetadata.COL_POSITION},
+        TaskMetadata.COL_PARENT_LIST_ID + " = ?",
+        new String[]{id},
+        null);
+
+    if (cursor == null)
+      return new ArrayList<>();
+
+    List<Task> result = new ArrayList<>(cursor.getCount());
+    while (cursor.moveToNext()) {
+      Task task = new Task();
+      task.setId(cursor.getString(0));
+      task.setTitle(cursor.getString(1));
+      task.setStatus(cursor.getString(2));
+      task.setPosition(cursor.getString(3));
+      result.add(task);
+    }
+    cursor.close();
+    return result;
+  }
 }

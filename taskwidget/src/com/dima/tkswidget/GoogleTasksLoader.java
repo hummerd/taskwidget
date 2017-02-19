@@ -9,7 +9,8 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.tasks.Tasks;
 import com.google.api.services.tasks.model.Task;
 import com.google.api.services.tasks.model.TaskList;
@@ -27,7 +28,8 @@ public class GoogleTasksLoader {
 		m_googleAccess = googleAccess;
 
 		HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
-		m_tasksService = new Tasks.Builder(httpTransport, new GsonFactory(), googleAccess)
+		JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+		m_tasksService = new Tasks.Builder(httpTransport, jsonFactory, googleAccess)
 			.setApplicationName(APP_NAME)
 			.build();
 		Logger.getLogger("com.google.api.client").setLevel(Level.ALL);

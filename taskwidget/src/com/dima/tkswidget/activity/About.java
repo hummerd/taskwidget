@@ -2,11 +2,15 @@ package com.dima.tkswidget.activity;
 
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.dima.tkswidget.WidgetController;
 
 
 public class About extends ListActivity {
@@ -47,17 +51,24 @@ public class About extends ListActivity {
 		}
 	}
 	
-	
-	
-	/** Called when the activity is first created. */
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    
-	    AboutItem[] items = new AboutItem[] { 
-	    		new AboutItem("Version", "Version description"), 
+	    AboutItem[] items = new AboutItem[] {
+					new AboutItem("Refresh", "Refresh all widgets"),
+					new AboutItem("Version", "Version description"),
 	    		new AboutItem("License", "License description") };
 	    AboutItemAdapter adapter = new AboutItemAdapter(this, items);
 	    setListAdapter(adapter);
+	}
+
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		if (position == 0) {
+			WidgetController wc = new WidgetController(this, null);
+			wc.updateWidgets();
+		}
 	}
 }

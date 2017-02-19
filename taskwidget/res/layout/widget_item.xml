@@ -2,9 +2,10 @@
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_item_light_text"
-    android:textColor="#ffffff"
+    android:textColor="#696969"
     android:textSize="12sp"
     android:background="@android:color/transparent"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/cw_margin" >
 </TextView>

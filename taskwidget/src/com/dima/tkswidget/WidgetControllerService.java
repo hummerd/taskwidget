@@ -28,6 +28,8 @@ public class WidgetControllerService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
+        LogHelper.d("WidgetControllerService got intent with action:");
+        LogHelper.d(action);
         if (action == null) {
             return;
         }

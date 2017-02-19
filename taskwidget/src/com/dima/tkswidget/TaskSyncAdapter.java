@@ -14,7 +14,6 @@ import android.os.RemoteException;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.UserRecoverableNotifiedException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.services.tasks.model.Task;
 import com.google.api.services.tasks.model.TaskList;
@@ -41,65 +40,67 @@ public class TaskSyncAdapter extends AbstractThreadedSyncAdapter {
     WidgetController ctrl = new WidgetController(m_context, null);
 
     try {
-      ctrl.notifySyncState(WidgetController.SYNC_STATE_STARTED);
+      try {
+        ctrl.notifySyncState(WidgetController.SYNC_STATE_STARTED);
 
-      GoogleServiceAuthenticator servAuth = new GoogleServiceAuthenticator(account.name, m_context);
-      token = servAuth.authentificateSyncAdapter(authority, extras);
+        GoogleServiceAuthenticator servAuth = new GoogleServiceAuthenticator(account, m_context);
+        token = servAuth.authentificateSyncAdapter(authority, extras);
 
-      GoogleTasksLoader taskLoader = new GoogleTasksLoader(servAuth.getAccessProtectedResource());
-      List<TaskList> taskLists = taskLoader.getTasksLists();
+        GoogleTasksLoader taskLoader = new GoogleTasksLoader(servAuth.getAccessProtectedResource());
+        List<TaskList> taskLists = taskLoader.getTasksLists();
 
-      ContentValues[] listsValues = new ContentValues[taskLists.size()];
-      for (int i = 0; i < taskLists.size(); i++) {
-        TaskList taskList = taskLists.get(i);
-        listsValues[i] = getTaskListValues(taskList);
-      }
-
-      provider.delete(TaskMetadata.TASK_LIST_INFO.CONTENT_DIR, "", new String[0]);
-      provider.bulkInsert(TaskMetadata.TASK_LIST_INFO.CONTENT_DIR, listsValues);
-      ctrl.notifySyncState(WidgetController.SYNC_STATE_LISTS_UPDATED);
-
-      for (TaskList taskList : taskLists) {
-        String taskListId = taskList.getId();
-        List<Task> tasks = taskLoader.getTasks(taskListId);
-
-        ContentValues[] tasksValues = new ContentValues[tasks.size()];
-        for (int i = 0; i < tasks.size(); i++) {
-          Task task = tasks.get(i);
-          tasksValues[i] = getTaskValues(task, taskListId);
+        ContentValues[] listsValues = new ContentValues[taskLists.size()];
+        for (int i = 0; i < taskLists.size(); i++) {
+          TaskList taskList = taskLists.get(i);
+          listsValues[i] = getTaskListValues(taskList);
         }
-        provider.delete(
-            TaskMetadata.TASK_INFO.CONTENT_DIR,
-            TaskMetadata.COL_PARENT_LIST_ID + " = ?",
-            new String[] { taskListId });
-        provider.bulkInsert(TaskMetadata.TASK_INFO.CONTENT_DIR, tasksValues);
-      }
 
-      ctrl.notifySyncState(WidgetController.SYNC_STATE_TASKS_UPDATED);
-      ctrl.notifySyncState(WidgetController.SYNC_STATE_FINISHED);
-      return;
+        provider.delete(TaskMetadata.TASK_LIST_INFO.CONTENT_DIR, "", new String[0]);
+        provider.bulkInsert(TaskMetadata.TASK_LIST_INFO.CONTENT_DIR, listsValues);
+        ctrl.notifySyncState(WidgetController.SYNC_STATE_LISTS_UPDATED);
 
-    } catch (final RemoteException e) {
-      e.printStackTrace();
-      syncResult.stats.numParseExceptions++;
-    } catch (UserRecoverableAuthIOException e) {
-      e.printStackTrace();
-      syncResult.stats.numAuthExceptions++;
-      if (token != null) {
-        GoogleAuthUtil.invalidateToken(m_context, token);
+        for (TaskList taskList : taskLists) {
+          String taskListId = taskList.getId();
+          List<Task> tasks = taskLoader.getTasks(taskListId);
+
+          LogHelper.d("Got " + Integer.toString(tasks.size()) + " tasks for list " + taskList.getTitle());
+          ContentValues[] tasksValues = new ContentValues[tasks.size()];
+          for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            tasksValues[i] = getTaskValues(task, taskListId);
+          }
+          provider.delete(
+              TaskMetadata.TASK_INFO.CONTENT_DIR,
+              TaskMetadata.COL_PARENT_LIST_ID + " = ?",
+              new String[]{taskListId});
+          provider.bulkInsert(TaskMetadata.TASK_INFO.CONTENT_DIR, tasksValues);
+        }
+
+        ctrl.notifySyncState(WidgetController.SYNC_STATE_TASKS_UPDATED);
+        ctrl.notifySyncState(WidgetController.SYNC_STATE_FINISHED);
+        return;
+
+      } catch (final RemoteException e) {
+        e.printStackTrace();
+        syncResult.stats.numParseExceptions++;
+      } catch (UserRecoverableAuthIOException e) {
+        e.printStackTrace();
+        syncResult.stats.numAuthExceptions++;
+        if (token != null) {
+          GoogleAuthUtil.clearToken(m_context, token);
+        }
+      } catch (GoogleAuthException e) {
+        e.printStackTrace();
+        syncResult.stats.numAuthExceptions++;
+      } catch (IOException e) {
+        syncResult.stats.numIoExceptions++;
+        e.printStackTrace();
+        if (token != null) {
+          GoogleAuthUtil.clearToken(m_context, token);
+        }
       }
-    } catch (UserRecoverableNotifiedException e) {
+    } catch (Exception e) {
       e.printStackTrace();
-      syncResult.stats.numAuthExceptions++;
-    } catch (GoogleAuthException e) {
-      e.printStackTrace();
-      syncResult.stats.numAuthExceptions++;
-    } catch (IOException e) {
-      syncResult.stats.numIoExceptions++;
-      e.printStackTrace();
-      if (token != null) {
-        GoogleAuthUtil.invalidateToken(m_context, token);
-      }
     }
 
     LogHelper.d("TaskSyncAdapter failed to sync");

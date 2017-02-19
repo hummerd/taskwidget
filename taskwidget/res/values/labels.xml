@@ -8,7 +8,8 @@
         <item>Update widget</item>
         <item>Configure widget</item>
     </string-array>
-    
+
+    <string name="touch_to_configure_widget">Configure…</string>
     <string name="addaccount">You must add Google account to use this widget</string>
     <string name="usingaccount">Using account: %s</string>
     <string name="selectacount">Select Google account to work with</string>

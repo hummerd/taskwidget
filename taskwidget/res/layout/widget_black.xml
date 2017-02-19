@@ -1,58 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>  
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    
     android:layout_width="match_parent"
-	android:layout_height="match_parent"
-    android:background="@drawable/bg_dark_flat" >
-
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_dark_flat"
+    android:orientation="horizontal"
+    android:baselineAligned="false">
     <RelativeLayout
         android:id="@+id/left_block"
         android:layout_width="90dp"
         android:layout_height="match_parent">
-
+        <Button
+            android:id="@+id/headerClick"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="0dp"
+            android:background="?android:selectableItemBackground"
+            />
         <TextView
             android:id="@+id/textViewList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="12dp"
+            android:layout_margin="@dimen/cw_margin"
             android:gravity="center"
             android:textColor="#ffffff"
-            android:textStyle="bold" />
-
+            android:textStyle="bold"
+            android:elevation="10dp"
+            />
         <ImageView
             android:id="@+id/imageRefresh"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="@dimen/cw_image_refresh_size"
+            android:layout_height="@dimen/cw_image_refresh_size"
+            android:layout_margin="@dimen/cw_margin"
             android:contentDescription="@string/updating"
             android:scaleType="fitEnd"
-            android:src="@drawable/ic_navigation_refresh_dark"
-            android:visibility="gone" />
+            android:src="@drawable/ic_cached_white_24px"
+            android:visibility="gone"
+            android:elevation="11dp"
+            />
     </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/tasksArea"
-        android:layout_width="match_parent"
+    <ListView
+        android:id="@+id/tasksList"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:listSelector="@android:color/transparent"
         android:orientation="vertical"
-        android:padding="12dp" >
-
-        <TextView
-            android:id="@+id/textViewTasks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left|top"
-            android:lineSpacingMultiplier="1.1"
-            android:text="@string/loading_text"
-            android:textColor="#ffffff"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/textViewCompletedTasks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left|top"
-            android:lineSpacingMultiplier="1.1"
-            android:textSize="12sp" />
-    </LinearLayout>
+        android:cacheColorHint="@null"
+        android:divider="@null"
+        android:dividerHeight="3.0dip"
+        android:layout_weight="1.0" />
 </LinearLayout>
